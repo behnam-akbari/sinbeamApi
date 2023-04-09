@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Scaphoid.Core.Model;
 using Scaphoid.Infrastructure.Data;
 using System.Text.Json.Serialization;
@@ -19,34 +21,12 @@ namespace Schaphoid.Api.Controllers
         [HttpGet]
         public Resource Get()
         {
-            var resource = new Resource();
+            var order = new OrderDto()
+            {
+                OrderDate = DateTime.Today
+            };
 
-            resource.Links.Add(new Link("beam", Url.Action(nameof(Beam),
-                null, null,
-                Request.Scheme),
-                HttpMethods.Get));
-
-            resource.Links.Add(new Link("localization", Url.Action(nameof(Localization),
-                null, null,
-                Request.Scheme),
-                HttpMethods.Get));
-
-            resource.Links.Add(new Link("order", Url.Action(nameof(Order),
-                null, null,
-                Request.Scheme),
-                HttpMethods.Get));
-
-            return resource;
-        }
-
-        #region Order
-
-        [HttpGet("[action]")]
-        public OrderDto Order()
-        {
-            var order = new OrderDto();
-
-            order.Links.Add(new Link("save", Url.Action(nameof(Order),
+            order.Links.Add(new Link("create-order", Url.Action(nameof(CreateOrder),
                 null, null,
                 Request.Scheme),
                 HttpMethods.Post));
@@ -54,8 +34,10 @@ namespace Schaphoid.Api.Controllers
             return order;
         }
 
-        [HttpPost("[action]")]
-        public object Order(OrderDto orderDto)
+        #region Order
+
+        [HttpPost("order")]
+        public IActionResult CreateOrder(OrderDto orderDto)
         {
             var order = new Order()
             {
@@ -70,7 +52,63 @@ namespace Schaphoid.Api.Controllers
             _dbContext.Add(order);
             _dbContext.SaveChanges();
 
-            return Ok();
+            return CreatedAtAction(nameof(GetOrder), new
+            {
+                id = order.Id
+            }, null);
+        }
+        
+        [HttpGet("order/{id}")]
+        public OrderDto GetOrder(int id)
+        {
+            var order = _dbContext.Orders.Find(id);
+
+            var orderDto = new OrderDto
+            {
+                Beam = order.Beam,
+                Company = order.Company,
+                Designer = order.Designer,
+                Note = order.Note,
+                OrderDate = order.OrderDate,
+                Project = order.Project,
+            };
+
+            orderDto.Links.Add(new Link("save-order", Url.Action(nameof(SaveOrder),
+                null, new { id = id },
+                Request.Scheme),
+                HttpMethods.Post));
+
+            orderDto.Links.Add(new Link("get-localization", Url.Action(nameof(Localization),
+                null, new { id = id },
+                Request.Scheme),
+                HttpMethods.Get));
+
+            orderDto.Links.Add(new Link("get-beam", Url.Action(nameof(Beam),
+                null, new { id = id },
+                Request.Scheme),
+                HttpMethods.Get));
+
+            return orderDto;
+        }
+
+        [HttpPost("order/{id}")]
+        public IActionResult SaveOrder(int id, OrderDto orderDto)
+        {
+            var order = _dbContext.Orders.Find(id);
+
+            order.Note = orderDto.Note;
+            order.Designer = orderDto.Designer;
+            order.Project = orderDto.Project;
+            order.OrderDate = orderDto.OrderDate;
+            order.Beam = orderDto.Beam;
+            order.Company = orderDto.Company;
+
+            _dbContext.SaveChanges();
+
+            return AcceptedAtAction(nameof(GetOrder), null, new
+            {
+                id = order.Id
+            });
         }
 
         [HttpGet("[action]")]
@@ -85,25 +123,44 @@ namespace Schaphoid.Api.Controllers
 
         #region Localization
 
-        [HttpGet("[action]")]
-        public object Localization()
+        [HttpGet("order/{id}/[action]")]
+        public object Localization(int id)
         {
-            var localization = new LocalizationDto()
+            var order = _dbContext.Orders.Where(e => e.Id == id)
+                .Include(e => e.Localization)
+                .FirstOrDefault();
+
+            if(order is null)
             {
-                DesignType = DesignType.UK,
-                DeflectionLimit = new DeflectionLimit(),
-                DesignParameters = new DesignParameters(),
-            };
+                return NotFound();
+            }
+
+            var localization = new LocalizationDto();
+
+            if (order.Localization is not null)
+            {
+                localization.DesignType = order.Localization.DesignType;
+                localization.DeflectionLimit = order.Localization.DeflectionLimit;
+                localization.DesignParameters = order.Localization.DesignParameters;
+                localization.DefaultNA = Constants.DefaultNA;
+            }
+            else
+            {
+                localization.DesignType = DesignType.UK;
+                localization.DeflectionLimit = new DeflectionLimit();
+                localization.DesignParameters = new DesignParameters();
+                localization.DefaultNA = Constants.DefaultNA;
+            }
 
             localization.Links.Add(new Link("save", Url.Action(nameof(Beam),
-                null, null,
+                null, new { id = id },
                 Request.Scheme),
                 HttpMethods.Post));
 
             return localization;
         }
 
-        [HttpPost("[action]")]
+        [HttpPost("order/{id}/[action]")]
         public IActionResult Localization(LocalizationDto localizationDto)
         {
             var localization = new Localization()
@@ -189,6 +246,7 @@ namespace Schaphoid.Api.Controllers
         public DesignType DesignType { get; set; }
         public DesignParameters DesignParameters { get; set; }
         public DeflectionLimit DeflectionLimit { get; set; }
+        public DesignParameters DefaultNA { get; set; }
     }
 
     public class ConfigurationDto : Resource
