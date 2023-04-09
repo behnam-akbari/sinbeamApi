@@ -51,14 +51,23 @@ namespace Schaphoid.Api.Controllers
             _dbContext.Add(order);
             _dbContext.SaveChanges();
 
+            orderDto = GetOrderDto(order.Id);
+
             return CreatedAtAction(nameof(GetOrder), new
             {
                 id = order.Id
-            }, null);
+            }, orderDto);
         }
         
         [HttpGet("order/{id}")]
         public OrderDto GetOrder(int id)
+        {
+            var orderDto = GetOrderDto(id);
+
+            return orderDto;
+        }
+
+        private OrderDto GetOrderDto(int id)
         {
             var order = _dbContext.Orders.Find(id);
 
@@ -86,7 +95,6 @@ namespace Schaphoid.Api.Controllers
                 null, new { id = id },
                 Request.Scheme),
                 HttpMethods.Get));
-
             return orderDto;
         }
 
