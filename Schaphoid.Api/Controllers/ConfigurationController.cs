@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Scaphoid.Core.Model;
 using Scaphoid.Infrastructure.Data;
 using System.Text.Json.Serialization;
@@ -199,13 +198,13 @@ namespace Schaphoid.Api.Controllers
 
         #region Beam
 
-        [HttpGet("[action]")]
-        public object Beam()
+        [HttpGet("order/{id}/[action]")]
+        public object Beam(int id)
         {
             var beam = new BeamDto();
 
             beam.Links.Add(new Link("save", Url.Action(nameof(Beam),
-                null, null,
+                null, new { id = id },
                 Request.Scheme),
                 HttpMethods.Post));
 
@@ -218,8 +217,8 @@ namespace Schaphoid.Api.Controllers
             };
         }
 
-        [HttpPost("[action]")]
-        public IActionResult Beam(BeamDto beamDto)
+        [HttpPost("order/{id}/[action]")]
+        public IActionResult Beam(int id, BeamDto beamDto)
         {
             return Ok();
         }
