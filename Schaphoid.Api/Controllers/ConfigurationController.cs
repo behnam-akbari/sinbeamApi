@@ -31,17 +31,28 @@ namespace Schaphoid.Api.Controllers
                 Request.Scheme),
                 HttpMethods.Get));
 
+            resource.Links.Add(new Link("order", Url.Action(nameof(Order),
+                null, null,
+                Request.Scheme),
+                HttpMethods.Get));
+
             return resource;
         }
 
+        #region Order
+
         [HttpGet("[action]")]
-        public object Orders()
+        public OrderDto Order()
         {
-            var orders = _dbContext.Order.ToList();
+            var order = new OrderDto();
 
-            return orders;
+            order.Links.Add(new Link("save", Url.Action(nameof(Order),
+                null, null,
+                Request.Scheme),
+                HttpMethods.Post));
+
+            return order;
         }
-
 
         [HttpPost("[action]")]
         public object Order(OrderDto orderDto)
@@ -61,6 +72,18 @@ namespace Schaphoid.Api.Controllers
 
             return Ok();
         }
+
+        [HttpGet("[action]")]
+        public object Orders()
+        {
+            var orders = _dbContext.Orders.ToList();
+
+            return orders;
+        }
+
+        #endregion
+
+        #region Localization
 
         [HttpGet("[action]")]
         public object Localization()
@@ -86,6 +109,10 @@ namespace Schaphoid.Api.Controllers
             return Ok();
         }
 
+        #endregion
+
+        #region Beam
+
         [HttpGet("[action]")]
         public object Beam()
         {
@@ -104,12 +131,14 @@ namespace Schaphoid.Api.Controllers
                 Constants.FlangeWidthCollection
             };
         }
-        
+
         [HttpPost("[action]")]
         public IActionResult Beam(BeamDto beamDto)
         {
             return Ok();
         }
+
+        #endregion
     }
 
     public class BeamDto : Resource
@@ -156,7 +185,7 @@ namespace Schaphoid.Api.Controllers
         public List<Link> Links { get; set; } = new List<Link>();
     }
 
-    public class OrderDto
+    public class OrderDto : Resource
     {
         public string Company { get; set; }
         public string Project { get; set; }
