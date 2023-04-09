@@ -151,7 +151,7 @@ namespace Schaphoid.Api.Controllers
                 localization.DefaultNA = Constants.DefaultNA;
             }
 
-            localization.Links.Add(new Link("save", Url.Action(nameof(Beam),
+            localization.Links.Add(new Link("save", Url.Action(nameof(Localization),
                 null, new { id = id },
                 Request.Scheme),
                 HttpMethods.Post));
