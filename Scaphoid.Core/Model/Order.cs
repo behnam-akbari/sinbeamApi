@@ -9,5 +9,7 @@
         public string Designer { get; set; }
         public string Note { get; set; }
         public DateTime OrderDate { get; set; }
+
+        public Localization Localization { get; set; }
     }
 }

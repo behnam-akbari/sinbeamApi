@@ -31,17 +31,28 @@ namespace Schaphoid.Api.Controllers
                 Request.Scheme),
                 HttpMethods.Get));
 
+            resource.Links.Add(new Link("order", Url.Action(nameof(Order),
+                null, null,
+                Request.Scheme),
+                HttpMethods.Get));
+
             return resource;
         }
 
+        #region Order
+
         [HttpGet("[action]")]
-        public object Orders()
+        public OrderDto Order()
         {
-            var orders = _dbContext.Order.ToList();
+            var order = new OrderDto();
 
-            return orders;
+            order.Links.Add(new Link("save", Url.Action(nameof(Order),
+                null, null,
+                Request.Scheme),
+                HttpMethods.Post));
+
+            return order;
         }
-
 
         [HttpPost("[action]")]
         public object Order(OrderDto orderDto)
@@ -61,6 +72,18 @@ namespace Schaphoid.Api.Controllers
 
             return Ok();
         }
+
+        [HttpGet("[action]")]
+        public object Orders()
+        {
+            var orders = _dbContext.Orders.ToList();
+
+            return orders;
+        }
+
+        #endregion
+
+        #region Localization
 
         [HttpGet("[action]")]
         public object Localization()
@@ -83,8 +106,41 @@ namespace Schaphoid.Api.Controllers
         [HttpPost("[action]")]
         public IActionResult Localization(LocalizationDto localizationDto)
         {
+            var localization = new Localization()
+            {
+                OrderId = 1,
+                DesignType = localizationDto.DesignType,
+                DeflectionLimit = localizationDto.DeflectionLimit
+            };
+
+            if(localizationDto.DesignType == DesignType.UserDefined)
+            {
+                localization.DesignParameters = new DesignParameters()
+                {
+                    GammaG = localizationDto.DesignParameters.GammaG,
+                    GammaQ = localizationDto.DesignParameters.GammaQ,
+                    ModificationFactorAllOtherHtoB = localizationDto.DesignParameters.ModificationFactorAllOtherHtoB,
+                    ModificationFactorKflHtoBLessThanTwo = localizationDto.DesignParameters.ModificationFactorKflHtoBLessThanTwo,
+                    ReductionFactorF = localizationDto.DesignParameters.ReductionFactorF,
+                    SteelGradeS235Between16and40mm = localizationDto.DesignParameters.SteelGradeS235Between16and40mm,
+                    SteelGradeS235Between40and63mm = localizationDto.DesignParameters.SteelGradeS235Between40and63mm,
+                    SteelGradeS235LessThan16mm = localizationDto.DesignParameters.SteelGradeS235LessThan16mm,
+                    SteelGradeS355Between16and40mm = localizationDto.DesignParameters.SteelGradeS355Between16and40mm,
+                    SteelGradeS355Between40and63mm = localizationDto.DesignParameters.SteelGradeS355Between40and63mm,
+                    SteelGradeS355LessThan16mm = localizationDto.DesignParameters.SteelGradeS355LessThan16mm
+                };
+            }
+
+            _dbContext.Add(localization);
+
+            _dbContext.SaveChanges();
+
             return Ok();
         }
+
+        #endregion
+
+        #region Beam
 
         [HttpGet("[action]")]
         public object Beam()
@@ -104,12 +160,14 @@ namespace Schaphoid.Api.Controllers
                 Constants.FlangeWidthCollection
             };
         }
-        
+
         [HttpPost("[action]")]
         public IActionResult Beam(BeamDto beamDto)
         {
             return Ok();
         }
+
+        #endregion
     }
 
     public class BeamDto : Resource
@@ -156,7 +214,7 @@ namespace Schaphoid.Api.Controllers
         public List<Link> Links { get; set; } = new List<Link>();
     }
 
-    public class OrderDto
+    public class OrderDto : Resource
     {
         public string Company { get; set; }
         public string Project { get; set; }

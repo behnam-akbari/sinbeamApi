@@ -2,6 +2,8 @@
 {
     public class Localization
     {
+        public int OrderId { get; set; }
+        public Order Order { get; set; }
         public DesignType DesignType { get; set; } = new DesignType();
         public DesignParameters DesignParameters { get; set; } = new DesignParameters();
         public DeflectionLimit DeflectionLimit { get; set; } = new DeflectionLimit();

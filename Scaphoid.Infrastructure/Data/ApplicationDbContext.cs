@@ -1,12 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Scaphoid.Core.Model;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Security;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Scaphoid.Infrastructure.Data
 {
@@ -16,11 +9,20 @@ namespace Scaphoid.Infrastructure.Data
         {
         }
 
-        public DbSet<Order> Order { get; set; }
+        public DbSet<Order> Orders { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             //builder.ApplyConfiguration(new UserConfiguration());
+
+            builder.Entity<Order>()
+                .HasOne(e => e.Localization)
+                .WithOne(e => e.Order)
+                .HasForeignKey<Localization>(e => e.OrderId);
+
+            builder.Entity<Localization>().HasKey(e => e.OrderId);
+            builder.Entity<Localization>().OwnsOne(e => e.DeflectionLimit);
+            builder.Entity<Localization>().OwnsOne(e => e.DesignParameters);
 
             base.OnModelCreating(builder);
         }
