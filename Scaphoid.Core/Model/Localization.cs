@@ -8,6 +8,8 @@
         public DesignParameters DesignParameters { get; set; } = new DesignParameters();
         public DeflectionLimit DeflectionLimit { get; set; } = new DeflectionLimit();
         public ULSLoadExpression ULSLoadExpression { get; set; }
+
+        public int PsiValue { get; set; } = 1;
     }
 
     public enum DesignType

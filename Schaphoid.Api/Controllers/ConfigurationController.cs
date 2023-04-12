@@ -228,6 +228,39 @@ namespace Schaphoid.Api.Controllers
         [HttpPost("order/{id}/[action]")]
         public IActionResult Beam(int id, BeamDto beamDto)
         {
+            var order = _dbContext.Orders.Where(e => e.Id == id)
+                .Include(e=>e.Localization)
+                .FirstOrDefault();
+
+            if(order is null)
+            {
+                return NotFound();
+            }
+
+            var localization = order.Localization;
+
+            var gamma_g = localization.DesignParameters.GammaG;
+            var gamma_q = localization.DesignParameters.GammaQ;
+
+            var gamma_g_610a = localization.DesignParameters.GammaG;
+
+            var gamma_q_610a = localization.DesignParameters.GammaQ * localization.PsiValue;
+
+            var flanges_area = beamDto.TopFlangeThickness * beamDto.TopFlangeWidth +
+                               beamDto.BottomFlangeThickness * beamDto.BottomFlangeWidth;
+
+            var web_eff_thick = beamDto.WebThickness * 1;
+
+            var ave_web_depth = 0.5 * (beamDto.WebDepthLeft + beamDto.WebDepthRight);
+
+            var section_area = flanges_area + web_eff_thick * ave_web_depth;
+
+            var self_wt = Math.Round((section_area / (1000000) * 7850 * 9.81) / 1000, 2);
+
+            var perm_udl = self_wt;
+
+
+
             return Ok();
         }
 
