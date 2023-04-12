@@ -67,6 +67,34 @@ namespace Schaphoid.Api.Controllers
             return orderDto;
         }
 
+        [HttpPost("order/{id}")]
+        public IActionResult SaveOrder(int id, OrderDto orderDto)
+        {
+            var order = _dbContext.Orders.Find(id);
+
+            order.Note = orderDto.Note;
+            order.Designer = orderDto.Designer;
+            order.Project = orderDto.Project;
+            order.OrderDate = orderDto.OrderDate;
+            order.Beam = orderDto.Beam;
+            order.Company = orderDto.Company;
+
+            _dbContext.SaveChanges();
+
+            return AcceptedAtAction(nameof(GetOrder), null, new
+            {
+                id = order.Id
+            });
+        }
+
+        [HttpGet("[action]")]
+        public object Orders()
+        {
+            var orders = _dbContext.Orders.ToList();
+
+            return orders;
+        }
+
         private OrderDto GetOrderDto(int id)
         {
             var order = _dbContext.Orders.Find(id);
@@ -96,34 +124,6 @@ namespace Schaphoid.Api.Controllers
                 Request.Scheme),
                 HttpMethods.Get));
             return orderDto;
-        }
-
-        [HttpPost("order/{id}")]
-        public IActionResult SaveOrder(int id, OrderDto orderDto)
-        {
-            var order = _dbContext.Orders.Find(id);
-
-            order.Note = orderDto.Note;
-            order.Designer = orderDto.Designer;
-            order.Project = orderDto.Project;
-            order.OrderDate = orderDto.OrderDate;
-            order.Beam = orderDto.Beam;
-            order.Company = orderDto.Company;
-
-            _dbContext.SaveChanges();
-
-            return AcceptedAtAction(nameof(GetOrder), null, new
-            {
-                id = order.Id
-            });
-        }
-
-        [HttpGet("[action]")]
-        public object Orders()
-        {
-            var orders = _dbContext.Orders.ToList();
-
-            return orders;
         }
 
         #endregion
@@ -174,25 +174,20 @@ namespace Schaphoid.Api.Controllers
             {
                 OrderId = 1,
                 DesignType = localizationDto.DesignType,
-                DeflectionLimit = localizationDto.DeflectionLimit
+                DeflectionLimit = localizationDto.DeflectionLimit,
+                ULSLoadExpression = localizationDto.ULSLoadExpression
             };
 
-            if(localizationDto.DesignType == DesignType.UserDefined)
+            localization.DesignParameters = localizationDto.DesignType switch
             {
-                localization.DesignParameters = new DesignParameters()
-                {
-                    GammaG = localizationDto.DesignParameters.GammaG,
-                    GammaQ = localizationDto.DesignParameters.GammaQ,
-                    ModificationFactorAllOtherHtoB = localizationDto.DesignParameters.ModificationFactorAllOtherHtoB,
-                    ModificationFactorKflHtoBLessThanTwo = localizationDto.DesignParameters.ModificationFactorKflHtoBLessThanTwo,
-                    ReductionFactorF = localizationDto.DesignParameters.ReductionFactorF,
-                    SteelGradeS235Between16and40mm = localizationDto.DesignParameters.SteelGradeS235Between16and40mm,
-                    SteelGradeS235Between40and63mm = localizationDto.DesignParameters.SteelGradeS235Between40and63mm,
-                    SteelGradeS235LessThan16mm = localizationDto.DesignParameters.SteelGradeS235LessThan16mm,
-                    SteelGradeS355Between16and40mm = localizationDto.DesignParameters.SteelGradeS355Between16and40mm,
-                    SteelGradeS355Between40and63mm = localizationDto.DesignParameters.SteelGradeS355Between40and63mm,
-                    SteelGradeS355LessThan16mm = localizationDto.DesignParameters.SteelGradeS355LessThan16mm
-                };
+                DesignType.UK => Constants.UkNA,
+                DesignType.Irish => Constants.IrishNA,
+                DesignType.UserDefined => localizationDto.DesignParameters,
+            };
+
+            if(localization.ULSLoadExpression == ULSLoadExpression.Expression610a)
+            {
+                localization.DesignParameters.ReductionFactorF = 1;
             }
 
             _dbContext.Add(localization);
@@ -216,6 +211,11 @@ namespace Schaphoid.Api.Controllers
                 Request.Scheme),
                 HttpMethods.Post));
 
+            beam.Links.Add(new Link("drawing", Url.Action(nameof(BeamDrawing),
+                null, new { id = id },
+                Request.Scheme),
+                HttpMethods.Post));
+
             return new
             {
                 Beam = beam,
@@ -231,6 +231,70 @@ namespace Schaphoid.Api.Controllers
             return Ok();
         }
 
+        [HttpPost("order/{id}/beam/drawing")]
+        public object BeamDrawing(int id, BeamDto beamDto)
+        {
+            if (beamDto.IsUniformDepth)
+            {
+                beamDto.WebDepthRight = beamDto.WebDepthLeft;
+            }
+
+            var maxDepth = Math.Max(beamDto.WebDepthLeft, beamDto.WebDepthRight);
+
+            var maxWidth = Math.Max(beamDto.TopFlangeWidth, beamDto.BottomFlangeWidth);
+
+            double boxh = 500;
+
+            double boxw = boxh * 180 / 225;
+
+            var scalerh = (0.8 * boxh) / maxDepth;
+            var scalerw = (0.8 * boxw) / maxWidth;
+
+            var scaler = Math.Min(scalerh, scalerw);
+
+            var top_w = Math.Round(scaler * beamDto.TopFlangeWidth, 2);
+            var bottom_w = Math.Round(scaler * beamDto.BottomFlangeWidth, 2);
+            var top_flg = Math.Round(scaler * beamDto.TopFlangeThickness, 2);
+            var bottom_flg = Math.Round(scaler * beamDto.BottomFlangeThickness, 2);
+            var webs = Math.Round(scaler * beamDto.WebThickness, 2);
+            var depths = Math.Round(scaler * maxDepth, 2);
+
+            var top_of_beam = Math.Round(0.5 * boxh - 0.5 * depths, 2);
+            var in_top_flg = Math.Round(top_of_beam + top_flg, 2);
+            var bottom_of_beam = Math.Round(top_of_beam + depths, 2);
+            var in_bottom_flg = Math.Round(bottom_of_beam - bottom_flg, 2);
+
+            var left_top = Math.Round(0.5 * boxw - 0.5 * top_w, 2);
+            var right_top = Math.Round(left_top + top_w, 2);
+            var left_bottom = Math.Round(0.5 * boxw - 0.5 * bottom_w, 2);
+            var right_bottom = Math.Round(left_bottom + bottom_w, 2);
+
+            var left_web = Math.Round(0.5 * boxw - 0.5 * webs, 2);
+            var right_web = Math.Round(left_web + webs, 2);
+
+            return new
+            {
+                topFlange = new
+                {
+                    width = Math.Round(right_top - left_top, 2),
+                    height = Math.Round(Math.Max(in_top_flg - top_of_beam - 3, 0), 2),
+                    borderWidth = "2px 2px 1px 2px"
+                },
+                web = new
+                {
+                    width = 0,
+                    height = Math.Round(in_bottom_flg - in_top_flg, 2),
+                    borderWidth = "auto 2px auto 2px"
+                },
+                bottomFlange = new
+                {
+                    width = Math.Round(right_top - left_top, 2),
+                    height = Math.Round(Math.Max(bottom_of_beam - in_bottom_flg - 3, 0), 2),
+                    borderWidth = "1px 2px 2px 2px"
+                }
+            };
+        }
+
         #endregion
     }
 
@@ -238,7 +302,6 @@ namespace Schaphoid.Api.Controllers
     {
         public double Span { get; set; }
         public bool IsUniformDepth { get; set; } = true;
-        public int WebDepth { get; set; } = 1000;
         public int WebDepthLeft { get; set; } = 1000;
         public int WebDepthRight { get; set; } = 1000;
         public double WebThickness { get; set; } = 2.5;
@@ -254,6 +317,7 @@ namespace Schaphoid.Api.Controllers
         public DesignParameters DesignParameters { get; set; }
         public DeflectionLimit DeflectionLimit { get; set; }
         public DesignParameters DefaultNA { get; set; }
+        public ULSLoadExpression ULSLoadExpression { get; set; } = ULSLoadExpression.Expression610a;
     }
 
     public class ConfigurationDto : Resource

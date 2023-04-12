@@ -7,6 +7,7 @@
         public DesignType DesignType { get; set; } = new DesignType();
         public DesignParameters DesignParameters { get; set; } = new DesignParameters();
         public DeflectionLimit DeflectionLimit { get; set; } = new DeflectionLimit();
+        public ULSLoadExpression ULSLoadExpression { get; set; }
     }
 
     public enum DesignType
@@ -14,6 +15,12 @@
         UK = 1,
         Irish = 2,
         UserDefined = 3
+    }
+
+    public enum ULSLoadExpression
+    {
+        Expression610a = 1,
+        Expression610aAnd610b = 2,
     }
 
     public class DeflectionLimit
