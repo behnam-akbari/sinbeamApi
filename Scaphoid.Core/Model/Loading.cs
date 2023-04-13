@@ -2,6 +2,8 @@
 {
     public class Loading
     {
+        public int OrderId { get; set; }
+        public Order Order { get; set; }
         public LoadType LoadType { get; set; }
         public LoadParameters PermanentLoads { get; set; }
         public LoadParameters VariableLoads { get; set; }
@@ -11,6 +13,9 @@
 
     public class PointLoad
     {
+        public int Id { get; set; }
+        public int LoadingId { get; set; }
+        public Loading Loading { get; set; }
         public double Position { get; set; }
         public double Load { get; set; }
     }

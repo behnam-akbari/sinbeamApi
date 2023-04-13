@@ -2,6 +2,9 @@
 {
     public class Beam
     {
+        public int OrderId { get; set; }
+        public Order Order { get; set; }
+
         public double Span { get; set; }
         public bool IsUniformDepth { get; set; }
 
@@ -47,7 +50,7 @@
 
         public double NoWebXSectionArea => TopFlangeThickness * TopFlangeWidth + BottomFlangeThickness * BottomFlangeWidth;
 
-        public double EffxSectionArea => TopFlangeThickness * TopFlangeWidth + BottomFlangeThickness * BottomFlangeWidth + Web * Factor7 * WebDepth;
+        public double EffxSectionArea => TopFlangeThickness * TopFlangeWidth + BottomFlangeThickness * BottomFlangeWidth + Web * WebDepth * Factor7;
 
         public double EffxSectionAreaRight => TopFlangeThickness * TopFlangeWidth + BottomFlangeThickness * BottomFlangeWidth + Web * Factor7 * WebDepthRight;
 

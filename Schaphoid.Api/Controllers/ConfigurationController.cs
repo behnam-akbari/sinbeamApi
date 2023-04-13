@@ -109,6 +109,11 @@ namespace Schaphoid.Api.Controllers
                 Project = order.Project,
             };
 
+            orderDto.Links.Add(new Link("get-order", Url.Action(nameof(GetOrder),
+                null, new { id = id },
+                Request.Scheme),
+                HttpMethods.Get));
+
             orderDto.Links.Add(new Link("save-order", Url.Action(nameof(SaveOrder),
                 null, new { id = id },
                 Request.Scheme),
@@ -123,6 +128,17 @@ namespace Schaphoid.Api.Controllers
                 null, new { id = id },
                 Request.Scheme),
                 HttpMethods.Get));
+
+            orderDto.Links.Add(new Link("get-loading", Url.Action(nameof(Loading),
+                null, new { id = id },
+                Request.Scheme),
+                HttpMethods.Get));
+
+            orderDto.Links.Add(new Link("get-properties", Url.Action(nameof(Properties),
+                null, new { id = id },
+                Request.Scheme),
+                HttpMethods.Get));
+
             return orderDto;
         }
 
@@ -168,11 +184,11 @@ namespace Schaphoid.Api.Controllers
         }
 
         [HttpPost("order/{id}/[action]")]
-        public IActionResult Localization(LocalizationDto localizationDto)
+        public IActionResult Localization(int id, LocalizationDto localizationDto)
         {
             var localization = new Localization()
             {
-                OrderId = 1,
+                OrderId = id,
                 DesignType = localizationDto.DesignType,
                 DeflectionLimit = localizationDto.DeflectionLimit,
                 ULSLoadExpression = localizationDto.ULSLoadExpression
@@ -204,7 +220,32 @@ namespace Schaphoid.Api.Controllers
         [HttpGet("order/{id}/[action]")]
         public object Beam(int id)
         {
+            var order = _dbContext.Orders.Where(e => e.Id == id)
+                .Include(e => e.BeamInfo)
+                .FirstOrDefault();
+
+            if(order is null)
+            {
+                return NotFound();
+            }
+
             var beam = new BeamDto();
+
+            if (order.BeamInfo is not null)
+            {
+                beam = new BeamDto()
+                {
+                    Span = order.BeamInfo.Span,
+                    WebDepthLeft = order.BeamInfo.WebDepth,
+                    WebDepthRight = order.BeamInfo.WebDepthRight,
+                    BottomFlangeThickness = order.BeamInfo.BottomFlangeThickness,
+                    BottomFlangeWidth = order.BeamInfo.BottomFlangeWidth,
+                    IsUniformDepth = order.BeamInfo.IsUniformDepth,
+                    TopFlangeThickness = order.BeamInfo.TopFlangeThickness,
+                    TopFlangeWidth = order.BeamInfo.TopFlangeWidth,
+                    WebThickness = order.BeamInfo.WebThickness
+                };
+            }
 
             beam.Links.Add(new Link("save", Url.Action(nameof(Beam),
                 null, new { id = id },
@@ -237,29 +278,43 @@ namespace Schaphoid.Api.Controllers
                 return NotFound();
             }
 
-            var localization = order.Localization;
+            order.BeamInfo = new Beam
+            {
+                OrderId = order.Id,
+                IsUniformDepth = beamDto.IsUniformDepth,
+                BottomFlangeThickness = beamDto.BottomFlangeThickness,
+                BottomFlangeWidth = beamDto.BottomFlangeWidth,
+                Span = beamDto.Span,
+                TopFlangeThickness = beamDto.TopFlangeThickness,
+                TopFlangeWidth = beamDto.TopFlangeWidth,
+                WebDepth = beamDto.WebDepthLeft,
+                WebDepthRight = beamDto.IsUniformDepth? beamDto.WebDepthLeft : beamDto.WebDepthRight,
+                WebThickness = beamDto.WebThickness
+            };
 
-            var gamma_g = localization.DesignParameters.GammaG;
-            var gamma_q = localization.DesignParameters.GammaQ;
+            _dbContext.SaveChanges();
 
-            var gamma_g_610a = localization.DesignParameters.GammaG;
+            //var localization = order.Localization;
 
-            var gamma_q_610a = localization.DesignParameters.GammaQ * localization.PsiValue;
+            //var gamma_g = localization.DesignParameters.GammaG;
+            //var gamma_q = localization.DesignParameters.GammaQ;
 
-            var flanges_area = beamDto.TopFlangeThickness * beamDto.TopFlangeWidth +
-                               beamDto.BottomFlangeThickness * beamDto.BottomFlangeWidth;
+            //var gamma_g_610a = localization.DesignParameters.GammaG;
 
-            var web_eff_thick = beamDto.WebThickness * 1;
+            //var gamma_q_610a = localization.DesignParameters.GammaQ * localization.PsiValue;
 
-            var ave_web_depth = 0.5 * (beamDto.WebDepthLeft + beamDto.WebDepthRight);
+            //var flanges_area = beamDto.TopFlangeThickness * beamDto.TopFlangeWidth +
+            //                   beamDto.BottomFlangeThickness * beamDto.BottomFlangeWidth;
 
-            var section_area = flanges_area + web_eff_thick * ave_web_depth;
+            //var web_eff_thick = beamDto.WebThickness * 1;
 
-            var self_wt = Math.Round((section_area / (1000000) * 7850 * 9.81) / 1000, 2);
+            //var ave_web_depth = 0.5 * (beamDto.WebDepthLeft + beamDto.WebDepthRight);
 
-            var perm_udl = self_wt;
+            //var section_area = flanges_area + web_eff_thick * ave_web_depth;
 
+            //var self_wt = Math.Round((section_area / (1000000) * 7850 * 9.81) / 1000, 2);
 
+            //var perm_udl = self_wt;
 
             return Ok();
         }
@@ -329,6 +384,203 @@ namespace Schaphoid.Api.Controllers
         }
 
         #endregion
+
+        #region Properties
+
+        [HttpGet("order/{id}/beam/properties")]
+        public object Properties(int id)
+        {
+            var order = _dbContext.Orders.Where(e => e.Id == id)
+                .Include(e => e.BeamInfo)
+                .FirstOrDefault();
+
+            if(order is null)
+            {
+                return NotFound();
+            }
+
+            var beam = order.BeamInfo;
+
+            var warping_status = true;
+
+            var warping = warping_status ?
+                $"Iw Warping inertia = {Math.Round(beam.Warping, 0)} cm6" :
+                "Iw Warping inertia cannot be calculated";
+
+            var warpingRight = warping_status ?
+                $"Iw Warping inertia = {Math.Round(beam.WarpingRight, 0)} cm6" :
+                "Iw Warping inertia cannot be calculated";
+
+            var selfWeight = beam.IsUniformDepth ? beam.SelfWeight : (beam.SelfWeight + beam.SelfWeightRight)/2;
+
+            var surfArea = (beam.SurfAreaLeft + beam.SurfAreaRight) / 2;
+
+            var surf = (beam.SurfPerLeft + beam.SurfPerRight)/2;
+
+            var left = new List<string>()
+            {
+                $"Iy Major axis inertia = {Math.Round(beam.LeftInertia, 0)} cm4",
+                $"Iz Minor axis inertia = {Math.Round(beam.MinorInertia/10000, 0)} cm4",
+                $"iy Major axis gyration = {Math.Round(beam.IY, 1)} cm",
+                $"iz Minor axis gyration = {Math.Round(beam.IZ, 1)} cm",
+                $"It Torsional inertia = {Math.Round(beam.TorsConst, 1)} cm4",
+                warping,
+                $"A Cross section area = {Math.Round(beam.NoWebXSectionArea/100, 0)} cm2",
+                $"Weight per m = {Math.Round(selfWeight, 0)} kg/m",
+                $"Surface area per m = {Math.Round(surfArea, 1)} m2/m",
+                $"Surface area per T = {Math.Round(surf, 1)} m2/T",
+                "Ratio A/AQ = 1.15"
+            };
+
+            if (beam.IsUniformDepth)
+            {
+                return new
+                {
+                    left,
+                    beam.IsUniformDepth
+                };
+            }
+
+            var right = new List<string>()
+            {
+                $"Iy Major axis inertia = {Math.Round(beam.RightInertia, 0)} cm4",
+                $"Iz Minor axis inertia = {Math.Round(beam.MinorInertia/10000, 0)} cm4",
+                $"iy Major axis gyration = {Math.Round(beam.IYRight, 1)} cm",
+                $"iz Minor axis gyration = {Math.Round(beam.IZRight, 1)} cm",
+                $"It Torsional inertia = {Math.Round(beam.TorsConstRight, 1)} cm4",
+                warpingRight,
+                $"A Cross section area = {Math.Round(beam.NoWebXSectionArea/100, 0)} cm2"
+            };
+
+            return new
+            {
+                left,
+                right,
+                beam.IsUniformDepth
+            };
+        }
+
+        #endregion
+
+        #region Loading
+
+        [HttpGet("order/{id}/beam/loading")]
+        public object Loading(int id)
+        {
+            var order = _dbContext.Orders.Where(e => e.Id == id)
+                .Include(e => e.BeamInfo)
+                .Include(e => e.Loading)
+                .ThenInclude(e => e.PointLoads)
+                .FirstOrDefault();
+
+            if (order is null)
+            {
+                return NotFound();
+            }
+
+            var beam = order.BeamInfo;
+
+            var flanges_area = beam.TopFlangeThickness * beam.TopFlangeWidth +
+                               beam.BottomFlangeThickness * beam.BottomFlangeWidth;
+
+            var web_eff_thick = beam.WebThickness * 1;
+
+            var ave_web_depth = 0.5 * (beam.WebDepth + beam.WebDepthRight);
+
+            var section_area = flanges_area + web_eff_thick * ave_web_depth;
+
+            var self_wt = Math.Round((section_area * 7850 * 9.81d / 1000000) / 1000, 2);
+
+            var loading = order.Loading;
+
+            LoadingDto loadingDto;
+
+            if (loading is null)
+            {
+                loadingDto = new LoadingDto
+                {
+                    SelfWeight = self_wt,
+                    LoadType = LoadType.CharacteristicLoads
+                };
+            }
+            else
+            {
+                loadingDto = new LoadingDto
+                {
+                    SelfWeight = self_wt,
+                    LoadType = loading.LoadType,
+                    PointLoads = loading.PointLoads.Select(e=> new PointLoadDto
+                    {
+                        Id = e.Id,
+                        Load = e.Load,
+                        Position = e.Position
+                    }).ToList(),
+                    PermanentLoads = loading.LoadType == LoadType.CharacteristicLoads ? loading.PermanentLoads : null,
+                    VariableLoads = loading.LoadType == LoadType.CharacteristicLoads ? loading.VariableLoads : null,
+                    UltimateLoads = loading.LoadType == LoadType.UltimateLoads ? loading.UltimateLoads : null
+                };
+            }
+
+            loadingDto.Links.Add(new Link("save", Url.Action(nameof(Loading),
+                null, new { id = id },
+                Request.Scheme),
+                HttpMethods.Post));
+
+            return loadingDto;
+        }
+
+        [HttpPost("order/{id}/beam/loading")]
+        public IActionResult Loading(int id, LoadingDto loadingDto)
+        {
+            var order = _dbContext.Orders.Where(e => e.Id == id)
+                .Include(e => e.Loading)
+                .ThenInclude(e => e.PointLoads)
+                .FirstOrDefault();
+
+            if(order is null)
+            {
+                return NotFound();
+            }
+
+            if(order.Loading is null)
+            {
+                order.Loading = new Loading();
+            }
+
+            order.Loading.LoadType = loadingDto.LoadType;
+
+            if(loadingDto.LoadType == LoadType.CharacteristicLoads)
+            {
+                order.Loading.PermanentLoads = loadingDto.PermanentLoads;
+                order.Loading.VariableLoads = loadingDto.VariableLoads;
+                order.Loading.UltimateLoads = null;
+            }
+            else
+            {
+                order.Loading.PermanentLoads = null;
+                order.Loading.VariableLoads = null;
+                order.Loading.UltimateLoads = loadingDto.UltimateLoads;
+            }
+
+            order.Loading.PointLoads?.Clear();
+
+            order.Loading.PointLoads = new List<PointLoad>();
+
+            foreach (var pointLoadDto in loadingDto.PointLoads)
+            {
+                order.Loading.PointLoads.Add(new PointLoad
+                {
+                    Position = pointLoadDto.Position,
+                    Load = pointLoadDto.Load
+                });
+            }
+
+            _dbContext.SaveChanges();
+
+            return Ok();
+        }
+
+        #endregion
     }
 
     public class BeamDto : Resource
@@ -336,7 +588,7 @@ namespace Schaphoid.Api.Controllers
         public double Span { get; set; }
         public bool IsUniformDepth { get; set; } = true;
         public int WebDepthLeft { get; set; } = 1000;
-        public int WebDepthRight { get; set; } = 1000;
+        public int WebDepthRight { get; set; }
         public double WebThickness { get; set; } = 2.5;
         public int TopFlangeThickness { get; set; } = 12;
         public int TopFlangeWidth { get; set; } = 200;
@@ -355,6 +607,23 @@ namespace Schaphoid.Api.Controllers
 
     public class ConfigurationDto : Resource
     {
+    }
+
+    public class LoadingDto : Resource
+    {
+        public double SelfWeight { get; set; }
+        public LoadType LoadType { get; set; }
+        public LoadParameters PermanentLoads { get; set; }
+        public LoadParameters VariableLoads { get; set; }
+        public LoadParameters UltimateLoads { get; set; }
+        public List<PointLoadDto> PointLoads { get; set; }
+    }
+
+    public class PointLoadDto
+    {
+        public int Id { get; set; }
+        public double Position { get; set; }
+        public double Load { get; set; }
     }
 
     public class Link

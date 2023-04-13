@@ -13,16 +13,20 @@ namespace Scaphoid.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            //builder.ApplyConfiguration(new UserConfiguration());
-
             builder.Entity<Order>()
                 .HasOne(e => e.Localization)
                 .WithOne(e => e.Order)
                 .HasForeignKey<Localization>(e => e.OrderId);
 
             builder.Entity<Localization>().HasKey(e => e.OrderId);
+            builder.Entity<Beam>().HasKey(e => e.OrderId);
             builder.Entity<Localization>().OwnsOne(e => e.DeflectionLimit);
             builder.Entity<Localization>().OwnsOne(e => e.DesignParameters);
+
+            builder.Entity<Loading>().HasKey(e => e.OrderId);
+            builder.Entity<Loading>().OwnsOne(e => e.PermanentLoads);
+            builder.Entity<Loading>().OwnsOne(e => e.VariableLoads);
+            builder.Entity<Loading>().OwnsOne(e => e.UltimateLoads);
 
             base.OnModelCreating(builder);
         }

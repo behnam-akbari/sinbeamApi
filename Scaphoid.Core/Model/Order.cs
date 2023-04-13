@@ -11,5 +11,7 @@
         public DateTime OrderDate { get; set; }
 
         public Localization Localization { get; set; }
+        public Beam BeamInfo { get; set; }
+        public Loading Loading { get; set; }
     }
 }
