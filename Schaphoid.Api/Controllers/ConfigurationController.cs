@@ -570,7 +570,7 @@ namespace Schaphoid.Api.Controllers
 
         #region Bending
 
-        [HttpPost("order/{id}/analysis/bending")]
+        [HttpGet("order/{id}/analysis/bending")]
         public object Bending(int id)
         {
             var order = _dbContext.Orders.Where(e => e.Id == id)
@@ -600,7 +600,9 @@ namespace Schaphoid.Api.Controllers
             if(loading.LoadType == LoadType.UltimateLoads)
             {
                 gamma_g = 1;
-                gamma_q = 0;    
+                gamma_q = 0;
+                loading.PermanentLoads = loading.UltimateLoads;
+                loading.VariableLoads = new LoadParameters();
             }
 
             var applied_perm_udl = loading.PermanentLoads.Udl;
@@ -833,10 +835,10 @@ namespace Schaphoid.Api.Controllers
             var sheardef_sls_lh_reaction = (sls_udl_moment + sls_points_moment + part_sls_udl_moment) / beam.Span;
             var sheardef_unfactored_lh_reaction = (unfactored_udl_moment + unfactored_points_moment + unfactored_part_udl_moment) / beam.Span;
 
-            var segments = 100;
+            const int segments = 100;
             var interval = beam.Span / segments;
 
-            var bmdData = new double[100, 4];
+            var bmdData = new double[segments + 3, 4];
 
             bmdData[0, 0] = 0;
             bmdData[0, 1] = uls_left_mom;
@@ -844,6 +846,8 @@ namespace Schaphoid.Api.Controllers
             double BM_part = 0;
             double sls_BM_part = 0;
             double unfactored_bm_part = 0;
+
+            var momarray = new double[100, 100];
 
             for (int p = 1; p < segments; p++)
             {
@@ -865,7 +869,7 @@ namespace Schaphoid.Api.Controllers
                 {
                     BM_part = 0;
                     sls_BM_part = 0;
-                   unfactored_bm_part = 0;
+                    unfactored_bm_part = 0;
                 }
 
                 if (part_udl_start< (p* interval) && (p * interval) <= part_udl_end)
@@ -903,13 +907,45 @@ namespace Schaphoid.Api.Controllers
                 var unfactored_nett_bm = unfactored_bm_reaction + unfactored_bm_udl + unfactored_bm_points + unfactored_bm_part;
 
                 bmdData[p + 2, 1] = Math.Round(p * interval, 3);
+
+                momarray[p, 1] = nett_bm;
+                momarray[p, 3] = sls_nett_bm;
+                momarray[p, 50] = unfactored_nett_bm;
             }
 
-            //bmdData(segments + 2, 1) = (span ^ 2) ^ 0.5
-            //bmdData(segments + 2, 2) = -uls_right_mom
+            bmdData[segments + 2, 1] = Math.Pow(Math.Pow(beam.Span, 2), 0.5);
+            bmdData[segments + 2, 2] = -uls_right_mom;
+
+            double max_bm = int.MinValue;
+
+            for (int i = 0; i < segments; i++)
+            {
+                var new_bm = momarray[i, 1];
+
+                if(new_bm > max_bm)
+                {
+                    max_bm = new_bm;
+                }
+            }
+
+            max_bm = new List<double> { max_bm, -uls_right_mom, uls_left_mom }.Max();
+
+            double min_bm = int.MaxValue;
+
+            for (int i = 0; i < segments; i++)
+            {
+                var new_bm = momarray[i, 1];
+
+                if (new_bm < min_bm)
+                {   
+                    min_bm = new_bm;
+                }
+            }
+
+            min_bm = new List<double> { min_bm, -uls_right_mom, uls_left_mom }.Min();
 
 
-            return null;
+            return bmdData;
         }
 
         #endregion
