@@ -2,7 +2,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Scaphoid.Core.Model;
 using Scaphoid.Infrastructure.Data;
+using System;
+using System.Diagnostics.Metrics;
 using System.Text.Json.Serialization;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Schaphoid.Api.Controllers
 {
@@ -204,6 +207,11 @@ namespace Schaphoid.Api.Controllers
             if(localization.ULSLoadExpression == ULSLoadExpression.Expression610a)
             {
                 localization.DesignParameters.ReductionFactorF = 1;
+                localization.PsiValue = 1;
+            }
+            else
+            {
+                localization.PsiValue = localizationDto.PsiValue;
             }
 
             _dbContext.Add(localization);
@@ -293,28 +301,6 @@ namespace Schaphoid.Api.Controllers
             };
 
             _dbContext.SaveChanges();
-
-            //var localization = order.Localization;
-
-            //var gamma_g = localization.DesignParameters.GammaG;
-            //var gamma_q = localization.DesignParameters.GammaQ;
-
-            //var gamma_g_610a = localization.DesignParameters.GammaG;
-
-            //var gamma_q_610a = localization.DesignParameters.GammaQ * localization.PsiValue;
-
-            //var flanges_area = beamDto.TopFlangeThickness * beamDto.TopFlangeWidth +
-            //                   beamDto.BottomFlangeThickness * beamDto.BottomFlangeWidth;
-
-            //var web_eff_thick = beamDto.WebThickness * 1;
-
-            //var ave_web_depth = 0.5 * (beamDto.WebDepthLeft + beamDto.WebDepthRight);
-
-            //var section_area = flanges_area + web_eff_thick * ave_web_depth;
-
-            //var self_wt = Math.Round((section_area / (1000000) * 7850 * 9.81) / 1000, 2);
-
-            //var perm_udl = self_wt;
 
             return Ok();
         }
@@ -581,6 +567,352 @@ namespace Schaphoid.Api.Controllers
         }
 
         #endregion
+
+        #region Bending
+
+        [HttpPost("order/{id}/analysis/bending")]
+        public object Bending(int id)
+        {
+            var order = _dbContext.Orders.Where(e => e.Id == id)
+                .Include(e => e.BeamInfo)
+                .Include(e=>e.Localization)
+                .Include(e => e.Loading)
+                .ThenInclude(e => e.PointLoads)
+                .FirstOrDefault();
+
+            if(order is null)
+            {
+                return NotFound();
+            }
+
+            var beam = order.BeamInfo;
+            var localization = order.Localization;
+            var loading = order.Loading;
+
+
+            var gamma_g = localization.DesignParameters.GammaG * localization.DesignParameters.ReductionFactorF;
+            var gamma_q = localization.DesignParameters.GammaQ;
+
+            var gamma_g_610a = localization.DesignParameters.GammaG;
+
+            var gamma_q_610a = localization.DesignParameters.GammaQ * localization.PsiValue;
+
+            if(loading.LoadType == LoadType.UltimateLoads)
+            {
+                gamma_g = 1;
+                gamma_q = 0;    
+            }
+
+            var applied_perm_udl = loading.PermanentLoads.Udl;
+
+            var flanges_area = beam.TopFlangeThickness * beam.TopFlangeWidth +
+                               beam.BottomFlangeThickness * beam.BottomFlangeWidth;
+
+            var web_eff_thick = beam.WebThickness * 1;
+
+            var ave_web_depth = 0.5 * (beam.WebDepth + beam.WebDepthRight);
+
+            var section_area = flanges_area + web_eff_thick * ave_web_depth;
+
+            var self_wt = Math.Round((section_area / (1000000) * 7850 * 9.81) / 1000, 2);
+
+            var perm_udl = applied_perm_udl + self_wt;
+
+            var vary_udl = loading.LoadType == LoadType.UltimateLoads ? 0 : loading.VariableLoads.Udl;
+
+            double uls_udl_610b = 0;
+            double sls_udl = 0;
+            double uls_udl_610a = 0;
+            double unfactored_uls = 0;
+
+            if (perm_udl != 0 || vary_udl != 0)
+            {
+                uls_udl_610b = gamma_g * perm_udl + gamma_q * vary_udl;
+                sls_udl = vary_udl;
+                uls_udl_610a = gamma_g_610a * perm_udl + gamma_q_610a * vary_udl;
+                unfactored_uls = perm_udl + vary_udl;
+            }
+
+            double uls_udl = 0;
+
+            if (localization.ULSLoadExpression == ULSLoadExpression.Expression610a)
+            {
+                uls_udl = uls_udl_610b;
+            }
+            else
+            {
+                if(uls_udl_610a > 0)
+                {
+                    uls_udl = Math.Max(uls_udl_610a, uls_udl_610b);
+                }
+                else
+                {
+                    uls_udl = Math.Min(uls_udl_610a, uls_udl_610b);
+                }
+            }
+
+            var partudl_perm = loading.PermanentLoads.PartialUdl;
+
+            var partudl_vary = loading.LoadType == LoadType.UltimateLoads ? 0 : loading.VariableLoads.Udl;
+
+            double part_uls_udl_610b = 0;
+            double part_sls_udl = 0;
+            double part_uls_udl_610a = 0;
+            double part_unfactored_udl = 0;
+
+            if (partudl_perm != 0 || partudl_vary != 0)
+            {
+                part_uls_udl_610b = gamma_g * partudl_perm + gamma_q * partudl_vary;
+                part_sls_udl = partudl_vary;
+                part_uls_udl_610a = gamma_g_610a * partudl_perm + gamma_q_610a * partudl_vary;
+                part_unfactored_udl = partudl_perm + partudl_vary;
+            }
+
+            double part_uls_udl = 0;
+
+            if (localization.ULSLoadExpression == ULSLoadExpression.Expression610a)
+            {
+                part_uls_udl = part_uls_udl_610b;
+            }
+            else
+            {
+                if (part_uls_udl > 0)
+                {
+                    part_uls_udl = Math.Max(part_uls_udl_610a, part_uls_udl_610b);
+                }
+                else
+                {
+                    part_uls_udl = Math.Min(part_uls_udl_610a, part_uls_udl_610b);
+                }
+            }
+
+            var uls_left_mom_610b = gamma_g * loading.PermanentLoads.EndMomentLeft +
+                                    gamma_q * loading.VariableLoads.EndMomentLeft;
+
+            var uls_right_mom_610b = gamma_g * loading.PermanentLoads.EndMomentRight +
+                                    gamma_q * loading.VariableLoads.EndMomentRight;
+
+            var uls_left_mom_610a = gamma_g_610a * loading.PermanentLoads.EndMomentLeft +
+                                    gamma_q_610a * loading.VariableLoads.EndMomentLeft;
+
+            var uls_right_mom_610a = gamma_g_610a * loading.PermanentLoads.EndMomentRight + 
+                                     gamma_q_610a * loading.VariableLoads.EndMomentRight;
+
+            double uls_left_mom = 0;
+            double uls_right_mom = 0;
+
+            if (localization.ULSLoadExpression == ULSLoadExpression.Expression610a)
+            {
+                uls_left_mom = uls_left_mom_610b;
+                uls_right_mom = uls_right_mom_610b;
+            }
+            else
+            {
+                if(uls_left_mom > 0)
+                {
+                    uls_left_mom = Math.Max(uls_left_mom_610a, uls_left_mom_610b);
+                }
+                else
+                {
+                    uls_left_mom = Math.Min(uls_left_mom_610a, uls_left_mom_610b);
+                }
+
+                if (uls_right_mom > 0)
+                {
+                    uls_right_mom = Math.Max(uls_right_mom_610a, uls_right_mom_610b);
+                }
+                else
+                {
+                    uls_right_mom = Math.Min(uls_right_mom_610a, uls_right_mom_610b);
+                }
+            }
+
+            double unfactored_left_moment = 0;
+            double unfactored_right_moment = 0;
+
+            if (loading.LoadType == LoadType.UltimateLoads)
+            {
+                unfactored_left_moment = loading.PermanentLoads.EndMomentLeft;
+                unfactored_right_moment = loading.PermanentLoads.EndMomentRight;
+            }
+            else
+            {
+                unfactored_left_moment = loading.PermanentLoads.EndMomentLeft + loading.VariableLoads.EndMomentLeft;
+                unfactored_right_moment = loading.PermanentLoads.EndMomentRight + loading.VariableLoads.EndMomentRight;
+            }
+
+            double uls_axial_610b = gamma_g * loading.PermanentLoads.AxialForce + gamma_q * loading.VariableLoads.AxialForce;
+            double uls_axial_610a = gamma_g_610a * loading.PermanentLoads.AxialForce + gamma_q_610a * loading.VariableLoads.AxialForce;
+
+            double uls_axial = 0;
+
+            if (loading.LoadType == LoadType.UltimateLoads)
+            {
+                uls_axial = uls_axial_610b;
+            }
+            else
+            {
+                if(uls_axial > 0)
+                {
+                    uls_axial = Math.Max(uls_axial_610a, uls_axial_610b);
+                }
+                else
+                {
+                    uls_axial = Math.Min(uls_axial_610a, uls_axial_610b);
+                }
+            }
+
+            double unfactored_axial = 0;
+
+            if (loading.LoadType == LoadType.UltimateLoads)
+            {
+                unfactored_axial = loading.PermanentLoads.AxialForce;
+            }
+            else
+            {
+                unfactored_axial = loading.PermanentLoads.AxialForce + loading.VariableLoads.AxialForce;
+            }
+
+            var sls_left_mom = loading.VariableLoads.EndMomentLeft;
+            var sls_right_mom = loading.VariableLoads.EndMomentRight;
+
+            double[,] arraypoints = new double[99, 99];
+
+            for (int i = 0; i < loading.PointLoads.Count; i++)
+            {
+                if(localization.ULSLoadExpression == ULSLoadExpression.Expression610a)
+                {
+                    arraypoints[i, 4] = gamma_g * arraypoints[i, 2] + gamma_q * arraypoints[i, 3];
+                }
+                else
+                {
+                    if (arraypoints[i, 2] > 0)
+                    {
+                        arraypoints[i, 4] = Math.Max(gamma_g * arraypoints[i, 2] + gamma_q * arraypoints[i, 3],
+                                                     gamma_g_610a * arraypoints[i, 2] + gamma_q_610a * arraypoints[i, 3]);
+                    }
+                    else
+                    {
+                        arraypoints[i, 4] = Math.Min(gamma_g * arraypoints[i, 2] + gamma_q * arraypoints[i, 3],
+                             gamma_g_610a * arraypoints[i, 2] + gamma_q_610a * arraypoints[i, 3]);
+                    }
+                }
+            }
+
+            var part_udl_start = loading.PermanentLoads.PartialUdlStart;
+            var part_udl_end = loading.PermanentLoads.PartialUdlEnd;
+
+            var udl_moment = uls_udl * beam.Span * beam.Span / 2;
+            var sls_udl_moment = sls_udl * beam.Span * beam.Span / 2;
+            var unfactored_udl_moment = unfactored_uls * beam.Span * beam.Span / 2;
+
+            var part_udl_moment = part_uls_udl * (part_udl_end - part_udl_start) * (beam.Span - 0.5 * (part_udl_start + part_udl_end));
+            var part_sls_udl_moment = part_sls_udl * (part_udl_end - part_udl_start) * (beam.Span - 0.5 * (part_udl_start + part_udl_end));
+            var unfactored_part_udl_moment = part_unfactored_udl * (part_udl_end - part_udl_start) * (beam.Span - 0.5 * (part_udl_start + part_udl_end));
+
+
+            double points_moment = 0;
+            double sls_points_moment = 0;
+            double unfactored_points_moment = 0;
+
+            for (int i = 0; i < loading.PointLoads.Count; i++)
+            {
+                var mom_contrib = arraypoints[i, 4] * (beam.Span - arraypoints[i, 1]);
+                var sls_mom_contrib = arraypoints[i, 3] * (beam.Span - arraypoints[i, 1]);
+                var unfactored_mom_contrib = (arraypoints[i, 2] + arraypoints[i, 3]) * (beam.Span - arraypoints[i, 1]);
+
+                points_moment = points_moment + mom_contrib;
+                sls_points_moment = sls_points_moment + sls_mom_contrib;
+                unfactored_points_moment = unfactored_points_moment + unfactored_mom_contrib;
+            }
+
+            var lh_reaction = (udl_moment + points_moment + part_udl_moment - uls_right_mom - uls_left_mom) / beam.Span;
+            var sls_lh_reaction = (sls_udl_moment + sls_points_moment + part_sls_udl_moment - sls_right_mom - sls_left_mom) / beam.Span;
+            var unfactored_lh_reaction = (unfactored_udl_moment + unfactored_points_moment + unfactored_part_udl_moment - unfactored_left_moment - unfactored_right_moment) / beam.Span;
+
+            var sheardef_sls_lh_reaction = (sls_udl_moment + sls_points_moment + part_sls_udl_moment) / beam.Span;
+            var sheardef_unfactored_lh_reaction = (unfactored_udl_moment + unfactored_points_moment + unfactored_part_udl_moment) / beam.Span;
+
+            var segments = 100;
+            var interval = beam.Span / segments;
+
+            var bmdData = new double[100, 4];
+
+            bmdData[0, 0] = 0;
+            bmdData[0, 1] = uls_left_mom;
+
+            double BM_part = 0;
+            double sls_BM_part = 0;
+            double unfactored_bm_part = 0;
+
+            for (int p = 1; p < segments; p++)
+            {
+                bmdData[p + 2, 0] = Math.Round(p * interval, 3);
+
+                var BM_reaction = lh_reaction * p * interval + uls_left_mom;
+
+                var sls_bm_reaction = sls_lh_reaction * p * interval + sls_left_mom;
+                var unfactored_bm_reaction = unfactored_lh_reaction * p * interval + unfactored_left_moment;
+
+                var sheardef_sls_bm_reaction = sls_lh_reaction * p * interval;
+                var sheardef_unfactored_bm_reaction = unfactored_lh_reaction * p * interval;
+
+                double BM_udl = -uls_udl * Math.Pow(p * interval, 2) * 0.5;
+                double sls_bm_udl = -sls_udl * Math.Pow(p * interval, 2) * 0.5;
+                double unfactored_bm_udl = -unfactored_uls * Math.Pow(p * interval, 2) * 0.5;
+
+                if((p * interval) <= part_udl_start)
+                {
+                    BM_part = 0;
+                    sls_BM_part = 0;
+                   unfactored_bm_part = 0;
+                }
+
+                if (part_udl_start< (p* interval) && (p * interval) <= part_udl_end)
+                {
+                    BM_part = -part_uls_udl * Math.Pow((p * interval) - part_udl_start, 2) * 0.5;
+                    sls_BM_part = -part_sls_udl * Math.Pow((p * interval) - part_udl_start, 2) * 0.5;
+                    unfactored_bm_part = -part_unfactored_udl * Math.Pow((p * interval) - part_udl_start, 2) * 0.5;
+                }
+
+                if (part_udl_end< (p* interval))
+                {
+                    BM_part = -part_uls_udl * (part_udl_end - part_udl_start) * ((p * interval) - 0.5 * (part_udl_start + part_udl_end));
+                    sls_BM_part = -part_sls_udl * (part_udl_end - part_udl_start) * ((p * interval) - 0.5 * (part_udl_start + part_udl_end));
+                    unfactored_bm_part = -part_unfactored_udl * (part_udl_end - part_udl_start) * ((p * interval) - 0.5 * (part_udl_start + part_udl_end));
+                }
+
+                double BM_points = 0;
+                double sls_bm_points = 0;
+                double unfactored_bm_points = 0;
+
+                for (int z = 0; z < loading.PointLoads.Count; z++)
+                {
+                    var lever = (p * interval) - arraypoints[z, 1];
+
+                    if(lever > 0)
+                    {
+                        BM_points = BM_points - lever * arraypoints[z, 4];
+                        sls_bm_points = sls_bm_points - lever * arraypoints[z, 3];
+                        unfactored_bm_points = unfactored_bm_points - lever * (arraypoints[z, 2] + arraypoints[z, 3]);
+                    }
+                }
+
+                var nett_bm = BM_reaction + BM_udl + BM_points + BM_part;
+                var sls_nett_bm = sls_bm_reaction + sls_bm_udl + sls_bm_points + sls_BM_part;
+                var unfactored_nett_bm = unfactored_bm_reaction + unfactored_bm_udl + unfactored_bm_points + unfactored_bm_part;
+
+                bmdData[p + 2, 1] = Math.Round(p * interval, 3);
+            }
+
+            //bmdData(segments + 2, 1) = (span ^ 2) ^ 0.5
+            //bmdData(segments + 2, 2) = -uls_right_mom
+
+
+            return null;
+        }
+
+        #endregion
     }
 
     public class BeamDto : Resource
@@ -603,6 +935,7 @@ namespace Schaphoid.Api.Controllers
         public DeflectionLimit DeflectionLimit { get; set; }
         public DesignParameters DefaultNA { get; set; }
         public ULSLoadExpression ULSLoadExpression { get; set; } = ULSLoadExpression.Expression610a;
+        public int PsiValue { get; set; }
     }
 
     public class ConfigurationDto : Resource

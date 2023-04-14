@@ -9,7 +9,7 @@
         public DeflectionLimit DeflectionLimit { get; set; } = new DeflectionLimit();
         public ULSLoadExpression ULSLoadExpression { get; set; }
 
-        public int PsiValue { get; set; } = 1;
+        public int PsiValue { get; set; }
     }
 
     public enum DesignType
