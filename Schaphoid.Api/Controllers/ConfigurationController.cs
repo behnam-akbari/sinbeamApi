@@ -496,6 +496,7 @@ namespace Schaphoid.Api.Controllers
             {
                 loadingDto = new LoadingDto
                 {
+                    Span = beam.Span,
                     SelfWeight = self_wt,
                     LoadType = LoadType.CharacteristicLoads
                 };
@@ -504,6 +505,7 @@ namespace Schaphoid.Api.Controllers
             {
                 loadingDto = new LoadingDto
                 {
+                    Span = beam.Span,
                     SelfWeight = self_wt,
                     LoadType = loading.LoadType,
                     PointLoads = loading.PointLoads.Select(e=> new PointLoadDto
@@ -992,6 +994,7 @@ namespace Schaphoid.Api.Controllers
         public LoadParameters VariableLoads { get; set; }
         public LoadParameters UltimateLoads { get; set; }
         public List<PointLoadDto> PointLoads { get; set; }
+        public double Span { get; internal set; }
     }
 
     public class PointLoadDto
