@@ -127,15 +127,36 @@ namespace Schaphoid.Api.Controllers
                 Request.Scheme),
                 HttpMethods.Get));
 
+            orderDto.Links.Add(new Link("save-localization", Url.Action(nameof(Localization),
+                null, new { id = id },
+                Request.Scheme),
+                HttpMethods.Post));
+
             orderDto.Links.Add(new Link("get-beam", Url.Action(nameof(Beam),
                 null, new { id = id },
                 Request.Scheme),
                 HttpMethods.Get));
 
+            orderDto.Links.Add(new Link("save-beam", Url.Action(nameof(Beam),
+                null, new { id = id },
+                Request.Scheme),
+                HttpMethods.Post));
+
+            orderDto.Links.Add(new Link("drawing", Url.Action(nameof(BeamDrawing),
+                null, new { id = id },
+                Request.Scheme),
+                HttpMethods.Post));
+
+
             orderDto.Links.Add(new Link("get-loading", Url.Action(nameof(Loading),
                 null, new { id = id },
                 Request.Scheme),
                 HttpMethods.Get));
+
+            orderDto.Links.Add(new Link("save-loading", Url.Action(nameof(Loading),
+                null, new { id = id },
+                Request.Scheme),
+                HttpMethods.Post));
 
             orderDto.Links.Add(new Link("get-properties", Url.Action(nameof(Properties),
                 null, new { id = id },
@@ -177,11 +198,6 @@ namespace Schaphoid.Api.Controllers
                 localization.DesignParameters = new DesignParameters();
                 localization.DefaultNA = Constants.DefaultNA;
             }
-
-            localization.Links.Add(new Link("save", Url.Action(nameof(Localization),
-                null, new { id = id },
-                Request.Scheme),
-                HttpMethods.Post));
 
             return localization;
         }
@@ -237,7 +253,10 @@ namespace Schaphoid.Api.Controllers
                 return NotFound();
             }
 
-            var beam = new BeamDto();
+            var beam = new BeamDto()
+            {
+                Span = 20
+            };
 
             if (order.BeamInfo is not null)
             {
@@ -254,16 +273,6 @@ namespace Schaphoid.Api.Controllers
                     WebThickness = order.BeamInfo.WebThickness
                 };
             }
-
-            beam.Links.Add(new Link("save", Url.Action(nameof(Beam),
-                null, new { id = id },
-                Request.Scheme),
-                HttpMethods.Post));
-
-            beam.Links.Add(new Link("drawing", Url.Action(nameof(BeamDrawing),
-                null, new { id = id },
-                Request.Scheme),
-                HttpMethods.Post));
 
             return new
             {
@@ -346,6 +355,8 @@ namespace Schaphoid.Api.Controllers
             var left_web = Math.Round(0.5 * boxw - 0.5 * webs, 2);
             var right_web = Math.Round(left_web + webs, 2);
 
+            var thick = beamDto.WebThickness * 2;
+
             return new
             {
                 topFlange = new
@@ -358,7 +369,7 @@ namespace Schaphoid.Api.Controllers
                 {
                     width = 0,
                     height = Math.Round(in_bottom_flg - in_top_flg, 2),
-                    borderWidth = "auto 2px auto 2px"
+                    borderWidth = $"0 {thick}px 0 0"
                 },
                 bottomFlange = new
                 {
@@ -506,11 +517,6 @@ namespace Schaphoid.Api.Controllers
                     UltimateLoads = loading.LoadType == LoadType.UltimateLoads ? loading.UltimateLoads : null
                 };
             }
-
-            loadingDto.Links.Add(new Link("save", Url.Action(nameof(Loading),
-                null, new { id = id },
-                Request.Scheme),
-                HttpMethods.Post));
 
             return loadingDto;
         }
