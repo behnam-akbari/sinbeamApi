@@ -506,7 +506,7 @@ namespace Schaphoid.Api.Controllers
                 {
                     SelfWeight = self_wt,
                     LoadType = loading.LoadType,
-                    PointLoads = loading.PointLoads.Select(e=> new PointLoadDto
+                    UltimatePointLoads = loading.PointLoads.Select(e=> new UltimatePointLoadDto
                     {
                         Id = e.Id,
                         Load = e.Load,
@@ -558,7 +558,7 @@ namespace Schaphoid.Api.Controllers
 
             order.Loading.PointLoads = new List<PointLoad>();
 
-            foreach (var pointLoadDto in loadingDto.PointLoads)
+            foreach (var pointLoadDto in loadingDto.UltimatePointLoads)
             {
                 order.Loading.PointLoads.Add(new PointLoad
                 {
@@ -991,14 +991,22 @@ namespace Schaphoid.Api.Controllers
         public LoadParameters PermanentLoads { get; set; }
         public LoadParameters VariableLoads { get; set; }
         public LoadParameters UltimateLoads { get; set; }
-        public List<PointLoadDto> PointLoads { get; set; }
+        public List<UltimatePointLoadDto> UltimatePointLoads { get; set; }
+        public List<CharacteristicPointLoadDto> CharacteristicPointLoads { get; set; }
     }
 
-    public class PointLoadDto
+    public class UltimatePointLoadDto
     {
         public int Id { get; set; }
         public double Position { get; set; }
         public double Load { get; set; }
+    }
+    public class CharacteristicPointLoadDto
+    {
+        public int Id { get; set; }
+        public double Position { get; set; }
+        public double PermanentAction { get; set; }
+        public double VariableAction { get; set; }
     }
 
     public class Link
