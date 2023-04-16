@@ -508,12 +508,21 @@ namespace Schaphoid.Api.Controllers
                     Span = beam.Span,
                     SelfWeight = self_wt,
                     LoadType = loading.LoadType,
-                    UltimatePointLoads = loading.PointLoads.Select(e=> new UltimatePointLoadDto
-                    {
-                        Id = e.Id,
-                        Load = e.Load,
-                        Position = e.Position
-                    }).ToList(),
+                    UltimatePointLoads = loading.LoadType == LoadType.UltimateLoads ?
+                        loading.PointLoads.Select(e => new UltimatePointLoadDto
+                        {
+                            Id = e.Id,
+                            Position = e.Position,
+                            Load = e.Load
+                        }).ToList() : null,
+                    CharacteristicPointLoads = loading.LoadType == LoadType.CharacteristicLoads ?
+                        loading.PointLoads.Select(e => new CharacteristicPointLoadDto
+                        {
+                            Id = e.Id,
+                            Position = e.Position,
+                            PermanentAction = e.PermanentAction,
+                            VariableAction = e.VariableAction
+                        }).ToList() : null,
                     PermanentLoads = loading.LoadType == LoadType.CharacteristicLoads ? loading.PermanentLoads : null,
                     VariableLoads = loading.LoadType == LoadType.CharacteristicLoads ? loading.VariableLoads : null,
                     UltimateLoads = loading.LoadType == LoadType.UltimateLoads ? loading.UltimateLoads : null
@@ -543,32 +552,42 @@ namespace Schaphoid.Api.Controllers
 
             order.Loading.LoadType = loadingDto.LoadType;
 
-            if(loadingDto.LoadType == LoadType.CharacteristicLoads)
+            order.Loading.PointLoads?.Clear();
+
+            order.Loading.PointLoads = new List<PointLoad>();
+
+            if (loadingDto.LoadType == LoadType.CharacteristicLoads)
             {
                 order.Loading.PermanentLoads = loadingDto.PermanentLoads;
                 order.Loading.VariableLoads = loadingDto.VariableLoads;
                 order.Loading.UltimateLoads = null;
+
+                foreach (var pointLoadDto in loadingDto.CharacteristicPointLoads)
+                {
+                    order.Loading.PointLoads.Add(new PointLoad
+                    {
+                        Position = pointLoadDto.Position,
+                        PermanentAction = pointLoadDto.PermanentAction,
+                        VariableAction = pointLoadDto.VariableAction
+                    });
+                }
             }
             else
             {
                 order.Loading.PermanentLoads = null;
                 order.Loading.VariableLoads = null;
                 order.Loading.UltimateLoads = loadingDto.UltimateLoads;
-            }
 
-            order.Loading.PointLoads?.Clear();
-
-            order.Loading.PointLoads = new List<PointLoad>();
-
-            foreach (var pointLoadDto in loadingDto.UltimatePointLoads)
-            {
-                order.Loading.PointLoads.Add(new PointLoad
+                foreach (var pointLoadDto in loadingDto.UltimatePointLoads)
                 {
-                    Position = pointLoadDto.Position,
-                    Load = pointLoadDto.Load
-                });
+                    order.Loading.PointLoads.Add(new PointLoad
+                    {
+                        Position = pointLoadDto.Position,
+                        Load = pointLoadDto.Load
+                    });
+                }
             }
-
+            
             _dbContext.SaveChanges();
 
             return Ok();

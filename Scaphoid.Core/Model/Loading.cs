@@ -18,6 +18,8 @@
         public Loading Loading { get; set; }
         public double Position { get; set; }
         public double Load { get; set; }
+        public double PermanentAction { get; set; }
+        public double VariableAction { get; set; }
     }
 
     public enum LoadType
