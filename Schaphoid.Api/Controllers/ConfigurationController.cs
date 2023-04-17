@@ -2,10 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Scaphoid.Core.Model;
 using Scaphoid.Infrastructure.Data;
-using System;
-using System.Diagnostics.Metrics;
 using System.Text.Json.Serialization;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Schaphoid.Api.Controllers
 {
@@ -146,7 +143,6 @@ namespace Schaphoid.Api.Controllers
                 null, new { id = id },
                 Request.Scheme),
                 HttpMethods.Post));
-
 
             orderDto.Links.Add(new Link("get-loading", Url.Action(nameof(Loading),
                 null, new { id = id },
