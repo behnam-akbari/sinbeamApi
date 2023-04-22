@@ -635,6 +635,8 @@ namespace Schaphoid.Api.Controllers
 
             var web_eff_thick = beam.WebThickness * 1;
 
+            beam.WebDepthRight = 1000;
+
             var ave_web_depth = 0.5 * (beam.WebDepth + beam.WebDepthRight);
 
             var section_area = flanges_area + web_eff_thick * ave_web_depth;
