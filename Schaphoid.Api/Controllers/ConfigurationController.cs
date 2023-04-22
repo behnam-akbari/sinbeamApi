@@ -598,7 +598,7 @@ namespace Schaphoid.Api.Controllers
         {
             var order = _dbContext.Orders.Where(e => e.Id == id)
                 .Include(e => e.BeamInfo)
-                .Include(e=>e.Localization)
+                .Include(e => e.Localization)
                 .Include(e => e.Loading)
                 .ThenInclude(e => e.PointLoads)
                 .FirstOrDefault();
@@ -639,7 +639,7 @@ namespace Schaphoid.Api.Controllers
 
             var section_area = flanges_area + web_eff_thick * ave_web_depth;
 
-            var self_wt = Math.Round((section_area / (1000000) * 7850 * 9.81) / 1000, 2);
+            var self_wt = Math.Round((section_area / (1000000) * 7850 * 9.81) / 1000, digits: 4);
 
             var perm_udl = applied_perm_udl + self_wt;
 
@@ -807,6 +807,10 @@ namespace Schaphoid.Api.Controllers
             {
                 if(localization.ULSLoadExpression == ULSLoadExpression.Expression610a)
                 {
+                    arraypoints[i, 1] = loading.PointLoads.ToArray()[i].Position; // To Do
+
+                    arraypoints[i, 2] = loading.PointLoads.ToArray()[i].Load; // To Do
+
                     arraypoints[i, 4] = gamma_g * arraypoints[i, 2] + gamma_q * arraypoints[i, 3];
                 }
                 else
@@ -929,7 +933,7 @@ namespace Schaphoid.Api.Controllers
                 var sls_nett_bm = sls_bm_reaction + sls_bm_udl + sls_bm_points + sls_BM_part;
                 var unfactored_nett_bm = unfactored_bm_reaction + unfactored_bm_udl + unfactored_bm_points + unfactored_bm_part;
 
-                bmdData[p + 2, 1] = Math.Round(p * interval, 3);
+                bmdData[p + 2, 1] = nett_bm;//Math.Round(p * interval, 3);
 
                 momarray[p, 1] = nett_bm;
                 momarray[p, 3] = sls_nett_bm;
@@ -968,7 +972,17 @@ namespace Schaphoid.Api.Controllers
             min_bm = new List<double> { min_bm, -uls_right_mom, uls_left_mom }.Min();
 
 
-            return bmdData;
+            var points = new List<Point>();
+
+            for (int i = 0; i < 103; i++)
+            {
+                points.Add(new Point(bmdData[i, 0], bmdData[i, 1]));
+            }
+
+            return new
+            {
+                points = points,
+            };
         }
 
         #endregion
@@ -1019,6 +1033,7 @@ namespace Schaphoid.Api.Controllers
         public double Position { get; set; }
         public double Load { get; set; }
     }
+
     public class CharacteristicPointLoadDto
     {
         public int Id { get; set; }
@@ -1054,5 +1069,17 @@ namespace Schaphoid.Api.Controllers
         public string Designer { get; set; }
         public string Note { get; set; }
         public DateTime OrderDate { get; set; }
+    }
+
+    public class Point
+    {
+        public Point(double x, double y)
+        {
+            X = x;
+            Y = y;
+        }
+
+        public double X { get; }
+        public double Y { get; }
     }
 }
