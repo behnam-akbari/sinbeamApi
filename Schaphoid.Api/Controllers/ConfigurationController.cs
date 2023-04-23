@@ -1247,8 +1247,7 @@ namespace Schaphoid.Api.Controllers
 
             return new
             {
-                //points = bendingPoints,
-                //bendingPoints,
+                bendingPoints,
                 sheerPoints,
                 //sheerDeflectionPoints
             };
