@@ -1105,6 +1105,8 @@ namespace Schaphoid.Api.Controllers
                 }
             }
 
+            beam.WebDepthRight = 500;
+
             double leftheight = Math.Pow(Math.Pow(beam.WebDepth, 2), 0.5);
             double rightheight = Math.Pow(Math.Pow(beam.WebDepthRight, 2), 0.5);
 
@@ -1143,10 +1145,10 @@ namespace Schaphoid.Api.Controllers
 
                 momarray[j, 14] = sec_inertia;
 
-                momarray[j, 41] = (momarray[j, 60] * 1000 / (web * web_depth)) * (178 / 155);
-                momarray[j, 48] = (momarray[j, 61] * 1000 / (web * web_depth)) * (178 / 155);
-                momarray[j, 42] = momarray[j, 41] * interval * 1000 / 81000;
-                momarray[j, 47] = momarray[j, 48] * interval * 1000 / 81000;
+                momarray[j, 41] = (momarray[j, 60] * 1000 / (web * web_depth)) * (178 / 155d);
+                momarray[j, 48] = (momarray[j, 61] * 1000 / (web * web_depth)) * (178 / 155d);
+                momarray[j, 42] = momarray[j, 41] * interval * 1000 / 81000d;
+                momarray[j, 47] = momarray[j, 48] * interval * 1000 / 81000d;
             }
 
             for (int j = 1; j < segments - 1; j++)
@@ -1180,7 +1182,7 @@ namespace Schaphoid.Api.Controllers
             def_sums[1, 5] = 0;
             def_sums[11, 5] = 0;
 
-            for (int k = 0; k < 9; k++)
+            for (int k = 0; k <= 9; k++)
             {
                 double shear_def = 0;
                 double unfactored_shear_def = 0;
@@ -1199,7 +1201,7 @@ namespace Schaphoid.Api.Controllers
                 def_sums[k + 1, 10] = unfactored_shear_def;
             }
 
-            for (int k = 2; k < 10; k++)
+            for (int k = 1; k <= 10; k++)
             {
                 double defl_coeff = 0;
                 double unfactored_defl_coeff = 0;
@@ -1221,7 +1223,7 @@ namespace Schaphoid.Api.Controllers
             def_sums[1, 6] = 0;
             def_sums[11, 6] = 0;
 
-            for (int k = 2; k < 10; k++)
+            for (int k = 1; k <= 10; k++)
             {
                 def_sums[k, 1] = deflection_positions[k - 1];
                 def_sums[k, 5] = def_sums[k, 2] + def_sums[k, 4];
@@ -1229,13 +1231,19 @@ namespace Schaphoid.Api.Controllers
             }
 
             var sheerDeflectionPoints = new List<Point>();
+            var bendingDeflectionPoints = new List<Point>();
+            var totalLoadDeflectionPoints = new List<Point>();
 
-            for (int i = 1; i < 11; i++)
+            for (int i = 1; i <= 11; i++)
             {
                 var sheerDeflectionX = def_sums[i, 1];
                 var sheerDeflectionY = def_sums[i, 10];
+                var bendingDeflectionY = def_sums[i, 6];
+                var totalLoadDeflectionY = def_sums[i, 7];
 
                 sheerDeflectionPoints.Add(new Point(sheerDeflectionX, sheerDeflectionY));
+                bendingDeflectionPoints.Add(new Point(sheerDeflectionX, bendingDeflectionY));
+                totalLoadDeflectionPoints.Add(new Point(sheerDeflectionX, totalLoadDeflectionY));
             }
 
             var sheerPoints = new List<Point>();
@@ -1247,9 +1255,25 @@ namespace Schaphoid.Api.Controllers
 
             return new
             {
-                bendingPoints,
-                sheerPoints,
-                //sheerDeflectionPoints
+                bending = new
+                {
+                    points = bendingPoints,
+                    maxMoment = max_bm,
+                    minMoment = min_bm,
+                },
+                shear = new
+                {
+                    points = sheerPoints,
+                    MaxShear = sheerPoints.Select(e => e.Y).Max(),
+                    MinShear = sheerPoints.Select(e => e.Y).Min(),
+                },
+                deflection = new
+                {
+                    sheer = sheerDeflectionPoints,
+                    bending = bendingDeflectionPoints,
+                    total = totalLoadDeflectionPoints,
+                    MaxDefln = totalLoadDeflectionPoints.Select(e => e.Y).Max()
+                }
             };
         }
 
