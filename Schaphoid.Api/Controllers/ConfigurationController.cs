@@ -999,7 +999,7 @@ namespace Schaphoid.Api.Controllers
             /////////////////////////////////////////////////////////////////////////////////
             ///
 
-            bmdData[2, 3] = Math.Round(lh_reaction, 3);
+            bmdData[0, 2] = Math.Round(lh_reaction, 3);
 
             for (int p = 1; p < segments; p++)
             {
@@ -1076,7 +1076,7 @@ namespace Schaphoid.Api.Controllers
             double total_partial_udl = ltbdata[3] * (part_udl_end - part_udl_start);
             double rh_reaction = lh_reaction - beam.Span * uls_udl - total_partial_udl - total_points_load;
 
-            bmdData[segments, 3] = rh_reaction;
+            bmdData[segments, 2] = rh_reaction;
             bmdData[segments, 1] = Math.Pow(Math.Pow(beam.Span, 2), .5);
             bmdData[segments, 3] = 0;
 
@@ -1247,10 +1247,10 @@ namespace Schaphoid.Api.Controllers
 
             return new
             {
-                points = bendingPoints,
-                bendingPoints,
+                //points = bendingPoints,
+                //bendingPoints,
                 sheerPoints,
-                sheerDeflectionPoints
+                //sheerDeflectionPoints
             };
         }
 
