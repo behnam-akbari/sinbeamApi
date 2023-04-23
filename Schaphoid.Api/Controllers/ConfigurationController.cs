@@ -2,7 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Scaphoid.Core.Model;
 using Scaphoid.Infrastructure.Data;
+using System;
 using System.Text.Json.Serialization;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Schaphoid.Api.Controllers
 {
@@ -155,6 +157,11 @@ namespace Schaphoid.Api.Controllers
                 HttpMethods.Post));
 
             orderDto.Links.Add(new Link("get-properties", Url.Action(nameof(Properties),
+                null, new { id = id },
+                Request.Scheme),
+                HttpMethods.Get));
+
+            orderDto.Links.Add(new Link("get-bending", Url.Action(nameof(Bending),
                 null, new { id = id },
                 Request.Scheme),
                 HttpMethods.Get));
@@ -800,6 +807,14 @@ namespace Schaphoid.Api.Controllers
                 unfactored_axial = loading.PermanentLoads.AxialForce + loading.VariableLoads.AxialForce;
             }
 
+            var ltbdata = new double[30];
+
+            ltbdata[2] = uls_udl;
+            ltbdata[3] = part_uls_udl;
+            ltbdata[6] = uls_left_mom;
+            ltbdata[7] = uls_right_mom;
+            ltbdata[8] = uls_axial;
+
             var sls_left_mom = loading.VariableLoads.EndMomentLeft;
             var sls_right_mom = loading.VariableLoads.EndMomentRight;
 
@@ -980,6 +995,121 @@ namespace Schaphoid.Api.Controllers
             {
                 points.Add(new Point(bmdData[i, 0], bmdData[i, 1]));
             }
+
+            /////////////////////////////////////////////////////////////////////////////////
+            ///
+
+            bmdData[2, 3] = Math.Round(lh_reaction, 3);
+
+            for (int p = 1; p < segments; p++)
+            {
+                double shear_udl = -uls_udl * (p * interval);
+                double sls_shear_udl = -sls_udl * (p * interval);
+                double unfactored_shear_udl = -unfactored_uls * (p * interval);
+
+                double shear_points = 0;
+                double sls_shear_points = 0;
+                double unfactored_shear_points = 0;
+
+                for (int z = 0; z < loading.PointLoads.Count; z++)
+                {
+                    var lever = (p * interval) - arraypoints[z, 1];
+
+                    if (lever > 0)
+                    {
+                        shear_points = shear_points - arraypoints[z, 4];
+                        sls_shear_points = sls_shear_points - arraypoints[z, 3];
+                        unfactored_shear_points = unfactored_shear_points - (arraypoints[z, 2] + arraypoints[z, 3]);
+                    }
+                }
+
+                double shear_part = 0;
+                double sls_shear_part = 0;
+                double unfactored_shear_part = 0;
+
+                if ((p * interval) <= part_udl_start)
+                {
+                    shear_part = 0;
+                    sls_shear_part = 0;
+                    unfactored_shear_part = 0;
+                }
+
+                if (part_udl_start < (p * interval) && (p * interval) <= part_udl_end)
+                {
+                    shear_part = -part_uls_udl * ((p * interval) - part_udl_start);
+                    sls_shear_part = -part_sls_udl * ((p * interval) - part_udl_start);
+                    unfactored_shear_part = -part_unfactored_udl * ((p * interval) - part_udl_start);
+                }
+
+                if(part_udl_end< (p* interval))
+                {
+                    shear_part = -part_uls_udl * (part_udl_end - part_udl_start);
+                    sls_shear_part = -part_sls_udl * (part_udl_end - part_udl_start);
+                    unfactored_shear_part = -part_unfactored_udl * (part_udl_end - part_udl_start);
+                }
+
+                double nett_shear = lh_reaction + shear_udl + shear_points + shear_part;
+                double sls_nett_shear = sls_lh_reaction + sls_shear_udl + sls_shear_points + sls_shear_part;
+                double unfactored_nett_shear = unfactored_lh_reaction + unfactored_shear_udl +
+                                            unfactored_shear_points + unfactored_shear_part;
+
+                double sheardef_sls_nett_shear = sheardef_sls_lh_reaction + sls_shear_udl + sls_shear_points + sls_shear_part;
+                double sheardef_unfactored_nett_shear = sheardef_unfactored_lh_reaction + unfactored_shear_udl +
+                                                        unfactored_shear_points + unfactored_shear_part;
+
+                bmdData[p + 2, 2] = nett_shear;
+
+                momarray[p, 2] = nett_shear;
+                momarray[p, 44] = sls_nett_shear;
+                momarray[p, 49] = unfactored_nett_shear;
+                momarray[p, 60] = sheardef_sls_nett_shear;
+                momarray[p, 61] = sheardef_unfactored_nett_shear;
+            }
+
+            double total_points_load = 0;
+
+            for (int i = 0; i < loading.PointLoads.Count; i++)
+            {
+                total_points_load = total_points_load + arraypoints[i, 4];
+            }
+
+            double total_partial_udl = ltbdata[3] * (part_udl_end - part_udl_start);
+            double rh_reaction = lh_reaction - beam.Span * uls_udl - total_partial_udl - total_points_load;
+
+            bmdData[segments + 2, 3] = rh_reaction;
+            bmdData[segments + 2, 1] = Math.Pow(Math.Pow(beam.Span, 2), .5);
+            bmdData[segments + 2, 3] = 0;
+
+
+            var deflection_positions = new double[10];
+
+            for (int i = 1; i < deflection_positions.Length; i++)
+            {
+                deflection_positions[i] = i * beam.Span / 10;
+            }
+
+            for (int i = 1; i < deflection_positions.Length; i++)
+            {
+                double lh_unit_reaction = (beam.Span - deflection_positions[i]) / beam.Span;
+
+                for (int j = 1; j < segments - 1; j++)
+                {
+                    double lever = (j * interval) - deflection_positions[i];
+
+                    double unit_lever = lever > 0 ? lever : 0;
+
+                    double unit_moment = lh_unit_reaction * (j * interval) - unit_lever;
+
+                    momarray[j, i + 3] = unit_moment;
+                }
+            }
+
+            //for (int j = 1; j < segments - 1; j++)
+            //{
+            //    var section_position = j * interval;
+            //    var section_depth = leftheight - (leftheight - rightheight) * section_position / beam.Span;
+            //    momarray[j, 13] = section_depth;
+            //}
 
             return new
             {
