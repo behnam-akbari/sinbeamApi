@@ -157,6 +157,11 @@ namespace Schaphoid.Api.Controllers
                 Request.Scheme),
                 HttpMethods.Post));
 
+            orderDto.Links.Add(new Link("get-bending", Url.Action(nameof(Bending),
+                null, new { id = id },
+                Request.Scheme),
+                HttpMethods.Get));
+
             orderDto.Links.Add(new Link("get-properties", Url.Action(nameof(Properties),
                 null, new { id = id },
                 Request.Scheme),
@@ -1372,6 +1377,46 @@ namespace Schaphoid.Api.Controllers
         [HttpGet("order/{id}/top-flange-verification")]
         public object TopFlangeVerification(int id)
         {
+            //For j = 1 To segments -1
+            //    section_position = j * interval
+            //    section_depth = leftheight - (leftheight - rightheight) * section_position / span
+            //    momarray(j, 13) = section_depth                                         'this is actually the web depth
+            //Next j
+
+            var order = _dbContext.Orders.Where(e => e.Id == id)
+                .Include(e => e.BeamInfo)
+                .Include (e => e.Restraint)
+                .FirstOrDefault();
+
+            if (order is null)
+            {
+                return NotFound();
+            }
+
+            var beam = order.BeamInfo;
+
+            const int segments = 100;
+            var interval = beam.Span / segments;
+
+            double leftheight = Math.Pow(Math.Pow(beam.WebDepth, 2), 0.5);
+            double rightheight = Math.Pow(Math.Pow(beam.WebDepthRight, 2), 0.5);
+
+            var momarray = new double[100, 100];
+
+            for (int j = 1; j < segments - 1; j++)
+            {
+                var section_position = j * interval;
+                var section_depth = leftheight - (leftheight - rightheight) * section_position / beam.Span;
+                momarray[j, 13] = section_depth;
+            }
+
+            var restraint = order.Restraint;
+
+            if (restraint.FullRestraintTopFlange == false)
+            {
+
+            }
+
             return Ok();
         }
 
