@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Scaphoid.Core.Model;
 using Scaphoid.Infrastructure.Data;
 using System;
+using System.Numerics;
 using System.Text.Json.Serialization;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -161,7 +162,22 @@ namespace Schaphoid.Api.Controllers
                 Request.Scheme),
                 HttpMethods.Get));
 
-            orderDto.Links.Add(new Link("get-bending", Url.Action(nameof(Bending),
+            orderDto.Links.Add(new Link("get-restraint", Url.Action(nameof(Restraints),
+                null, new { id = id },
+                Request.Scheme),
+                HttpMethods.Get));
+
+            orderDto.Links.Add(new Link("save-restraint", Url.Action(nameof(Restraints),
+                null, new { id = id },
+                Request.Scheme),
+                HttpMethods.Post));
+
+            orderDto.Links.Add(new Link("get-top-flange-verification", Url.Action(nameof(TopFlangeVerification),
+                null, new { id = id },
+                Request.Scheme),
+                HttpMethods.Get));
+
+            orderDto.Links.Add(new Link("get-bottom-flange-verification", Url.Action(nameof(BottomFlangeVerification),
                 null, new { id = id },
                 Request.Scheme),
                 HttpMethods.Get));
@@ -1212,8 +1228,8 @@ namespace Schaphoid.Api.Controllers
                     unfactored_defl_coeff = unfactored_defl_coeff + momarray[j, k + 49];
                 }
 
-                def_sums[k, 2] = defl_coeff * 1000000000 / 210;
-                def_sums[k, 6] = unfactored_defl_coeff * 1000000000 / 210;
+                def_sums[k, 2] = defl_coeff * 1000000000 / 210d;
+                def_sums[k, 6] = unfactored_defl_coeff * 1000000000 / 210d;
             }
 
             def_sums[1, 2] = 0;
@@ -1241,16 +1257,16 @@ namespace Schaphoid.Api.Controllers
                 var bendingDeflectionY = def_sums[i, 6];
                 var totalLoadDeflectionY = def_sums[i, 7];
 
-                sheerDeflectionPoints.Add(new Point(sheerDeflectionX, sheerDeflectionY));
-                bendingDeflectionPoints.Add(new Point(sheerDeflectionX, bendingDeflectionY));
-                totalLoadDeflectionPoints.Add(new Point(sheerDeflectionX, totalLoadDeflectionY));
+                sheerDeflectionPoints.Add(new Point(sheerDeflectionX, Math.Round(sheerDeflectionY, 2)));
+                bendingDeflectionPoints.Add(new Point(sheerDeflectionX, Math.Round(bendingDeflectionY, 2)));
+                totalLoadDeflectionPoints.Add(new Point(sheerDeflectionX, Math.Round(totalLoadDeflectionY, 2)));
             }
 
             var sheerPoints = new List<Point>();
 
             for (int i = 0; i < segments + 1; i++)
             {
-                sheerPoints.Add(new Point(bmdData[i, 0], bmdData[i, 2]));
+                sheerPoints.Add(new Point(bmdData[i, 0], Math.Round(bmdData[i, 2], 2)));
             }
 
             return new
@@ -1278,6 +1294,103 @@ namespace Schaphoid.Api.Controllers
         }
 
         #endregion
+
+        #region Restraints
+
+        [HttpGet("order/{id}/restraints")]
+        public object Restraints(int id)
+        {
+            var order = _dbContext.Orders.Where(e => e.Id == id)
+                .Include(e => e.BeamInfo)
+                .Include(e => e.Restraint)
+                .FirstOrDefault();
+
+            if(order is null)
+            {
+                return NotFound();
+            }
+
+            var beam = order.BeamInfo;
+
+            if(order.Restraint is null)
+            {
+                var restraintDto = new RestraintDto
+                {
+                    TopFlangeRestraints = new List<double> { 0, beam.Span },
+                    BottomFlangeRestraints = new List<double> { 0, beam.Span },
+                    FullRestraintTopFlange = false, 
+                    FullRestraintBottomFlange = false
+                };
+
+                return restraintDto;
+            }
+            else
+            {
+                var restraint = order.Restraint;
+
+                var restraintDto = new RestraintDto
+                {
+                    TopFlangeRestraints = restraint.TopFlangeRestraints,
+                    BottomFlangeRestraints = restraint.BottomFlangeRestraints,
+                    FullRestraintTopFlange = restraint.FullRestraintTopFlange,
+                    FullRestraintBottomFlange = restraint.FullRestraintBottomFlange
+                };
+
+                return restraintDto;
+            }
+        }
+
+        [HttpPost("order/{id}/restraints")]
+        public IActionResult Restraints(int id, RestraintDto restraintDto)
+        {
+            var order = _dbContext.Orders.Where(e => e.Id == id)
+                .Include(e => e.Restraint)
+                .FirstOrDefault();
+
+            if (order is null)
+            {
+                return NotFound();
+            }
+
+            order.Restraint = new Restraint
+            {
+                BottomFlangeRestraints = restraintDto.BottomFlangeRestraints,
+                TopFlangeRestraints = restraintDto.TopFlangeRestraints,
+                FullRestraintBottomFlange = restraintDto.FullRestraintBottomFlange,
+                FullRestraintTopFlange = restraintDto.FullRestraintTopFlange
+            };
+
+            _dbContext.SaveChanges();
+
+            return Ok();
+        }
+
+        #endregion
+
+        #region Flange Verification
+
+        [HttpGet("order/{id}/top-flange-verification")]
+        public object TopFlangeVerification(int id)
+        {
+            return Ok();
+        }
+
+        [HttpGet("order/{id}/bottom-flange-verification")]
+        public object BottomFlangeVerification(int id)
+        {
+            return Ok();
+        }
+
+        #endregion
+    }
+
+    public class RestraintDto
+    {
+        public bool FullRestraintTopFlange { get; set; }
+        public List<double> TopFlangeRestraints { get; set; }
+
+        public bool FullRestraintBottomFlange { get; set; }
+        public List<double> BottomFlangeRestraints { get; set; }
     }
 
     public class BeamDto : Resource

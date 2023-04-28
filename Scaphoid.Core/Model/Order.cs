@@ -13,5 +13,18 @@
         public Localization Localization { get; set; }
         public Beam BeamInfo { get; set; }
         public Loading Loading { get; set; }
+        public Restraint Restraint { get; set; }
+    }
+
+    public class Restraint
+    {
+        public int OrderId { get; set; }
+        public Order Order { get; set; }
+
+        public bool FullRestraintTopFlange { get; set; }
+        public List<double> TopFlangeRestraints { get; set; }
+
+        public bool FullRestraintBottomFlange { get; set; }
+        public List<double> BottomFlangeRestraints { get; set; }
     }
 }

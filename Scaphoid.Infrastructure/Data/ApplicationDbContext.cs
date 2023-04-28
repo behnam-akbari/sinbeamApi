@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Scaphoid.Core.Model;
 
 namespace Scaphoid.Infrastructure.Data
@@ -27,6 +28,19 @@ namespace Scaphoid.Infrastructure.Data
             builder.Entity<Loading>().OwnsOne(e => e.PermanentLoads);
             builder.Entity<Loading>().OwnsOne(e => e.VariableLoads);
             builder.Entity<Loading>().OwnsOne(e => e.UltimateLoads);
+
+            builder.Entity<Restraint>().HasKey(e => e.OrderId);
+
+            var intArrayValueConverter = new ValueConverter<List<double>, string>(
+                i => string.Join(",", i),
+                s => string.IsNullOrWhiteSpace(s) ? new List<double>() : s.Split(new[] { ',' }).Select(double.Parse)
+                .ToList());
+
+            builder.Entity<Restraint>().Property(e => e.TopFlangeRestraints)
+                 .HasConversion(intArrayValueConverter);
+
+            builder.Entity<Restraint>().Property(e => e.BottomFlangeRestraints)
+                 .HasConversion(intArrayValueConverter);
 
             base.OnModelCreating(builder);
         }
