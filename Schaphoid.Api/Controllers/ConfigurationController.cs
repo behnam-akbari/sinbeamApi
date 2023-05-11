@@ -1427,7 +1427,7 @@ namespace Schaphoid.Api.Controllers
 
             if (restraint.FullRestraintTopFlange == false)
             {
-                for (int i = 1; i < restraint.TopFlangeRestraints.Count; i++)
+                for (int i = 1; i <= restraint.TopFlangeRestraints.Count; i++)
                 {
                     ltbtop[i, 1] = restraint.TopFlangeRestraints[i - 1];
                 }
@@ -1439,7 +1439,7 @@ namespace Schaphoid.Api.Controllers
                     ltbtop[i + 1, 2] = ltbtop[i + 1, 1] - ltbtop[i, 1];
                 }
 
-                for (int i = 1; i < restraint.TopFlangeRestraints.Count; i++)
+                for (int i = 1; i <= restraint.TopFlangeRestraints.Count; i++)
                 {
                     var distance = ltbtop[i, 1];
 
@@ -1448,7 +1448,7 @@ namespace Schaphoid.Api.Controllers
                     ltbtop[i, 3] = nett_bm;
                 }
 
-                for (int i = 1; i < restraint.TopFlangeRestraints.Count; i++)
+                for (int i = 1; i <= restraint.TopFlangeRestraints.Count; i++)
                 {
                     for (int k = 1; k < 3; k++)
                     {
@@ -1458,7 +1458,7 @@ namespace Schaphoid.Api.Controllers
                     }
                 }
 
-                for (int i = 1; i < restraint.TopFlangeRestraints.Count; i++)
+                for (int i = 1; i <= restraint.TopFlangeRestraints.Count; i++)
                 {
                     double momstart = ltbtop[i, 3];
                     double mom_25 = ltbtop[i + 1, 5];
@@ -1549,7 +1549,7 @@ namespace Schaphoid.Api.Controllers
 
                 var alpha = top_flg_thick <= 40 ? 0.49 : 0.76;
 
-                for (int i = 2; i < restraint.TopFlangeRestraints.Count; i++)
+                for (int i = 2; i <= restraint.TopFlangeRestraints.Count; i++)
                 {
                     ltbtop[i, 11] = (ltbtop[i, 1] - ltbtop[i - 1, 1]) * 1000;
                     ltbtop[i, 12] = ltbtop[i, 10] * ltbtop[i, 11] / (gyra_top * lambda_one_top);
@@ -1558,14 +1558,14 @@ namespace Schaphoid.Api.Controllers
                     ltbtop[i, 15] = aeff_top * ltbtop[i, 14] * topstrength / 1000;
                 }
 
-                for (int i = 1; i < restraint.TopFlangeRestraints.Count; i++)
+                for (int i = 1; i <= restraint.TopFlangeRestraints.Count; i++)
                 {
                     ltbtop[i, 16] = depth_left - (depth_left - depth_right) * (ltbtop[i, 1] / span);
                 }
 
                 var extra = 0.5 * (top_flg_thick + bottom_flg_thick);
 
-                for (int i = 2; i < restraint.TopFlangeRestraints.Count; i++)
+                for (int i = 2; i <= restraint.TopFlangeRestraints.Count; i++)
                 {
                     ltbtop[i, 17] = ltbtop[i - 1, 3] / ((ltbtop[i - 1, 16] + 0.5 * (top_flg_thick + bottom_flg_thick)) / 1000);
                     ltbtop[i, 18] = ltbtop[i, 3] / ((ltbtop[i, 16] + 0.5 * (top_flg_thick + bottom_flg_thick)) / 1000);
@@ -1612,7 +1612,7 @@ namespace Schaphoid.Api.Controllers
                 var ult_axial = gamma_g * axial_perm + gamma_q * axial_vary;
                 var top_axial_force = ult_axial * top_area / (bottom_area + top_area);
 
-                for (int i = 2; i < restraint.TopFlangeRestraints.Count; i++)
+                for (int i = 2; i <= restraint.TopFlangeRestraints.Count; i++)
                 {
                     ltbtop[i, 21] = ltbtop[i, 27] + top_axial_force;
                     ltbtop[i, 26] = ltbtop[i, 19] + top_axial_force;
@@ -1652,7 +1652,7 @@ namespace Schaphoid.Api.Controllers
                 double max_top_ute = 0;
                 var max_position = 0;
 
-                for (int i = 2; i < restraint.TopFlangeRestraints.Count; i++)
+                for (int i = 2; i <= restraint.TopFlangeRestraints.Count; i++)
                 {
                     var top_ute = Math.Max(ltbtop[i, 22], ltbtop[i, 23]);
 
@@ -1665,12 +1665,12 @@ namespace Schaphoid.Api.Controllers
 
                 var verificationItems = new List<VerificationItem>();
 
-                for (int i = 2; i < restraint.TopFlangeRestraints.Count; i++)
+                for (int i = 2; i <= restraint.TopFlangeRestraints.Count; i++)
                 {
                     var verificationItem = new VerificationItem
                     {
                         From = Math.Round(ltbtop[i - 1, 1], 3),
-                        To = Math.Round(ltbtop[i - 2, 2], 3)
+                        To = Math.Round(ltbtop[i, 1], 3)
                     };
 
                     if(ltbtop[i, 29] == -1)
@@ -1701,47 +1701,18 @@ namespace Schaphoid.Api.Controllers
                         }
                     }
 
+                    verificationItem.Captions = GetTopFlangePositionCaptions(ltbtop, aeff_top, top_flange_tension_resi, top_axial_force, i);
+
                     verificationItems.Add(verificationItem);
                 }
 
-                var captions = new List<string>();
-
-                if(max_position > 0)
-                {
-                    if(ltbtop[max_position, 29] == 1)
-                    {
-                        captions.Add($"Segment length = {Math.Round(ltbtop[max_position, 2] * 1000, 0)} mm");
-                        captions.Add($"Correction factor kc = {Math.Round(ltbtop[max_position, 10], 2)}");
-                        captions.Add($"Slenderness = {Math.Round(ltbtop[max_position, 12], 3)}");
-                        captions.Add($"Effective area = {Math.Round(aeff_top, 0)} mm2");
-                        captions.Add($"Resistance = {Math.Round(ltbtop[max_position, 15], 0)} kN");
-                        captions.Add($"Force due to moment = {Math.Round(ltbtop[max_position, 19], 0)}  kN");
-                        captions.Add($"Force from axial = {Math.Round(top_axial_force, 0)} kN");
-                        captions.Add($"Total = {Math.Round(ltbtop[max_position, 26], 0)} kN");
-                        captions.Add($"Utilisation = {Math.Round(ltbtop[max_position, 23], 2)}");
-                        captions.Add($"Segment from {Math.Round(ltbtop[max_position - 1, 1], 3)} m to {Math.Round(ltbtop[max_position, 1], 3)} m");
-                    }
-                    else if(ltbtop[max_position, 29] == -1)
-                    {
-                        captions.Add($"Segment length = {Math.Round(ltbtop[max_position, 2] * 1000, 0)} mm");
-                        captions.Add($"Force due to moment = {Math.Round(ltbtop[max_position, 27], 0)} kN");
-                        captions.Add($"Force from axial = {Math.Round(top_axial_force, 0)} kN");
-                        captions.Add($"Total = {Math.Round(ltbtop[max_position, 21], 0)} kN");
-                        captions.Add($"Segment from {Math.Round(ltbtop[max_position - 1, 1], 3)} m to {Math.Round(ltbtop[max_position, 1], 3)} m");
-                        captions.Add("Segment is in tension");
-                        captions.Add($"Flange tension resistance = {Math.Round(top_flange_tension_resi, 0)} kN");
-                    }
-                    else
-                    {
-                        captions.Add("Segment is partially in tension and part in compression");
-                        captions.Add($"Segment length = {Math.Round(ltbtop[max_position, 2] * 1000, 0)} mm");
-                        captions.Add($"Most onerous utilisation ={Math.Round(ltbtop[max_position, 30], 2)} considering {top_ute_condition}");
-                        captions.Add($"Segment from {Math.Round(ltbtop[max_position - 1, 1], 3)} m to  {Math.Round(ltbtop[max_position, 1], 3)} m");
-                    }
-                }
+                var captions = max_position > 0 ?
+                    GetTopFlangeMaxPositionCaptions(top_ute_condition, ltbtop, aeff_top, top_flange_tension_resi, top_axial_force, max_position) :
+                    new List<string>();
 
                 return new
                 {
+                    MaximumUtilization = Math.Round(max_top_ute, 2),
                     verificationItems,
                     captions
                 };
@@ -1788,6 +1759,16 @@ namespace Schaphoid.Api.Controllers
                 var aeff_top = beta * top_flg_thick * top_flg_width;
 
                 var resi_top = aeff_top * topstrength / 1000;
+
+                if (loading.PermanentLoads is null)
+                {
+                    loading.PermanentLoads = new LoadParameters();
+                }
+
+                if (loading.VariableLoads is null)
+                {
+                    loading.VariableLoads = new LoadParameters();
+                }
 
                 var axial_perm = loading.PermanentLoads.AxialForce;
                 var axial_vary = loading.VariableLoads.AxialForce;
@@ -1899,6 +1880,92 @@ namespace Schaphoid.Api.Controllers
                     captions
                 };
             }
+        }
+
+        private List<string> GetTopFlangePositionCaptions(double[,] ltbtop, double aeff_top, double top_flange_tension_resi, double top_axial_force, int seg_no)
+        {
+            var captions = new List<string>();
+
+            captions.Add($"Segment from {Math.Round(ltbtop[seg_no - 1, 1], 3)} m to {Math.Round(ltbtop[seg_no, 1], 3)} m");
+            captions.Add($"Segment length = {Math.Round(ltbtop[seg_no, 2] * 1000, 0)} mm");
+
+            if (ltbtop[seg_no, 29] == 1)
+            {
+                captions.Add($"Correction factor kc = {Math.Round(ltbtop[seg_no, 10], 2)}");
+                captions.Add($"Slenderness = {Math.Round(ltbtop[seg_no, 12], 3)}");
+                captions.Add($"Effective area = {Math.Round(aeff_top, 0)} mm2");
+                captions.Add($"Resistance = {Math.Round(ltbtop[seg_no, 15], 0)} kN");
+                captions.Add($"Force due to moment = {Math.Round(ltbtop[seg_no, 19], 0)}  kN");
+                captions.Add($"Force from axial = {Math.Round(top_axial_force, 0)} kN");
+                captions.Add($"Total = {Math.Round(ltbtop[seg_no, 26], 0)} kN");
+                captions.Add($"Utilisation = {Math.Round(ltbtop[seg_no, 23], 2)}");
+            }
+            else if (ltbtop[seg_no, 29] == -1)
+            {
+                captions.Add($"Force due to moment = {Math.Round(ltbtop[seg_no, 27], 0)} kN");
+                captions.Add($"Force from axial = {Math.Round(top_axial_force, 0)} kN");
+                captions.Add($"Total = {Math.Round(ltbtop[seg_no, 21], 0)} kN");
+                captions.Add("Segment is in tension");
+                captions.Add($"Flange tension resistance = {Math.Round(top_flange_tension_resi, 0)} kN");
+            }
+            else
+            {
+                captions.Add("Segment is partially in tension and part in compression");
+
+                if(ltbtop[seg_no, 30] == ltbtop[seg_no, 22])
+                {
+                    captions.Add($"Force due to moment = {Math.Round(ltbtop[seg_no, 27], 0)} kN");
+                    captions.Add($"Total = {Math.Round(ltbtop[seg_no, 21], 0)} kN");
+                }
+                else
+                {
+                    captions.Add($"Force due to moment = {Math.Round(ltbtop[seg_no, 19], 0)} kN");
+                    captions.Add($"Total = {Math.Round(ltbtop[seg_no, 26], 0)} kN");
+                }
+
+                captions.Add($"Force from axial = {Math.Round(top_axial_force, 0)} kN");
+
+                var ute_condition = ltbtop[seg_no, 30] == ltbtop[seg_no, 22] ? " tension" : " compression";
+
+                captions.Add($"Most onerous utilisation ={Math.Round(ltbtop[seg_no, 30], 2)} considering {ute_condition}");
+            }
+
+            return captions;
+        }
+
+        private List<string> GetTopFlangeMaxPositionCaptions(string top_ute_condition, double[,] ltbtop, double aeff_top, double top_flange_tension_resi, double top_axial_force, int seg_no)
+        {
+            var captions = new List<string>();
+
+            captions.Add($"Segment from {Math.Round(ltbtop[seg_no - 1, 1], 3)} m to {Math.Round(ltbtop[seg_no, 1], 3)} m");
+            captions.Add($"Segment length = {Math.Round(ltbtop[seg_no, 2] * 1000, 0)} mm");
+
+            if (ltbtop[seg_no, 29] == 1)
+            {
+                captions.Add($"Correction factor kc = {Math.Round(ltbtop[seg_no, 10], 2)}");
+                captions.Add($"Slenderness = {Math.Round(ltbtop[seg_no, 12], 3)}");
+                captions.Add($"Effective area = {Math.Round(aeff_top, 0)} mm2");
+                captions.Add($"Resistance = {Math.Round(ltbtop[seg_no, 15], 0)} kN");
+                captions.Add($"Force due to moment = {Math.Round(ltbtop[seg_no, 19], 0)}  kN");
+                captions.Add($"Force from axial = {Math.Round(top_axial_force, 0)} kN");
+                captions.Add($"Total = {Math.Round(ltbtop[seg_no, 26], 0)} kN");
+                captions.Add($"Utilisation = {Math.Round(ltbtop[seg_no, 23], 2)}");
+            }
+            else if (ltbtop[seg_no, 29] == -1)
+            {
+                captions.Add($"Force due to moment = {Math.Round(ltbtop[seg_no, 27], 0)} kN");
+                captions.Add($"Force from axial = {Math.Round(top_axial_force, 0)} kN");
+                captions.Add($"Total = {Math.Round(ltbtop[seg_no, 21], 0)} kN");
+                captions.Add("Segment is in tension");
+                captions.Add($"Flange tension resistance = {Math.Round(top_flange_tension_resi, 0)} kN");
+            }
+            else
+            {
+                captions.Add("Segment is partially in tension and part in compression");
+                captions.Add($"Most onerous utilisation ={Math.Round(ltbtop[seg_no, 30], 2)} considering {top_ute_condition}");
+            }
+
+            return captions;
         }
 
         private double designstrength(Order order, int thickness, int steelgrade)
@@ -2050,19 +2117,19 @@ namespace Schaphoid.Api.Controllers
 
             if (restraint.FullRestraintBottomFlange == false)
             {
-                for (int i = 1; i < restraint.BottomFlangeRestraints.Count; i++)
+                for (int i = 1; i <= restraint.BottomFlangeRestraints.Count; i++)
                 {
                     ltbbottom[i, 1] = restraint.BottomFlangeRestraints[i - 1];
                 }
 
                 ltbbottom[1, 2] = 0;
 
-                for (int i = 1; i < restraint.BottomFlangeRestraints.Count; i++)
+                for (int i = 1; i <= restraint.BottomFlangeRestraints.Count; i++)
                 {
                     ltbbottom[i + 1, 2] = ltbbottom[i + 1, 1] - ltbbottom[i, 1];
                 }
 
-                for (int i = 1; i < restraint.BottomFlangeRestraints.Count; i++)
+                for (int i = 1; i <= restraint.BottomFlangeRestraints.Count; i++)
                 {
                     var distance = ltbbottom[i, 1];
 
@@ -2071,7 +2138,7 @@ namespace Schaphoid.Api.Controllers
                     ltbbottom[i, 3] = nett_bm;
                 }
 
-                for (int i = 1; i < restraint.BottomFlangeRestraints.Count; i++)
+                for (int i = 1; i <= restraint.BottomFlangeRestraints.Count; i++)
                 {
                     for (int k = 1; k < 3; k++)
                     {
@@ -2081,7 +2148,7 @@ namespace Schaphoid.Api.Controllers
                     }
                 }
 
-                for (int i = 1; i < restraint.BottomFlangeRestraints.Count; i++)
+                for (int i = 1; i <= restraint.BottomFlangeRestraints.Count; i++)
                 {
                     double momstart = ltbbottom[i, 3];
                     double mom_25 = ltbbottom[i + 1, 5];
@@ -2172,7 +2239,7 @@ namespace Schaphoid.Api.Controllers
 
                 var alpha = top_flg_thick <= 40 ? 0.49 : 0.76;
 
-                for (int i = 2; i < restraint.BottomFlangeRestraints.Count; i++)
+                for (int i = 2; i <= restraint.BottomFlangeRestraints.Count; i++)
                 {
                     ltbbottom[i, 11] = (ltbbottom[i, 1] - ltbbottom[i - 1, 1]) * 1000;
                     ltbbottom[i, 12] = ltbbottom[i, 10] * ltbbottom[i, 11] / (gyra_bottom * lambda_one_bottom);
@@ -2181,14 +2248,14 @@ namespace Schaphoid.Api.Controllers
                     ltbbottom[i, 15] = aeff_bottom * ltbbottom[i, 14] * bottomstrength / 1000;
                 }
 
-                for (int i = 1; i < restraint.BottomFlangeRestraints.Count; i++)
+                for (int i = 1; i <= restraint.BottomFlangeRestraints.Count; i++)
                 {
                     ltbbottom[i, 16] = depth_left - (depth_left - depth_right) * (ltbbottom[i, 1] / span);
                 }
 
                 var extra = 0.5 * (top_flg_thick + bottom_flg_thick);
 
-                for (int i = 2; i < restraint.BottomFlangeRestraints.Count; i++)
+                for (int i = 2; i <= restraint.BottomFlangeRestraints.Count; i++)
                 {
                     ltbbottom[i, 17] = ltbbottom[i - 1, 3] / ((ltbbottom[i - 1, 16] + 0.5 * (top_flg_thick + bottom_flg_thick)) / 1000);
                     ltbbottom[i, 18] = ltbbottom[i, 3] / ((ltbbottom[i, 16] + 0.5 * (top_flg_thick + bottom_flg_thick)) / 1000);
@@ -2253,7 +2320,7 @@ namespace Schaphoid.Api.Controllers
                 var ult_axial = gamma_g * axial_perm + gamma_q * axial_vary;
                 var bottom_axial_force = ult_axial * bottom_area / (bottom_area + top_area);
 
-                for (int i = 2; i < restraint.BottomFlangeRestraints.Count; i++)
+                for (int i = 2; i <= restraint.BottomFlangeRestraints.Count; i++)
                 {
                     ltbbottom[i, 21] = ltbbottom[i, 19] + bottom_axial_force;
                     ltbbottom[i, 26] = ltbbottom[i, 24] + bottom_axial_force;
@@ -2293,9 +2360,9 @@ namespace Schaphoid.Api.Controllers
                 double max_bottom_ute = 0;
                 var max_position = 0;
 
-                for (int i = 2; i < restraint.BottomFlangeRestraints.Count; i++)
+                for (int i = 2; i <= restraint.BottomFlangeRestraints.Count; i++)
                 {
-                    var bottom_ute = Math.Max(ltbtop[i, 22], ltbtop[i, 23]);
+                    var bottom_ute = Math.Max(ltbbottom[i, 22], ltbbottom[i, 23]);
 
                     if (bottom_ute > max_bottom_ute)
                     {
@@ -2307,7 +2374,7 @@ namespace Schaphoid.Api.Controllers
 
                 var verificationItems = new List<VerificationItem>();
 
-                for (int i = 2; i < restraint.BottomFlangeRestraints.Count; i++)
+                for (int i = 2; i <= restraint.BottomFlangeRestraints.Count; i++)
                 {
                     var verificationItem = new VerificationItem
                     {
@@ -2343,48 +2410,18 @@ namespace Schaphoid.Api.Controllers
                         verificationItem.Utilization = Math.Round(ltbtop[i, 30], 2);
                     }
 
+                    verificationItem.Captions = GetBottomFlangeCaptions(ltbbottom, aeff_bottom, bottom_flange_tension_resi, bottom_axial_force, i);
+
                     verificationItems.Add(verificationItem);
                 }
 
-                var captions = new List<string>();
-
-                if (max_position > 0)
-                {
-                    if (ltbtop[max_position, 29] == 1)
-                    {
-                        captions.Add($"Segment length = {Math.Round(ltbbottom[max_position, 2] * 1000, 0)} mm");
-                        captions.Add($"Correction factor kc = {Math.Round(ltbbottom[max_position, 10], 2)}");
-                        captions.Add($"Slenderness = {Math.Round(ltbbottom[max_position, 12], 3)}");
-                        captions.Add($"Effective area = {Math.Round(aeff_bottom, 0)} mm2");
-                        captions.Add($"Resistance = {Math.Round(ltbbottom[max_position, 15], 0)} kN");
-                        captions.Add($"Force due to moment = {Math.Round(ltbbottom[max_position, 19], 0)}  kN");
-                        captions.Add($"Force from axial = {Math.Round(bottom_axial_force, 0)} kN");
-                        captions.Add($"Total = {Math.Round(ltbbottom[max_position, 21], 0)} kN");
-                        captions.Add($"Utilisation = {Math.Round(ltbbottom[max_position, 23], 2)}");
-                        captions.Add($"Segment from {Math.Round(ltbbottom[max_position - 1, 1], 3)} m to {Math.Round(ltbbottom[max_position, 1], 3)} m");
-                    }
-                    else if (ltbtop[max_position, 29] == -1)
-                    {
-                        captions.Add($"Segment length = {Math.Round(ltbbottom[max_position, 2] * 1000, 0)} mm");
-                        captions.Add($"Force due to moment = {Math.Round(ltbbottom[max_position, 24], 0)} kN");
-                        captions.Add($"Force from axial = {Math.Round(bottom_axial_force, 0)} kN");
-                        captions.Add($"Total = {Math.Round(ltbbottom[max_position, 26], 0)} kN");
-                        captions.Add($"Segment from {Math.Round(ltbbottom[max_position - 1, 1], 3)} m to {Math.Round(ltbbottom[max_position, 1], 3)} m");
-                        captions.Add("Segment is in tension");
-                        captions.Add($"Flange tension resistance = {Math.Round(bottom_flange_tension_resi, 0)} kN");
-                    }
-                    else
-                    {
-                        captions.Add("Segment is partially in tension and part in compression");
-                        captions.Add($"Segment length = {Math.Round(ltbbottom[max_position, 2] * 1000, 0)} mm");
-                        captions.Add($"Most onerous utilisation ={Math.Round(ltbbottom[max_position, 30], 2)} considering {max_onerous}");
-                        captions.Add($"Segment from {Math.Round(ltbbottom[max_position - 1, 1], 3)} m to  {Math.Round(ltbbottom[max_position, 1], 3)} m");
-                        captions.Add($"Force from axial = {Math.Round(bottom_axial_force, 0)} kN");
-                    }
-                }
+                var captions = max_position > 0 ?
+                    GetBottomFlangeMaxPositionCaptions(max_onerous, ltbbottom, aeff_bottom, bottom_flange_tension_resi, bottom_axial_force, max_position) :
+                    new List<string>();
 
                 return new
                 {
+                    MaximumUtilization = Math.Round(max_bottom_ute, 2),
                     verificationItems,
                     captions
                 };
@@ -2431,6 +2468,16 @@ namespace Schaphoid.Api.Controllers
                 var aeff_bottom = beta * top_flg_thick * top_flg_width;
 
                 var resi_bottom = aeff_bottom * botstrength / 1000;
+
+                if (loading.PermanentLoads is null)
+                {
+                    loading.PermanentLoads = new LoadParameters();
+                }
+
+                if (loading.VariableLoads is null)
+                {
+                    loading.VariableLoads = new LoadParameters();
+                }
 
                 var axial_perm = loading.PermanentLoads.AxialForce;
                 var axial_vary = loading.VariableLoads.AxialForce;
@@ -2542,6 +2589,89 @@ namespace Schaphoid.Api.Controllers
                     captions
                 };
             }
+        }
+
+        private List<string> GetBottomFlangeMaxPositionCaptions(string max_onerous, double[,] ltbbottom, double aeff_bottom, double bottom_flange_tension_resi, double bottom_axial_force, int max_position)
+        {
+            var captions = new List<string>();
+
+            captions.Add($"Segment from {Math.Round(ltbbottom[max_position - 1, 1], 3)} m to {Math.Round(ltbbottom[max_position, 1], 3)} m");
+            captions.Add($"Segment length = {Math.Round(ltbbottom[max_position, 2] * 1000, 0)} mm");
+
+            if (ltbbottom[max_position, 29] == 1)
+            {
+                captions.Add($"Correction factor kc = {Math.Round(ltbbottom[max_position, 10], 2)}");
+                captions.Add($"Slenderness = {Math.Round(ltbbottom[max_position, 12], 3)}");
+                captions.Add($"Effective area = {Math.Round(aeff_bottom, 0)} mm2");
+                captions.Add($"Resistance = {Math.Round(ltbbottom[max_position, 15], 0)} kN");
+                captions.Add($"Force due to moment = {Math.Round(ltbbottom[max_position, 19], 0)}  kN");
+                captions.Add($"Force from axial = {Math.Round(bottom_axial_force, 0)} kN");
+                captions.Add($"Total = {Math.Round(ltbbottom[max_position, 21], 0)} kN");
+                captions.Add($"Utilisation = {Math.Round(ltbbottom[max_position, 23], 2)}");
+            }
+            else if (ltbbottom[max_position, 29] == -1)
+            {
+                captions.Add($"Force due to moment = {Math.Round(ltbbottom[max_position, 24], 0)} kN");
+                captions.Add($"Force from axial = {Math.Round(bottom_axial_force, 0)} kN");
+                captions.Add($"Total = {Math.Round(ltbbottom[max_position, 26], 0)} kN");
+                captions.Add("Segment is in tension");
+                captions.Add($"Flange tension resistance = {Math.Round(bottom_flange_tension_resi, 0)} kN");
+            }
+            else
+            {
+                captions.Add("Segment is partially in tension and part in compression");
+                captions.Add($"Most onerous utilisation ={Math.Round(ltbbottom[max_position, 30], 2)} considering {max_onerous}");
+                captions.Add($"Force from axial = {Math.Round(bottom_axial_force, 0)} kN");
+            }
+
+            return captions;
+        }
+
+        private List<string> GetBottomFlangeCaptions(double[,] ltbbottom, double aeff_bottom, double bottom_flange_tension_resi, double bottom_axial_force, int seg_no)
+        {
+            var captions = new List<string>();
+
+            captions.Add($"Segment from {Math.Round(ltbbottom[seg_no - 1, 1], 3)} m to {Math.Round(ltbbottom[seg_no, 1], 3)} m");
+            captions.Add($"Segment length = {Math.Round(ltbbottom[seg_no, 2] * 1000, 0)} mm");
+
+            if (ltbbottom[seg_no, 29] == 1)
+            {
+                captions.Add($"Correction factor kc = {Math.Round(ltbbottom[seg_no, 10], 2)}");
+                captions.Add($"Slenderness = {Math.Round(ltbbottom[seg_no, 12], 3)}");
+                captions.Add($"Effective area = {Math.Round(aeff_bottom, 0)} mm2");
+                captions.Add($"Resistance = {Math.Round(ltbbottom[seg_no, 15], 0)} kN");
+                captions.Add($"Force due to moment = {Math.Round(ltbbottom[seg_no, 19], 0)}  kN");
+                captions.Add($"Force from axial = {Math.Round(bottom_axial_force, 0)} kN");
+                captions.Add($"Total = {Math.Round(ltbbottom[seg_no, 21], 0)} kN");
+                captions.Add($"Utilisation = {Math.Round(ltbbottom[seg_no, 23], 2)}");
+            }
+            else if (ltbbottom[seg_no, 29] == -1)
+            {
+                captions.Add($"Force due to moment = {Math.Round(ltbbottom[seg_no, 24], 0)} kN");
+                captions.Add($"Force from axial = {Math.Round(bottom_axial_force, 0)} kN");
+                captions.Add($"Total = {Math.Round(ltbbottom[seg_no, 26], 0)} kN");
+                captions.Add("Segment is in tension");
+                captions.Add($"Flange tension resistance = {Math.Round(bottom_flange_tension_resi, 0)} kN");
+            }
+            else
+            {
+                if (ltbbottom[seg_no, 30] == ltbbottom[seg_no, 22])
+                {
+                    captions.Add($"Force due to moment = {Math.Round(ltbbottom[seg_no, 24], 0)} kN");
+                    captions.Add($"Total = {Math.Round(ltbbottom[seg_no, 26], 0)} kN");
+                }
+                else
+                {
+                    captions.Add($"Force due to moment = {Math.Round(ltbbottom[seg_no, 19], 0)} kN");
+                    captions.Add($"Total = {Math.Round(ltbbottom[seg_no, 21], 0)} kN");
+                }
+
+                var ute_condition = ltbbottom[seg_no, 30] == ltbbottom[seg_no, 22] ? " tension" : " compression";
+
+                captions.Add($"Most onerous utilisation ={Math.Round(ltbbottom[seg_no, 30], 2)} considering {ute_condition}");
+            }
+
+            return captions;
         }
 
         #endregion
@@ -2856,5 +2986,6 @@ namespace Schaphoid.Api.Controllers
         public double DesignForce { get; set; }
         public double Resistance { get; set; }
         public double Utilization { get; set; }
+        public List<string> Captions { get; set; }
     }
 }
