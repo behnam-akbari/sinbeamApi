@@ -2776,7 +2776,7 @@ namespace Schaphoid.Api.Controllers
             var crit_local_resi = crit_local_reduction * web * webyield * critical_depth / (Math.Pow(3, 0.5) * 1000);
             var crit_local_ute = abs_max_shear / crit_local_resi;
 
-            var max_shear_ute = 0;
+            double max_shear_ute = 0;
             var global_slenderness = crit_slender;
             var global_reduction = crit_reduction;
             var global_resi = crit_global_resi;
@@ -2803,8 +2803,11 @@ namespace Schaphoid.Api.Controllers
                 five.Add(new Point(pointX, Math.Round(momarray[i, 40], 3)));
             }
 
+            var caption = $"Maximum web utilisation = {Math.Round(max_shear_ute, 2)} at {max_shear_position} with {web} mm web";
+
             return new
             {
+                caption,
                 one, 
                 two, 
                 three, 
