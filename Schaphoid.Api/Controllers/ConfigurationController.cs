@@ -55,7 +55,16 @@ namespace Schaphoid.Api.Controllers
             };
 
             _dbContext.Add(order);
-            _dbContext.SaveChanges();
+
+            try
+            {
+                _dbContext.SaveChanges();
+            }
+            catch (Exception ex) 
+            {
+                throw;
+            }
+
 
             orderDto = GetOrderDto(order.Id);
 
@@ -186,6 +195,11 @@ namespace Schaphoid.Api.Controllers
                 HttpMethods.Get));
 
             orderDto.Links.Add(new Link("get-bottom-flange-verification", Url.Action(nameof(BottomFlangeVerification),
+                null, new { id = id },
+                Request.Scheme),
+                HttpMethods.Get));
+
+            orderDto.Links.Add(new Link("get-web-verification", Url.Action(nameof(WebVerification),
                 null, new { id = id },
                 Request.Scheme),
                 HttpMethods.Get));
@@ -1490,7 +1504,8 @@ namespace Schaphoid.Api.Controllers
                     ltbtop[i + 1, 10] = Math.Pow(c_one, -0.5);
                 }
 
-                var steeltop = beam.TopFlangeSteel == SteelType.S355 ? 355 : 275;
+                //var steeltop = beam.TopFlangeSteel == SteelType.S355 ? 355 : 275;
+                var steeltop = 355;
 
                 var top_flg_thick = beam.TopFlangeThickness;
                 var top_flg_width = beam.TopFlangeWidth;
@@ -2591,6 +2606,213 @@ namespace Schaphoid.Api.Controllers
             }
         }
 
+        [HttpGet("order/{id}/web-verification")]
+        public object WebVerification(int id)
+        {
+            var order = _dbContext.Orders.Where(e => e.Id == id)
+                .Include(e => e.BeamInfo)
+                .Include(e => e.Restraint)
+                .Include(e => e.Loading)
+                .ThenInclude(e => e.PointLoads)
+                .Include(e => e.Localization)
+                .FirstOrDefault();
+
+            if (order is null)
+            {
+                return NotFound();
+            }
+
+            var beam = order.BeamInfo;
+            var loading = order.Loading;
+
+            double webyield = beam.WebSteel == SteelType.S275 ? 275 : 355;
+
+            webyield = 0.9 * webyield;
+
+            var web = beam.WebThickness;
+
+            var fourthroot = web switch
+            {
+                1.5 => 10900000,
+                2 => 16780000,
+                2.5 => 23470000,
+                3 => 30880000
+            };
+
+            var span = beam.Span;
+
+            var interval = span / 100;
+            var segments = 100;
+
+            var localization = order.Localization;
+
+            var depth_left = beam.WebDepth;
+
+            var depth_right = beam.IsUniformDepth ? depth_left : beam.WebDepthRight;
+
+            double leftheight = Math.Pow(Math.Pow(beam.WebDepth, 2), 0.5);
+            double rightheight = Math.Pow(Math.Pow(beam.WebDepthRight, 2), 0.5);
+
+            var gamma_g = localization.DesignParameters.GammaG * localization.DesignParameters.ReductionFactorF;
+            var gamma_q = localization.DesignParameters.GammaQ;
+            var gamma_g_610a = localization.DesignParameters.GammaG;
+            var gamma_q_610a = localization.DesignParameters.GammaQ * localization.PsiValue;
+            
+            var momarray = new double[100, 100];
+
+            var helpData = GetHelpData(order);
+
+            var lh_reaction = helpData.lh_reaction;
+            var rh_reaction = helpData.rh_reaction;
+            var uls_udl = helpData.uls_udl;
+            var sls_udl = helpData.sls_udl;
+            var unfactored_uls = helpData.unfactored_uls;
+            var part_udl_start = helpData.part_udl_start;
+            var part_udl_end = helpData.part_udl_end;
+
+            var part_uls_udl = helpData.part_uls_udl;
+            var part_sls_udl = helpData.part_sls_udl;
+            var part_unfactored_udl = helpData.part_unfactored_udl;
+
+            double[,] arraypoints = GetArrayPoints(localization, loading, gamma_g, gamma_q, gamma_g_610a, gamma_q_610a);
+
+            for (int j = 1; j < segments; j++)
+            {
+                double shear_udl = -uls_udl * (j * interval);
+
+                double shear_points = 0;
+
+                for (int z = 0; z < loading.PointLoads.Count; z++)
+                {
+                    var lever = (j * interval) - arraypoints[z, 1];
+
+                    if (lever > 0)
+                    {
+                        shear_points = shear_points - arraypoints[z, 4];
+                    }
+                }
+
+                double shear_part = 0;
+
+                if ((j * interval) <= part_udl_start)
+                {
+                    shear_part = 0;
+                }
+
+                if (part_udl_start < (j * interval) && (j * interval) <= part_udl_end)
+                {
+                    shear_part = -part_uls_udl * ((j * interval) - part_udl_start);
+                }
+
+                if (part_udl_end < (j * interval))
+                {
+                    shear_part = -part_uls_udl * (part_udl_end - part_udl_start);
+                }
+
+                double nett_shear = lh_reaction + shear_udl + shear_points + shear_part;
+
+                momarray[j, 2] = nett_shear;
+            }
+
+            for (int j = 1; j < segments - 1; j++)
+            {
+                var section_position = j * interval;
+                var section_depth = leftheight - (leftheight - rightheight) * section_position / span;
+                momarray[j, 13] = section_depth;
+            }
+
+            for (int j = 1; j < segments - 1; j++)
+            {
+                momarray[j, 30] = 32.4 * fourthroot / (web * Math.Pow(momarray[j, 13], 2));
+            }
+
+            for (int j = 1; j < segments - 1; j++)
+            {
+                momarray[j, 31] = Math.Pow((webyield / (momarray[j, 30] * Math.Pow(3, 0.5))), 0.5);
+                momarray[j, 32] = Math.Min(1, 1.5 / (0.5 + Math.Pow(momarray[j, 31], 2)));
+                momarray[j, 33] = momarray[j, 32] * web * webyield * momarray[j, 13] / (Math.Pow(3, 0.5) * 1000);
+            }
+
+            var weblocalbuckle = true;
+
+            for (int j = 1; j < segments - 1; j++)
+            {
+                momarray[j, 35] = (5.34 + (40 * 178) / (momarray[j, 13] * web)) * (189800) * Math.Pow((web / 178), 2);
+                momarray[j, 36] = Math.Pow(webyield / (momarray[j, 35] * Math.Pow(3, 0.5)), 0.5);
+                momarray[j, 37] = Math.Min(1, 1.15 / (0.9 + momarray[j, 36]));
+                momarray[j, 38] = momarray[j, 37] * web * webyield * momarray[j, 13] / (Math.Pow(3, 0.5) * 1000);
+
+                momarray[j, 39] = weblocalbuckle ? Math.Min(momarray[j, 38], momarray[j, 33]) : momarray[j, 33];
+
+                momarray[j, 40] = Math.Pow(Math.Pow(momarray[j, 2] / momarray[j, 39], 2), 0.5);
+            }
+
+            double abs_max_shear;
+            string max_shear_position;
+            double critical_depth;
+
+            if (lh_reaction > -rh_reaction)
+            {
+                abs_max_shear = lh_reaction;
+                max_shear_position = "left end";
+                critical_depth = leftheight;
+            }
+            else
+            {
+                abs_max_shear = -rh_reaction;
+                max_shear_position = "right end";
+                critical_depth = rightheight;
+            }
+
+            var crit_stress = 32.4 * fourthroot / (web * Math.Pow(critical_depth, 2));
+            var crit_slender = Math.Pow(webyield / (crit_stress * Math.Pow(3, 0.5)), 0.5);
+            var crit_reduction = Math.Min(1, 1.5 / (0.5 + Math.Pow(crit_slender, 2)));
+            var crit_global_resi = crit_reduction * web * webyield * critical_depth / (Math.Pow(3, 0.5) * 1000);
+            var crit_global_ute = abs_max_shear / crit_global_resi;
+
+            double crit_local_stress = Math.Pow((5.34 + (40 * 178) / (critical_depth * web)) * (189800) * (web / 178), 2);
+            var crit_local_slenderness = Math.Pow(webyield / (crit_local_stress * Math.Pow(3, 0.5)), 0.5);
+            var crit_local_reduction = Math.Min(1, 1.15 / (0.9 + crit_local_slenderness));
+            var crit_local_resi = crit_local_reduction * web * webyield * critical_depth / (Math.Pow(3, 0.5) * 1000);
+            var crit_local_ute = abs_max_shear / crit_local_resi;
+
+            var max_shear_ute = 0;
+            var global_slenderness = crit_slender;
+            var global_reduction = crit_reduction;
+            var global_resi = crit_global_resi;
+            var global_ute = crit_global_ute;
+            var local_slenderness = crit_local_slenderness;
+            var local_reduction = crit_local_reduction;
+            var local_resi = crit_local_resi;
+            var local_ute = crit_local_ute;
+
+            var one = new List<Point>();
+            var two = new List<Point>();
+            var three = new List<Point>();
+            var four = new List<Point>();
+            var five = new List<Point>();
+
+            for (int i = 0; i < segments - 1 ; i++)
+            {
+                var pointX = i * interval;
+
+                one.Add(new Point(pointX, Math.Round(momarray[i, 2], 3)));
+                two.Add(new Point(pointX, Math.Round(momarray[i, 33], 3)));
+                three.Add(new Point(pointX, Math.Round(momarray[i, 38], 3)));
+                four.Add(new Point(pointX, Math.Round(momarray[i, 39], 3)));
+                five.Add(new Point(pointX, Math.Round(momarray[i, 40], 3)));
+            }
+
+            return new
+            {
+                one, 
+                two, 
+                three, 
+                four, 
+                five
+            };
+        }
+
         private List<string> GetBottomFlangeMaxPositionCaptions(string max_onerous, double[,] ltbbottom, double aeff_bottom, double bottom_flange_tension_resi, double bottom_axial_force, int max_position)
         {
             var captions = new List<string>();
@@ -2847,6 +3069,26 @@ namespace Schaphoid.Api.Controllers
 
             var lh_reaction = (udl_moment + points_moment + part_udl_moment - uls_right_mom - uls_left_mom) / beam.Span;
 
+
+            double total_points_load = 0;
+
+            for (int i = 0; i < loading.PointLoads.Count; i++)
+            {
+                total_points_load = total_points_load + arraypoints[i, 4];
+            }
+
+            double total_partial_udl = part_uls_udl * (part_udl_end - part_udl_start);
+            double rh_reaction = lh_reaction - beam.Span * uls_udl - total_partial_udl - total_points_load;
+
+            double sls_udl = 0;
+            double unfactored_uls = 0;
+
+            if (perm_udl != 0 || vary_udl != 0)
+            {
+                sls_udl = vary_udl;
+                unfactored_uls = perm_udl + vary_udl;
+            }
+
             var helpData = new HelpData
             {
                 uls_left_mom = uls_left_mom,
@@ -2855,7 +3097,12 @@ namespace Schaphoid.Api.Controllers
                 uls_udl = uls_udl,
                 part_udl_start = part_udl_start,
                 part_udl_end = part_udl_end,
-                part_uls_udl = part_uls_udl
+                part_uls_udl = part_uls_udl,
+                rh_reaction = rh_reaction,
+                part_sls_udl = part_sls_udl,
+                part_unfactored_udl = part_unfactored_udl,
+                unfactored_uls = unfactored_uls,
+                sls_udl = sls_udl,
             };
 
             return helpData;
@@ -2873,6 +3120,11 @@ namespace Schaphoid.Api.Controllers
         public int part_udl_start { get; set; }
         public int part_udl_end { get; internal set; }
         public double part_uls_udl { get; internal set; }
+        public double rh_reaction { get; internal set; }
+        public double part_sls_udl { get; internal set; }
+        public double part_unfactored_udl { get; internal set; }
+        public double unfactored_uls { get; internal set; }
+        public double sls_udl { get; internal set; }
     }
 
     public class RestraintDto

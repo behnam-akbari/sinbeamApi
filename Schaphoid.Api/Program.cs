@@ -26,6 +26,8 @@ app.UseCors(AllowSpecificOrigins);
 
 app.UseAuthorization();
 
+app.MapGet("/", () => "Comming Soon ...");
+
 app.MapControllers();
 
 app.Run();
