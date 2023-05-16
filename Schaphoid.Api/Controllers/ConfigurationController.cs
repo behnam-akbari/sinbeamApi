@@ -2653,14 +2653,14 @@ namespace Schaphoid.Api.Controllers
             double leftheight = Math.Pow(Math.Pow(beam.WebDepth, 2), 0.5);
             double rightheight = Math.Pow(Math.Pow(beam.WebDepthRight, 2), 0.5);
 
-            var gamma_g = localization.DesignParameters.GammaG * localization.DesignParameters.ReductionFactorF;
-            var gamma_q = localization.DesignParameters.GammaQ;
-            var gamma_g_610a = localization.DesignParameters.GammaG;
-            var gamma_q_610a = localization.DesignParameters.GammaQ * localization.PsiValue;
-            
-            var momarray = new double[100, 100];
-
             var helpData = GetHelpData(order);
+
+            var gamma_g = helpData.gamma_g;
+            var gamma_q = helpData.gamma_q;
+            var gamma_g_610a = helpData.gamma_g_610a;
+            var gamma_q_610a = helpData.gamma_q_610a;
+
+            var momarray = new double[100, 100];
 
             var lh_reaction = helpData.lh_reaction;
             var rh_reaction = helpData.rh_reaction;
@@ -2792,15 +2792,15 @@ namespace Schaphoid.Api.Controllers
             var four = new List<Point>();
             var five = new List<Point>();
 
-            for (int i = 0; i < segments - 1 ; i++)
+            for (int i = 1; i < segments - 1 ; i++)
             {
-                var pointX = i * interval;
+                double pointX = Math.Round(i * interval, 2);
 
-                one.Add(new Point(pointX, Math.Round(momarray[i, 2], 3)));
-                two.Add(new Point(pointX, Math.Round(momarray[i, 33], 3)));
-                three.Add(new Point(pointX, Math.Round(momarray[i, 38], 3)));
-                four.Add(new Point(pointX, Math.Round(momarray[i, 39], 3)));
-                five.Add(new Point(pointX, Math.Round(momarray[i, 40], 3)));
+                one.Add(new Point(pointX, Math.Round(momarray[i, 2], 2)));
+                two.Add(new Point(pointX, Math.Round(momarray[i, 33], 2)));
+                three.Add(new Point(pointX, Math.Round(momarray[i, 38], 2)));
+                four.Add(new Point(pointX, Math.Round(momarray[i, 39], 2)));
+                five.Add(new Point(pointX, Math.Round(momarray[i, 40], 2)));
             }
 
             max_shear_ute = weblocalbuckle ? Math.Max(global_ute, local_ute) : global_ute;
@@ -3108,6 +3108,10 @@ namespace Schaphoid.Api.Controllers
                 part_unfactored_udl = part_unfactored_udl,
                 unfactored_uls = unfactored_uls,
                 sls_udl = sls_udl,
+                gamma_g = gamma_g,
+                gamma_q = gamma_q,
+                gamma_g_610a = gamma_g_610a,
+                gamma_q_610a = gamma_q_610a,
             };
 
             return helpData;
@@ -3130,6 +3134,10 @@ namespace Schaphoid.Api.Controllers
         public double part_unfactored_udl { get; internal set; }
         public double unfactored_uls { get; internal set; }
         public double sls_udl { get; internal set; }
+        public double gamma_g { get; internal set; }
+        public double gamma_q { get; internal set; }
+        public double gamma_g_610a { get; internal set; }
+        public double gamma_q_610a { get; internal set; }
     }
 
     public class RestraintDto
