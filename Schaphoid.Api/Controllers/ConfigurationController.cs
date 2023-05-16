@@ -2803,6 +2803,8 @@ namespace Schaphoid.Api.Controllers
                 five.Add(new Point(pointX, Math.Round(momarray[i, 40], 3)));
             }
 
+            max_shear_ute = weblocalbuckle ? Math.Max(global_ute, local_ute) : global_ute;
+
             var caption = $"Maximum web utilisation = {Math.Round(max_shear_ute, 2)} at {max_shear_position} with {web} mm web";
 
             return new
