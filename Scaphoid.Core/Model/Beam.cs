@@ -10,6 +10,7 @@
 
         public int WebDepth { get; set; }
         public int WebDepthRight { get; set; }
+        public bool WebLocalBuckle { get; set; } = true;
 
         public double WebThickness { get; set; }
         public SteelType WebSteel { get; set; }
