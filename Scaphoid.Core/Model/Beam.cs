@@ -18,10 +18,12 @@
         public int TopFlangeThickness { get; set;}
         public int TopFlangeWidth { get; set; }
         public SteelType TopFlangeSteel { get; set; }
+        public bool FixedTopFlange { get; set; }
 
         public int BottomFlangeThickness { get; set; }
         public int BottomFlangeWidth { get; set; }
         public SteelType BottomFlangeSteel { get; set; }
+        public bool FixedBottomFlange { get; set; }
 
         public double SectionInertia => GetInertia(WebDepth);
         public double LeftInertia => GetInertia(WebDepth);

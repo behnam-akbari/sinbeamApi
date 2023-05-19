@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Scaphoid.Core.Model;
 using Scaphoid.Infrastructure.Data;
 using System;
@@ -2915,9 +2916,22 @@ namespace Schaphoid.Api.Controllers
                 return NotFound();
             }
 
-            double designed_web = -1;
-            double max_shear_ute = int.MaxValue;
+            double designed_web, max_shear_ute;
+            GetDesignWeb(order, out designed_web, out max_shear_ute);
 
+            var caption = max_shear_ute > 1 ? "No satisfactory web - try increasing the beam depth" :
+                    $"Thinnest web is {designed_web} mm, with a utilisation of {Math.Round(max_shear_ute, 2)}";
+
+            return new
+            {
+                caption
+            };
+        }
+
+        private void GetDesignWeb(Order order, out double designed_web, out double max_shear_ute)
+        {
+            designed_web = -1;
+            max_shear_ute = int.MaxValue;
             foreach (var web in Constants.WebThicknessCollection)
             {
                 max_shear_ute = GetMaxShearUte(order, web);
@@ -2928,14 +2942,6 @@ namespace Schaphoid.Api.Controllers
                     break;
                 }
             }
-
-            var caption = max_shear_ute > 1 ? "No satisfactory web - try increasing the beam depth" :
-                    $"Thinnest web is {designed_web} mm, with a utilisation of {Math.Round(max_shear_ute, 2)}";
-
-            return new
-            {
-                caption
-            };
         }
 
         [HttpGet("order/{id}/bottom-flange-design")]
@@ -2954,65 +2960,11 @@ namespace Schaphoid.Api.Controllers
                 return NotFound();
             }
 
-            var beam = order.BeamInfo;
-            var restraint = order.Restraint;
-
-            var fixedflangewidth = false;
-
-            var caption = string.Empty;
-
-            if (fixedflangewidth == false)
-            {
-                for (int i = 0; i < 8; i++)
-                {
-                    var bottom_flg_thick = Constants.FlangeThicknessCollection2[i];
-                    var bottom_flg_width = Constants.FlangeWidthCollection2[i];
-
-                    var max_bottom_ute = GetMaxBottomUte(order, bottom_flg_thick, bottom_flg_width);
-
-                    if (max_bottom_ute <= 1)
-                    {
-                        caption = $"Lightest bottom flange is {bottom_flg_width} x {bottom_flg_thick} mm, Utilisation is {max_bottom_ute}";
-                        break;
-                    }
-                }
-
-                if (string.IsNullOrWhiteSpace(caption))
-                {
-                    caption = "No suitable sizes - increase beam depth or steel grade";
-
-                }
-            }
-            else
-            {
-                var fixedwidth = 200;
-
-                for (int i = 0; i < 8; i++)
-                {
-                    var bottom_flg_thick = Constants.FlangeThicknessCollection2[i];
-                    var bottom_flg_width = Constants.FlangeWidthCollection2[i];
-
-                    if (fixedwidth == bottom_flg_width)
-                    {
-                        var max_bottom_ute = GetMaxBottomUte(order, bottom_flg_thick, bottom_flg_width);
-
-                        if (max_bottom_ute <= 1)
-                        {
-                            caption = $"Lightest bottom flange of this fixed width is {bottom_flg_width} x {bottom_flg_thick} mm, Utilisation is {max_bottom_ute}";
-                            break;
-                        }
-                    }
-                }
-
-                if (string.IsNullOrWhiteSpace(caption))
-                {
-                    caption = "No suitable sizes of this width";
-                }
-            }
+            var flangeDesign = GetBottomFlangeDesign(order);
 
             return new
             {
-                caption,
+                caption = flangeDesign.Caption
             };
         }
 
@@ -3032,24 +2984,129 @@ namespace Schaphoid.Api.Controllers
                 return NotFound();
             }
 
-            var beam = order.BeamInfo;
-            var restraint = order.Restraint;
+            var flangeDesign = GetTopFlangeDesign(order);
 
+            return new
+            {
+                caption = flangeDesign.Caption
+            };
+        }
+
+        [HttpPost("order/{id}/web-design/confirm")]
+        public IActionResult ConfirmWebDesign(int id)
+        {
+            var order = _dbContext.Orders.Where(e => e.Id == id)
+                .Include(e => e.BeamInfo)
+                .Include(e => e.Restraint)
+                .Include(e => e.Loading)
+                .ThenInclude(e => e.PointLoads)
+                .Include(e => e.Localization)
+                .FirstOrDefault();
+
+            if (order is null)
+            {
+                return NotFound();
+            }
+
+            double designed_web, max_shear_ute;
+
+            GetDesignWeb(order, out designed_web, out max_shear_ute);
+
+            order.BeamInfo.WebThickness = designed_web;
+
+            _dbContext.SaveChanges();
+
+            return Ok();
+        }
+
+        [HttpPost("order/{id}/bottom-flange-design/confirm")]
+        public IActionResult ConfirmBottomFlangeDesign(int id, ConfirmFlange confirmFlange)
+        {
+            var order = _dbContext.Orders.Where(e => e.Id == id)
+                .Include(e => e.BeamInfo)
+                .Include(e => e.Restraint)
+                .Include(e => e.Loading)
+                .ThenInclude(e => e.PointLoads)
+                .Include(e => e.Localization)
+                .FirstOrDefault();
+
+            if (order is null)
+            {
+                return NotFound();
+            }
+
+            order.BeamInfo.FixedBottomFlange = confirmFlange.FixedFlange;
+
+            var flangeDesign = GetBottomFlangeDesign(order);
+
+            if(!flangeDesign.IsValid)
+            {
+                return BadRequest(flangeDesign.Caption);
+            }
+
+            order.BeamInfo.BottomFlangeWidth = (int)flangeDesign.Width;
+            order.BeamInfo.BottomFlangeThickness = flangeDesign.Thick;
+
+            _dbContext.SaveChanges();
+
+            return Ok();
+        }
+
+        [HttpPost("order/{id}/top-flange-design/confirm")]
+        public IActionResult ConfirmTopFlangeDesign(int id, ConfirmFlange confirmFlange)
+        {
+            var order = _dbContext.Orders.Where(e => e.Id == id)
+                .Include(e => e.BeamInfo)
+                .Include(e => e.Restraint)
+                .Include(e => e.Loading)
+                .ThenInclude(e => e.PointLoads)
+                .Include(e => e.Localization)
+                .FirstOrDefault();
+
+            if (order is null)
+            {
+                return NotFound();
+            }
+
+            order.BeamInfo.FixedTopFlange = confirmFlange.FixedFlange;
+
+            var flangeDesign = GetTopFlangeDesign(order);
+
+            if(!flangeDesign.IsValid)
+            {
+                return BadRequest(flangeDesign.Caption);
+            }
+
+            order.BeamInfo.TopFlangeWidth = (int)flangeDesign.Width;
+            order.BeamInfo.TopFlangeThickness = flangeDesign.Thick;
+
+            _dbContext.SaveChanges();
+            
+            return Ok();
+        }
+
+        private FlangeDesign GetTopFlangeDesign(Order order)
+        {
             var fixedflangewidth = false;
 
             var caption = string.Empty;
+            double max_top_ute = -1;
+            int top_flg_thick = -1;
+            double top_flg_width = -1;
+            bool IsValid = false;
 
             if (fixedflangewidth == false)
             {
-                for (int i = 0; i < 8; i++)
+                for (int i = 0; i < 34; i++)
                 {
-                    var top_flg_thick = Constants.FlangeThicknessCollection[i];
-                    var top_flg_width = Constants.FlangeWidthCollection[i];
+                    top_flg_thick = Constants.FlangeThicknessCollection[i];
+                    top_flg_width = Constants.FlangeWidthCollection[i];
 
-                    var max_top_ute = GetMaxTopUte(order, top_flg_thick, top_flg_width);
+                    max_top_ute = GetMaxTopUte(order, top_flg_thick, top_flg_width);
 
                     if (max_top_ute <= 1)
                     {
+                        IsValid = true;
                         caption = $"Lightest top flange is {top_flg_width} x {top_flg_thick} mm, Utilisation is {max_top_ute}";
                         break;
                     }
@@ -3064,17 +3121,18 @@ namespace Schaphoid.Api.Controllers
             {
                 var fixedwidth = 200;
 
-                for (int i = 0; i < 8; i++)
+                for (int i = 0; i < 34; i++)
                 {
-                    var top_flg_thick = Constants.FlangeThicknessCollection[i];
-                    var top_flg_width = Constants.FlangeWidthCollection[i];
+                    top_flg_thick = Constants.FlangeThicknessCollection[i];
+                    top_flg_width = Constants.FlangeWidthCollection[i];
 
                     if (fixedwidth == top_flg_width)
                     {
-                        var max_top_ute = GetMaxTopUte(order, top_flg_thick, top_flg_width);
+                        max_top_ute = GetMaxTopUte(order, top_flg_thick, top_flg_width);
 
                         if (max_top_ute <= 1)
                         {
+                            IsValid = true;
                             caption = $"Lightest top flange of this fixed width is {top_flg_width} x {top_flg_thick} mm, Utilisation is {max_top_ute}";
                             break;
                         }
@@ -3087,31 +3145,85 @@ namespace Schaphoid.Api.Controllers
                 }
             }
 
-            return new
+            return new FlangeDesign
             {
-                caption
+                Caption = caption,
+                Thick = top_flg_thick,
+                Width = top_flg_width,
+                Utilization = max_top_ute,
+                IsValid = IsValid
             };
         }
 
-        [HttpPost("order/{id}/web-design/confirm")]
-        public IActionResult ConfirmWebDesign(int id)
+        private FlangeDesign GetBottomFlangeDesign(Order order)
         {
-            return Ok();
+            var caption = string.Empty;
+            double max_bottom_ute = -1;
+            int bottom_flg_thick = -1;
+            double bottom_flg_width = -1;
+            bool IsValid = false;
+
+            var beam = order.BeamInfo;
+
+            if (beam.FixedBottomFlange == false)
+            {
+                for (int i = 0; i < 34; i++)
+                {
+                    bottom_flg_thick = Constants.FlangeThicknessCollection[i];
+                    bottom_flg_width = Constants.FlangeWidthCollection[i];
+
+                    max_bottom_ute = GetMaxBottomUte(order, bottom_flg_thick, bottom_flg_width);
+
+                    if (max_bottom_ute <= 1)
+                    {
+                        IsValid = true;
+                        caption = $"Lightest bottom flange is {bottom_flg_width} x {bottom_flg_thick} mm, Utilisation is {max_bottom_ute}";
+                        break;
+                    }
+                }
+
+                if (string.IsNullOrWhiteSpace(caption))
+                {
+                    caption = "No suitable sizes - increase beam depth or steel grade";
+                }
+            }
+            else
+            {
+                var fixedwidth = beam.BottomFlangeWidth;
+
+                for (int i = 0; i < 34; i++)
+                {
+                    bottom_flg_thick = Constants.FlangeThicknessCollection[i];
+                    bottom_flg_width = Constants.FlangeWidthCollection[i];
+
+                    if (fixedwidth == bottom_flg_width)
+                    {
+                        max_bottom_ute = GetMaxBottomUte(order, bottom_flg_thick, bottom_flg_width);
+
+                        if (max_bottom_ute <= 1)
+                        {
+                            IsValid = true;
+                            caption = $"Lightest bottom flange of this fixed width is {bottom_flg_width} x {bottom_flg_thick} mm, Utilisation is {max_bottom_ute}";
+                            break;
+                        }
+                    }
+                }
+
+                if (string.IsNullOrWhiteSpace(caption))
+                {
+                    caption = "No suitable sizes of this width";
+                }
+            }
+
+            return new FlangeDesign
+            {
+                Caption = caption,
+                Thick = bottom_flg_thick,
+                Width = bottom_flg_width,
+                Utilization = max_bottom_ute,
+                IsValid = IsValid
+            };
         }
-
-        [HttpPost("order/{id}/bottom-flange-design/confirm")]
-        public IActionResult ConfirmBottomFlangeDesign(int id, ConfirmFlange confirmFlange)
-        {
-            return Ok();
-        }
-
-        [HttpPost("order/{id}/top-flange-design/confirm")]
-        public IActionResult ConfirmTopFlangeDesign(int id, ConfirmFlange confirmFlange)
-        {
-            return Ok();
-        }
-
-
 
         public double GetMaxTopUte(Order order, int top_flg_thick, double top_flg_width)
         {
@@ -4540,5 +4652,14 @@ namespace Schaphoid.Api.Controllers
         public double Resistance { get; set; }
         public double Utilization { get; set; }
         public List<string> Captions { get; set; }
+    }
+
+    public class FlangeDesign
+    {
+        public string Caption { get; internal set; }
+        public int Thick { get; internal set; }
+        public double Width { get; internal set; }
+        public double Utilization { get; internal set; }
+        public bool IsValid { get; internal set; }
     }
 }
