@@ -2945,7 +2945,7 @@ namespace Schaphoid.Api.Controllers
         }
 
         [HttpGet("order/{id}/bottom-flange-design")]
-        public object BottomFlangeDesign(int id)
+        public object BottomFlangeDesign(int id, int? width)
         {
             var order = _dbContext.Orders.Where(e => e.Id == id)
                 .Include(e => e.BeamInfo)
@@ -2960,6 +2960,12 @@ namespace Schaphoid.Api.Controllers
                 return NotFound();
             }
 
+            if (width.HasValue)
+            {
+                order.BeamInfo.FixedBottomFlange = true;
+                order.BeamInfo.BottomFlangeWidth = width.Value;
+            }
+
             var flangeDesign = GetBottomFlangeDesign(order);
 
             return new
@@ -2969,7 +2975,7 @@ namespace Schaphoid.Api.Controllers
         }
 
         [HttpGet("order/{id}/top-flange-design")]
-        public object TopFlangeDesign(int id)
+        public object TopFlangeDesign(int id, int? width)
         {
             var order = _dbContext.Orders.Where(e => e.Id == id)
                 .Include(e => e.BeamInfo)
@@ -2982,6 +2988,12 @@ namespace Schaphoid.Api.Controllers
             if (order is null)
             {
                 return NotFound();
+            }
+
+            if (width.HasValue)
+            {
+                order.BeamInfo.FixedTopFlange = true;
+                order.BeamInfo.TopFlangeWidth = width.Value;
             }
 
             var flangeDesign = GetTopFlangeDesign(order);
@@ -3099,8 +3111,8 @@ namespace Schaphoid.Api.Controllers
             {
                 for (int i = 0; i < 34; i++)
                 {
-                    top_flg_thick = Constants.FlangeThicknessCollection[i];
-                    top_flg_width = Constants.FlangeWidthCollection[i];
+                    top_flg_thick = Constants.FlangeThicknessCollection2[i];
+                    top_flg_width = Constants.FlangeWidthCollection2[i];
 
                     max_top_ute = GetMaxTopUte(order, top_flg_thick, top_flg_width);
 
@@ -3123,8 +3135,8 @@ namespace Schaphoid.Api.Controllers
 
                 for (int i = 0; i < 34; i++)
                 {
-                    top_flg_thick = Constants.FlangeThicknessCollection[i];
-                    top_flg_width = Constants.FlangeWidthCollection[i];
+                    top_flg_thick = Constants.FlangeThicknessCollection2[i];
+                    top_flg_width = Constants.FlangeWidthCollection2[i];
 
                     if (fixedwidth == top_flg_width)
                     {
@@ -3169,8 +3181,8 @@ namespace Schaphoid.Api.Controllers
             {
                 for (int i = 0; i < 34; i++)
                 {
-                    bottom_flg_thick = Constants.FlangeThicknessCollection[i];
-                    bottom_flg_width = Constants.FlangeWidthCollection[i];
+                    bottom_flg_thick = Constants.FlangeThicknessCollection2[i];
+                    bottom_flg_width = Constants.FlangeWidthCollection2[i];
 
                     max_bottom_ute = GetMaxBottomUte(order, bottom_flg_thick, bottom_flg_width);
 
@@ -3193,8 +3205,8 @@ namespace Schaphoid.Api.Controllers
 
                 for (int i = 0; i < 34; i++)
                 {
-                    bottom_flg_thick = Constants.FlangeThicknessCollection[i];
-                    bottom_flg_width = Constants.FlangeWidthCollection[i];
+                    bottom_flg_thick = Constants.FlangeThicknessCollection2[i];
+                    bottom_flg_width = Constants.FlangeWidthCollection2[i];
 
                     if (fixedwidth == bottom_flg_width)
                     {
