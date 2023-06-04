@@ -116,6 +116,7 @@ namespace Schaphoid.Api.Controllers
 
             var orderDto = new OrderDto
             {
+                Id = id,
                 Beam = order.Beam,
                 Company = order.Company,
                 Designer = order.Designer,
@@ -4644,6 +4645,7 @@ namespace Schaphoid.Api.Controllers
 
     public class OrderDto : Resource
     {
+        public int Id { get; set; }
         public string Company { get; set; }
         public string Project { get; set; }
         public string Beam { get; set; }
