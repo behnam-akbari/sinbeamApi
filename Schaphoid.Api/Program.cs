@@ -1,8 +1,15 @@
 using Scaphoid.Infrastructure;
+using Serilog;
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.File("log.txt")
+    .CreateLogger();
 
 var AllowSpecificOrigins = "_allowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog();
 
 builder.Services.AddControllers();
 builder.Services.AddApplicationService();
@@ -22,11 +29,13 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+app.UseStaticFiles();
+
 app.UseCors(AllowSpecificOrigins);
 
 app.UseAuthorization();
 
-app.MapGet("/", () => "Comming Soon ...");
+app.MapFallbackToFile("/", @"index.html");
 
 app.MapControllers();
 

@@ -66,7 +66,6 @@ namespace Schaphoid.Api.Controllers
                 throw;
             }
 
-
             orderDto = GetOrderDto(order.Id);
 
             return CreatedAtAction(nameof(GetOrder), new
@@ -354,7 +353,10 @@ namespace Schaphoid.Api.Controllers
                     IsUniformDepth = order.BeamInfo.IsUniformDepth,
                     TopFlangeThickness = order.BeamInfo.TopFlangeThickness,
                     TopFlangeWidth = order.BeamInfo.TopFlangeWidth,
-                    WebThickness = order.BeamInfo.WebThickness
+                    WebThickness = order.BeamInfo.WebThickness,
+                    WebSteel = order.BeamInfo.WebSteel,
+                    BottomFlangeSteel = order.BeamInfo.BottomFlangeSteel,
+                    TopFlangeSteel = order.BeamInfo.TopFlangeSteel
                 };
             }
 
@@ -390,7 +392,10 @@ namespace Schaphoid.Api.Controllers
                 TopFlangeWidth = beamDto.TopFlangeWidth,
                 WebDepth = beamDto.WebDepthLeft,
                 WebDepthRight = beamDto.IsUniformDepth? beamDto.WebDepthLeft : beamDto.WebDepthRight,
-                WebThickness = beamDto.WebThickness
+                WebThickness = beamDto.WebThickness,
+                WebSteel = beamDto.WebSteel,
+                BottomFlangeSteel = beamDto.BottomFlangeSteel,
+                TopFlangeSteel = beamDto.TopFlangeSteel
             };
 
             _dbContext.SaveChanges();
@@ -4572,6 +4577,9 @@ namespace Schaphoid.Api.Controllers
         public int TopFlangeWidth { get; set; } = 200;
         public int BottomFlangeThickness { get; set; } = 12;
         public int BottomFlangeWidth { get; set; } = 200;
+        public SteelType WebSteel { get; set; } = SteelType.S355;
+        public SteelType BottomFlangeSteel { get; set; } = SteelType.S355;
+        public SteelType TopFlangeSteel { get; set; } = SteelType.S355;
     }
 
     public class LocalizationDto : Resource
