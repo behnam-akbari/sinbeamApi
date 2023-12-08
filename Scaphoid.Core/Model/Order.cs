@@ -3,17 +3,20 @@
     public class Order
     {
         public int Id { get; set; }
-        public string Company { get; set; }
         public string Project { get; set; }
-        public string Beam { get; set; }
         public string Designer { get; set; }
         public string Note { get; set; }
-        public DateTime OrderDate { get; set; }
+        public DateTime CreatedOn { get; set; }
+
+        public string SectionId { get; set; }
+
 
         public Localization Localization { get; set; }
         public Beam BeamInfo { get; set; }
         public Loading Loading { get; set; }
         public Restraint Restraint { get; set; }
+        public double Span { get; set; }
+        public ElementType ElementType { get; set; }
     }
 
     public class Restraint

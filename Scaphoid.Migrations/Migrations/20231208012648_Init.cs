@@ -17,12 +17,13 @@ namespace Scaphoid.Migrations.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Company = table.Column<string>(type: "TEXT", nullable: true),
                     Project = table.Column<string>(type: "TEXT", nullable: true),
-                    Beam = table.Column<string>(type: "TEXT", nullable: true),
                     Designer = table.Column<string>(type: "TEXT", nullable: true),
                     Note = table.Column<string>(type: "TEXT", nullable: true),
-                    OrderDate = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    CreatedOn = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    SectionId = table.Column<string>(type: "TEXT", nullable: true),
+                    Span = table.Column<double>(type: "REAL", nullable: false),
+                    ElementType = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -38,11 +39,17 @@ namespace Scaphoid.Migrations.Migrations
                     IsUniformDepth = table.Column<bool>(type: "INTEGER", nullable: false),
                     WebDepth = table.Column<int>(type: "INTEGER", nullable: false),
                     WebDepthRight = table.Column<int>(type: "INTEGER", nullable: false),
+                    WebLocalBuckle = table.Column<bool>(type: "INTEGER", nullable: false),
                     WebThickness = table.Column<double>(type: "REAL", nullable: false),
+                    WebSteel = table.Column<int>(type: "INTEGER", nullable: false),
                     TopFlangeThickness = table.Column<int>(type: "INTEGER", nullable: false),
                     TopFlangeWidth = table.Column<int>(type: "INTEGER", nullable: false),
+                    TopFlangeSteel = table.Column<int>(type: "INTEGER", nullable: false),
+                    FixedTopFlange = table.Column<bool>(type: "INTEGER", nullable: false),
                     BottomFlangeThickness = table.Column<int>(type: "INTEGER", nullable: false),
-                    BottomFlangeWidth = table.Column<int>(type: "INTEGER", nullable: false)
+                    BottomFlangeWidth = table.Column<int>(type: "INTEGER", nullable: false),
+                    BottomFlangeSteel = table.Column<int>(type: "INTEGER", nullable: false),
+                    FixedBottomFlange = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -128,6 +135,27 @@ namespace Scaphoid.Migrations.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Restraint",
+                columns: table => new
+                {
+                    OrderId = table.Column<int>(type: "INTEGER", nullable: false),
+                    FullRestraintTopFlange = table.Column<bool>(type: "INTEGER", nullable: false),
+                    TopFlangeRestraints = table.Column<string>(type: "TEXT", nullable: true),
+                    FullRestraintBottomFlange = table.Column<bool>(type: "INTEGER", nullable: false),
+                    BottomFlangeRestraints = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Restraint", x => x.OrderId);
+                    table.ForeignKey(
+                        name: "FK_Restraint_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PointLoad",
                 columns: table => new
                 {
@@ -135,7 +163,9 @@ namespace Scaphoid.Migrations.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     LoadingId = table.Column<int>(type: "INTEGER", nullable: false),
                     Position = table.Column<double>(type: "REAL", nullable: false),
-                    Load = table.Column<double>(type: "REAL", nullable: false)
+                    Load = table.Column<double>(type: "REAL", nullable: false),
+                    PermanentAction = table.Column<double>(type: "REAL", nullable: false),
+                    VariableAction = table.Column<double>(type: "REAL", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -165,6 +195,9 @@ namespace Scaphoid.Migrations.Migrations
 
             migrationBuilder.DropTable(
                 name: "PointLoad");
+
+            migrationBuilder.DropTable(
+                name: "Restraint");
 
             migrationBuilder.DropTable(
                 name: "Loading");

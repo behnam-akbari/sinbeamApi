@@ -11,8 +11,8 @@ using Scaphoid.Infrastructure.Data;
 namespace Scaphoid.Migrations.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230428062855_AddRestraint")]
-    partial class AddRestraint
+    [Migration("20231208012648_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,10 +25,19 @@ namespace Scaphoid.Migrations.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("BottomFlangeSteel")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("BottomFlangeThickness")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("BottomFlangeWidth")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("FixedBottomFlange")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("FixedTopFlange")
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsUniformDepth")
@@ -36,6 +45,9 @@ namespace Scaphoid.Migrations.Migrations
 
                     b.Property<double>("Span")
                         .HasColumnType("REAL");
+
+                    b.Property<int>("TopFlangeSteel")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("TopFlangeThickness")
                         .HasColumnType("INTEGER");
@@ -47,6 +59,12 @@ namespace Scaphoid.Migrations.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("WebDepthRight")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("WebLocalBuckle")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("WebSteel")
                         .HasColumnType("INTEGER");
 
                     b.Property<double>("WebThickness")
@@ -95,23 +113,26 @@ namespace Scaphoid.Migrations.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Beam")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Company")
+                    b.Property<DateTime>("CreatedOn")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Designer")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Note")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("ElementType")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("OrderDate")
+                    b.Property<string>("Note")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Project")
                         .HasColumnType("TEXT");
+
+                    b.Property<string>("SectionId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("Span")
+                        .HasColumnType("REAL");
 
                     b.HasKey("Id");
 

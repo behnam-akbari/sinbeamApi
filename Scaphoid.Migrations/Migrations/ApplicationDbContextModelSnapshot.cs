@@ -96,6 +96,9 @@ namespace Scaphoid.Migrations.Migrations
                     b.Property<int>("PsiValue")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("SteelType")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("ULSLoadExpression")
                         .HasColumnType("INTEGER");
 
@@ -110,23 +113,26 @@ namespace Scaphoid.Migrations.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Beam")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Company")
+                    b.Property<DateTime>("CreatedOn")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Designer")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Note")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("ElementType")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("OrderDate")
+                    b.Property<string>("Note")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Project")
                         .HasColumnType("TEXT");
+
+                    b.Property<string>("SectionId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("Span")
+                        .HasColumnType("REAL");
 
                     b.HasKey("Id");
 

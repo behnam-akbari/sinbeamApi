@@ -114,6 +114,21 @@
             SteelGradeS355Between40and63mm = 335
         };
 
+        public static readonly DesignParameters IranNA = new()
+        {
+            GammaG = 1.35,
+            GammaQ = 1.5,
+            ReductionFactorF = 0.925,
+            ModificationFactorKflHtoBLessThanTwo = 1,
+            ModificationFactorAllOtherHtoB = 0.9,
+            SteelGradeS235LessThan16mm = 275,
+            SteelGradeS235Between16and40mm = 265,
+            SteelGradeS235Between40and63mm = 255,
+            SteelGradeS355LessThan16mm = 355,
+            SteelGradeS355Between16and40mm = 345,
+            SteelGradeS355Between40and63mm = 335
+        };
+
         public static readonly DesignParameters DefaultNA = new()
         {
             GammaG = 1.35,
@@ -128,5 +143,35 @@
             SteelGradeS355Between16and40mm = 345,
             SteelGradeS355Between40and63mm = 335
         };
+
+        public static List<double> NewWebThicknessCollection = new() { 1.5, 2, 2.5, 3, 4, 5, 6 };
+        public static List<double> NewWebHeightCollection = new() { 333, 500, 625, 750, 1000, 1250, 1500 };
+    }
+
+    public class Flange
+    {
+        public Flange(int width, int thickness, double it)
+        {
+            Width = width;
+            Thickness = thickness;
+            It = it;
+
+        }
+
+        public int Width { get; set; }
+        public int Thickness { get; set; }
+        public double It { get; set; }
+    }
+
+    public class WebThickness
+    {
+        public WebThickness(string key, double value)
+        {
+            Key = key;
+            Value = value;
+        }
+
+        public string Key { get; set; }
+        public double Value { get; set; }
     }
 }

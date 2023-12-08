@@ -1,4 +1,6 @@
-﻿namespace Scaphoid.Core.Model
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Scaphoid.Core.Model
 {
     public class Beam
     {
@@ -144,7 +146,10 @@
 
     public enum SteelType
     {
-        S275 = 1, 
+        [Display(Name = "ST-37 (s 275)")]
+        S275 = 1,
+
+        [Display(Name = "ST-38 (s 355)")]
         S355 = 2
     }
 }

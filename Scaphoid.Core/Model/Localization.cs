@@ -4,10 +4,12 @@
     {
         public int OrderId { get; set; }
         public Order Order { get; set; }
-        public DesignType DesignType { get; set; } = new DesignType();
-        public DesignParameters DesignParameters { get; set; } = new DesignParameters();
-        public DeflectionLimit DeflectionLimit { get; set; } = new DeflectionLimit();
+        public DesignType DesignType { get; set; }
+        public DesignParameters DesignParameters { get; set; }
+        public DeflectionLimit DeflectionLimit { get; set; }
         public ULSLoadExpression ULSLoadExpression { get; set; }
+
+        public SteelType SteelType { get; set; }
 
         public int PsiValue { get; set; }
     }
@@ -16,7 +18,8 @@
     {
         UK = 1,
         Irish = 2,
-        UserDefined = 3
+        Iran = 3,
+        UserDefined = 4
     }
 
     public enum ULSLoadExpression
@@ -25,10 +28,16 @@
         Expression610aAnd610b = 2,
     }
 
+    public enum ElementType
+    {
+        Column = 1,
+        Rafter = 2
+    }
+
     public class DeflectionLimit
     {
-        public double VariableLoads { get; set; } = 360;
-        public double TotalLoads { get; set; } = 250;
+        public double VariableLoads { get; set; }
+        public double TotalLoads { get; set; }
     }
 
     public class DesignParameters

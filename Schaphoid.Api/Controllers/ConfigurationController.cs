@@ -3,13 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Scaphoid.Core.Model;
 using Scaphoid.Infrastructure.Data;
-using System;
-using System.Diagnostics.Metrics;
-using System.Numerics;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
+using Scaphoid.Infrastructure.Repositories;
 using System.Text.Json.Serialization;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Schaphoid.Api.Controllers
 {
@@ -18,19 +13,18 @@ namespace Schaphoid.Api.Controllers
     public class ConfigurationController : ControllerBase
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly WebSectionRepository _webSectionRepository;
 
-        public ConfigurationController(ApplicationDbContext dbContext)
+        public ConfigurationController(ApplicationDbContext dbContext, WebSectionRepository webSectionRepository)
         {
             _dbContext = dbContext;
+            _webSectionRepository = webSectionRepository;
         }
 
         [HttpGet]
         public Resource Get()
         {
-            var order = new OrderDto()
-            {
-                OrderDate = DateTime.Today
-            };
+            var order = new OrderDto();
 
             order.Links.Add(new Link("create-order", Url.Action(nameof(CreateOrder),
                 null, null,
@@ -47,12 +41,28 @@ namespace Schaphoid.Api.Controllers
         {
             var order = new Order()
             {
-                Beam = orderDto.Beam,
-                Company = orderDto.Company,
+                ElementType = orderDto.ElementType,
+                Span = orderDto.Span,
                 Designer = orderDto.Designer,
                 Note = orderDto.Note,
-                OrderDate = orderDto.OrderDate,
-                Project = orderDto.Project
+                CreatedOn = DateTime.Now,
+                Project = orderDto.ProjectName
+            };
+
+            order.Localization = new Localization()
+            {
+                DesignType = orderDto.DesignType,
+                DeflectionLimit = orderDto.DeflectionLimit,
+                ULSLoadExpression = orderDto.ULSLoadExpression,
+                SteelType = orderDto.SteelType,
+                DesignParameters = orderDto.DesignType switch
+                {
+                    DesignType.UK => Constants.UkNA,
+                    DesignType.Irish => Constants.IrishNA,
+                    DesignType.Iran => Constants.IranNA,
+                    DesignType.UserDefined => orderDto.DesignParameters,
+                    _ => null,
+                },
             };
 
             _dbContext.Add(order);
@@ -85,14 +95,29 @@ namespace Schaphoid.Api.Controllers
         [HttpPost("order/{id}")]
         public IActionResult SaveOrder(int id, OrderDto orderDto)
         {
-            var order = _dbContext.Orders.Find(id);
+            var order = _dbContext.Orders
+                .Include(e => e.Localization)
+                .FirstOrDefault(e => e.Id == id);
 
             order.Note = orderDto.Note;
             order.Designer = orderDto.Designer;
-            order.Project = orderDto.Project;
-            order.OrderDate = orderDto.OrderDate;
-            order.Beam = orderDto.Beam;
-            order.Company = orderDto.Company;
+            order.Project = orderDto.ProjectName;
+
+            order.Localization = new Localization()
+            {
+                DesignType = orderDto.DesignType,
+                DeflectionLimit = orderDto.DeflectionLimit,
+                ULSLoadExpression = orderDto.ULSLoadExpression,
+                SteelType = orderDto.SteelType,
+                DesignParameters = orderDto.DesignType switch
+                {
+                    DesignType.UK => Constants.UkNA,
+                    DesignType.Irish => Constants.IrishNA,
+                    DesignType.Iran => Constants.IranNA,
+                    DesignType.UserDefined => orderDto.DesignParameters,
+                    _ => null,
+                },
+            };
 
             _dbContext.SaveChanges();
 
@@ -112,17 +137,23 @@ namespace Schaphoid.Api.Controllers
 
         private OrderDto GetOrderDto(int id)
         {
-            var order = _dbContext.Orders.Find(id);
+            var order = _dbContext.Orders
+                .Include(e => e.Localization)
+                .FirstOrDefault(e => e.Id == id);
 
             var orderDto = new OrderDto
             {
                 Id = id,
-                Beam = order.Beam,
-                Company = order.Company,
                 Designer = order.Designer,
                 Note = order.Note,
-                OrderDate = order.OrderDate,
-                Project = order.Project,
+                ProjectName = order.Project,
+                ElementType = ElementType.Rafter,
+                Span = order.Span,
+                DesignType = order.Localization.DesignType,
+                DeflectionLimit = order.Localization.DeflectionLimit,
+                DesignParameters = order.Localization.DesignParameters,
+                ULSLoadExpression = order.Localization.ULSLoadExpression,
+                SteelType = order.Localization.SteelType
             };
 
             orderDto.Links.Add(new Link("get-order", Url.Action(nameof(GetOrder),
@@ -135,190 +166,124 @@ namespace Schaphoid.Api.Controllers
                 Request.Scheme),
                 HttpMethods.Post));
 
-            orderDto.Links.Add(new Link("get-localization", Url.Action(nameof(Localization),
-                null, new { id = id },
-                Request.Scheme),
-                HttpMethods.Get));
+            if(order.SectionId == null)
+            {
+                orderDto.Links.Add(new Link("get-section", Url.Action(nameof(SectionsController.Init),
+                    "sections", new { orderId = id },
+                    Request.Scheme),
+                    HttpMethods.Get));
+            }
+            else
+            {
+                orderDto.Links.Add(new Link("get-section", Url.Action(nameof(SectionsController.Get),
+                    "sections", new { orderId = id, order.SectionId },
+                    Request.Scheme),
+                    HttpMethods.Get));
+            }
 
-            orderDto.Links.Add(new Link("save-localization", Url.Action(nameof(Localization),
-                null, new { id = id },
-                Request.Scheme),
-                HttpMethods.Post));
+            //orderDto.Links.Add(new Link("get-beam", Url.Action(nameof(Beam),
+            //    null, new { id = id },
+            //    Request.Scheme),
+            //    HttpMethods.Get));
 
-            orderDto.Links.Add(new Link("get-beam", Url.Action(nameof(Beam),
-                null, new { id = id },
-                Request.Scheme),
-                HttpMethods.Get));
+            //orderDto.Links.Add(new Link("save-beam", Url.Action(nameof(Beam),
+            //    null, new { id = id },
+            //    Request.Scheme),
+            //    HttpMethods.Post));
 
-            orderDto.Links.Add(new Link("save-beam", Url.Action(nameof(Beam),
-                null, new { id = id },
-                Request.Scheme),
-                HttpMethods.Post));
+            //orderDto.Links.Add(new Link("drawing", Url.Action(nameof(BeamDrawing),
+            //    null, new { id = id },
+            //    Request.Scheme),
+            //    HttpMethods.Post));
 
-            orderDto.Links.Add(new Link("drawing", Url.Action(nameof(BeamDrawing),
-                null, new { id = id },
-                Request.Scheme),
-                HttpMethods.Post));
+            //orderDto.Links.Add(new Link("get-loading", Url.Action(nameof(Loading),
+            //    null, new { id = id },
+            //    Request.Scheme),
+            //    HttpMethods.Get));
 
-            orderDto.Links.Add(new Link("get-loading", Url.Action(nameof(Loading),
-                null, new { id = id },
-                Request.Scheme),
-                HttpMethods.Get));
+            //orderDto.Links.Add(new Link("save-loading", Url.Action(nameof(Loading),
+            //    null, new { id = id },
+            //    Request.Scheme),
+            //    HttpMethods.Post));
 
-            orderDto.Links.Add(new Link("save-loading", Url.Action(nameof(Loading),
-                null, new { id = id },
-                Request.Scheme),
-                HttpMethods.Post));
+            //orderDto.Links.Add(new Link("get-bending", Url.Action(nameof(Bending),
+            //    null, new { id = id },
+            //    Request.Scheme),
+            //    HttpMethods.Get));
 
-            orderDto.Links.Add(new Link("get-bending", Url.Action(nameof(Bending),
-                null, new { id = id },
-                Request.Scheme),
-                HttpMethods.Get));
+            //orderDto.Links.Add(new Link("get-properties", Url.Action(nameof(Properties),
+            //    null, new { id = id },
+            //    Request.Scheme),
+            //    HttpMethods.Get));
 
-            orderDto.Links.Add(new Link("get-properties", Url.Action(nameof(Properties),
-                null, new { id = id },
-                Request.Scheme),
-                HttpMethods.Get));
+            //orderDto.Links.Add(new Link("get-restraint", Url.Action(nameof(Restraints),
+            //    null, new { id = id },
+            //    Request.Scheme),
+            //    HttpMethods.Get));
 
-            orderDto.Links.Add(new Link("get-restraint", Url.Action(nameof(Restraints),
-                null, new { id = id },
-                Request.Scheme),
-                HttpMethods.Get));
+            //orderDto.Links.Add(new Link("save-restraint", Url.Action(nameof(Restraints),
+            //    null, new { id = id },
+            //    Request.Scheme),
+            //    HttpMethods.Post));
 
-            orderDto.Links.Add(new Link("save-restraint", Url.Action(nameof(Restraints),
-                null, new { id = id },
-                Request.Scheme),
-                HttpMethods.Post));
+            //orderDto.Links.Add(new Link("get-top-flange-verification", Url.Action(nameof(TopFlangeVerification),
+            //    null, new { id = id },
+            //    Request.Scheme),
+            //    HttpMethods.Get));
 
-            orderDto.Links.Add(new Link("get-top-flange-verification", Url.Action(nameof(TopFlangeVerification),
-                null, new { id = id },
-                Request.Scheme),
-                HttpMethods.Get));
+            //orderDto.Links.Add(new Link("get-bottom-flange-verification", Url.Action(nameof(BottomFlangeVerification),
+            //    null, new { id = id },
+            //    Request.Scheme),
+            //    HttpMethods.Get));
 
-            orderDto.Links.Add(new Link("get-bottom-flange-verification", Url.Action(nameof(BottomFlangeVerification),
-                null, new { id = id },
-                Request.Scheme),
-                HttpMethods.Get));
+            //orderDto.Links.Add(new Link("set-web-local-buckle", Url.Action(nameof(SetWebLocalBuckle),
+            //    null, new { id = id },
+            //    Request.Scheme),
+            //    HttpMethods.Post));
 
-            orderDto.Links.Add(new Link("set-web-local-buckle", Url.Action(nameof(SetWebLocalBuckle),
-                null, new { id = id },
-                Request.Scheme),
-                HttpMethods.Post));
+            //orderDto.Links.Add(new Link("unset-web-local-buckle", Url.Action(nameof(UnsetWebLocalBuckle),
+            //    null, new { id = id },
+            //    Request.Scheme),
+            //    HttpMethods.Post));
 
-            orderDto.Links.Add(new Link("unset-web-local-buckle", Url.Action(nameof(UnsetWebLocalBuckle),
-                null, new { id = id },
-                Request.Scheme),
-                HttpMethods.Post));
-
-            orderDto.Links.Add(new Link("get-web-verification", Url.Action(nameof(WebVerification),
-                null, new { id = id },
-                Request.Scheme),
-                HttpMethods.Get));
+            //orderDto.Links.Add(new Link("get-web-verification", Url.Action(nameof(WebVerification),
+            //    null, new { id = id },
+            //    Request.Scheme),
+            //    HttpMethods.Get));
 
 
 
-            orderDto.Links.Add(new Link("get-web-design", Url.Action(nameof(WebDesign),
-                null, new { id = id },
-                Request.Scheme),
-                HttpMethods.Get));
+            //orderDto.Links.Add(new Link("get-web-design", Url.Action(nameof(WebDesign),
+            //    null, new { id = id },
+            //    Request.Scheme),
+            //    HttpMethods.Get));
 
-            orderDto.Links.Add(new Link("get-bottom-flange-design", Url.Action(nameof(BottomFlangeDesign),
-                null, new { id = id },
-                Request.Scheme),
-                HttpMethods.Get));
+            //orderDto.Links.Add(new Link("get-bottom-flange-design", Url.Action(nameof(BottomFlangeDesign),
+            //    null, new { id = id },
+            //    Request.Scheme),
+            //    HttpMethods.Get));
 
-            orderDto.Links.Add(new Link("get-top-flange-design", Url.Action(nameof(TopFlangeDesign),
-                null, new { id = id },
-                Request.Scheme),
-                HttpMethods.Get));
+            //orderDto.Links.Add(new Link("get-top-flange-design", Url.Action(nameof(TopFlangeDesign),
+            //    null, new { id = id },
+            //    Request.Scheme),
+            //    HttpMethods.Get));
 
-            orderDto.Links.Add(new Link("confirm-web-design", Url.Action(nameof(ConfirmWebDesign),
-                null, new { id = id },
-                Request.Scheme),
-                HttpMethods.Post));
+            //orderDto.Links.Add(new Link("confirm-web-design", Url.Action(nameof(ConfirmWebDesign),
+            //    null, new { id = id },
+            //    Request.Scheme),
+            //    HttpMethods.Post));
 
-            orderDto.Links.Add(new Link("confirm-bottom-flange-design", Url.Action(nameof(ConfirmBottomFlangeDesign),
-                null, new { id = id },
-                Request.Scheme),
-                HttpMethods.Post));
+            //orderDto.Links.Add(new Link("confirm-bottom-flange-design", Url.Action(nameof(ConfirmBottomFlangeDesign),
+            //    null, new { id = id },
+            //    Request.Scheme),
+            //    HttpMethods.Post));
 
-            orderDto.Links.Add(new Link("confirm-top-flange-design", Url.Action(nameof(ConfirmTopFlangeDesign),
-                null, new { id = id },
-                Request.Scheme),
-                HttpMethods.Post));
+            //orderDto.Links.Add(new Link("confirm-top-flange-design", Url.Action(nameof(ConfirmTopFlangeDesign),
+            //    null, new { id = id },
+            //    Request.Scheme),
+            //    HttpMethods.Post));
 
             return orderDto;
-        }
-
-        #endregion
-
-        #region Localization
-
-        [HttpGet("order/{id}/[action]")]
-        public object Localization(int id)
-        {
-            var order = _dbContext.Orders.Where(e => e.Id == id)
-                .Include(e => e.Localization)
-                .FirstOrDefault();
-
-            if(order is null)
-            {
-                return NotFound();
-            }
-
-            var localization = new LocalizationDto();
-
-            if (order.Localization is not null)
-            {
-                localization.DesignType = order.Localization.DesignType;
-                localization.DeflectionLimit = order.Localization.DeflectionLimit;
-                localization.DesignParameters = order.Localization.DesignParameters;
-                localization.DefaultNA = Constants.DefaultNA;
-            }
-            else
-            {
-                localization.DesignType = DesignType.UK;
-                localization.DeflectionLimit = new DeflectionLimit();
-                localization.DesignParameters = new DesignParameters();
-                localization.DefaultNA = Constants.DefaultNA;
-            }
-
-            return localization;
-        }
-
-        [HttpPost("order/{id}/[action]")]
-        public IActionResult Localization(int id, LocalizationDto localizationDto)
-        {
-            var localization = new Localization()
-            {
-                OrderId = id,
-                DesignType = localizationDto.DesignType,
-                DeflectionLimit = localizationDto.DeflectionLimit,
-                ULSLoadExpression = localizationDto.ULSLoadExpression
-            };
-
-            localization.DesignParameters = localizationDto.DesignType switch
-            {
-                DesignType.UK => Constants.UkNA,
-                DesignType.Irish => Constants.IrishNA,
-                DesignType.UserDefined => localizationDto.DesignParameters,
-            };
-
-            if(localization.ULSLoadExpression == ULSLoadExpression.Expression610a)
-            {
-                localization.DesignParameters.ReductionFactorF = 1;
-                localization.PsiValue = 1;
-            }
-            else
-            {
-                localization.PsiValue = localizationDto.PsiValue;
-            }
-
-            _dbContext.Add(localization);
-
-            _dbContext.SaveChanges();
-
-            return Ok();
         }
 
         #endregion
@@ -347,26 +312,24 @@ namespace Schaphoid.Api.Controllers
                 beam = new BeamDto()
                 {
                     Span = order.BeamInfo.Span,
-                    WebDepthLeft = order.BeamInfo.WebDepth,
-                    WebDepthRight = order.BeamInfo.WebDepthRight,
+                    
                     BottomFlangeThickness = order.BeamInfo.BottomFlangeThickness,
                     BottomFlangeWidth = order.BeamInfo.BottomFlangeWidth,
-                    IsUniformDepth = order.BeamInfo.IsUniformDepth,
+                    BottomFlangeSteel = order.BeamInfo.BottomFlangeSteel,
+                    
                     TopFlangeThickness = order.BeamInfo.TopFlangeThickness,
                     TopFlangeWidth = order.BeamInfo.TopFlangeWidth,
+                    TopFlangeSteel = order.BeamInfo.TopFlangeSteel,
+
+                    WebDepth = order.BeamInfo.WebDepth,
                     WebThickness = order.BeamInfo.WebThickness,
-                    WebSteel = order.BeamInfo.WebSteel,
-                    BottomFlangeSteel = order.BeamInfo.BottomFlangeSteel,
-                    TopFlangeSteel = order.BeamInfo.TopFlangeSteel
+                    WebSteel = order.BeamInfo.WebSteel
                 };
             }
 
             return new
             {
-                Beam = beam,
-                Constants.WebThicknessCollection,
-                Constants.FlangeThicknessCollection,
-                Constants.FlangeWidthCollection
+                Beam = beam
             };
         }
 
@@ -385,18 +348,20 @@ namespace Schaphoid.Api.Controllers
             order.BeamInfo = new Beam
             {
                 OrderId = order.Id,
-                IsUniformDepth = beamDto.IsUniformDepth,
+                Span = beamDto.Span,
+                IsUniformDepth = true,
+                
                 BottomFlangeThickness = beamDto.BottomFlangeThickness,
                 BottomFlangeWidth = beamDto.BottomFlangeWidth,
-                Span = beamDto.Span,
+                BottomFlangeSteel = beamDto.BottomFlangeSteel,
+                
                 TopFlangeThickness = beamDto.TopFlangeThickness,
                 TopFlangeWidth = beamDto.TopFlangeWidth,
-                WebDepth = beamDto.WebDepthLeft,
-                WebDepthRight = beamDto.IsUniformDepth? beamDto.WebDepthLeft : beamDto.WebDepthRight,
-                WebThickness = beamDto.WebThickness,
+                TopFlangeSteel = beamDto.TopFlangeSteel,
+                
+                WebDepth = beamDto.WebDepth,
                 WebSteel = beamDto.WebSteel,
-                BottomFlangeSteel = beamDto.BottomFlangeSteel,
-                TopFlangeSteel = beamDto.TopFlangeSteel
+                WebThickness = beamDto.WebThickness
             };
 
             _dbContext.SaveChanges();
@@ -407,12 +372,7 @@ namespace Schaphoid.Api.Controllers
         [HttpPost("order/{id}/beam/drawing")]
         public object BeamDrawing(int id, BeamDto beamDto)
         {
-            if (beamDto.IsUniformDepth)
-            {
-                beamDto.WebDepthRight = beamDto.WebDepthLeft;
-            }
-
-            var maxDepth = Math.Max(beamDto.WebDepthLeft, beamDto.WebDepthRight);
+            var maxDepth = beamDto.WebDepth;
 
             var maxWidth = Math.Max(beamDto.TopFlangeWidth, beamDto.BottomFlangeWidth);
 
@@ -4571,8 +4531,7 @@ namespace Schaphoid.Api.Controllers
     {
         public double Span { get; set; }
         public bool IsUniformDepth { get; set; } = true;
-        public int WebDepthLeft { get; set; } = 1000;
-        public int WebDepthRight { get; set; }
+        public int WebDepth { get; set; } = 1000;
         public double WebThickness { get; set; } = 2.5;
         public int TopFlangeThickness { get; set; } = 12;
         public int TopFlangeWidth { get; set; } = 200;
@@ -4583,7 +4542,7 @@ namespace Schaphoid.Api.Controllers
         public SteelType TopFlangeSteel { get; set; } = SteelType.S355;
     }
 
-    public class LocalizationDto : Resource
+    public class LocalizationDto
     {
         public DesignType DesignType { get; set; }
         public DesignParameters DesignParameters { get; set; }
@@ -4624,34 +4583,22 @@ namespace Schaphoid.Api.Controllers
         public double VariableAction { get; set; }
     }
 
-    public class Link
-    {
-        public Link(string rel, string href, string method)
-        {
-            Rel = rel;
-            Href = href;
-            Method = method;
-        }
-        public string Href { get; set; }
-        public string Rel { get; set; }
-        public string Method { get; set; }
-    }
-
-    public class Resource
-    {
-        [JsonPropertyName("_links")]
-        public List<Link> Links { get; set; } = new List<Link>();
-    }
-
     public class OrderDto : Resource
     {
         public int Id { get; set; }
-        public string Company { get; set; }
-        public string Project { get; set; }
-        public string Beam { get; set; }
+        public string ProjectName { get; set; }
         public string Designer { get; set; }
         public string Note { get; set; }
-        public DateTime OrderDate { get; set; }
+        public ElementType ElementType { get; set; } = ElementType.Rafter;
+        public double Span { get; set; }
+
+
+        public DesignType DesignType { get; set; } = DesignType.UK;
+        public DesignParameters DesignParameters { get; set; }
+        public DeflectionLimit DeflectionLimit { get; set; }
+        //public DesignParameters DefaultNA { get; set; }
+        public ULSLoadExpression ULSLoadExpression { get; set; } = ULSLoadExpression.Expression610a;
+        public SteelType SteelType { get; set; }
     }
 
     public class Point
@@ -4683,5 +4630,10 @@ namespace Schaphoid.Api.Controllers
         public double Width { get; internal set; }
         public double Utilization { get; internal set; }
         public bool IsValid { get; internal set; }
+    }
+
+    public class Resource<T> : Resource
+    {
+        public T Data { get; set; }
     }
 }
