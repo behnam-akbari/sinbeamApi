@@ -41,6 +41,8 @@ namespace Scaphoid.Core.Model
         /// WT0/WTA/WTB/...
         /// </summary>
         public double WebThickness { get; set; }
+
+        [JsonIgnore]
         public string WebThicknessKey { get; set; }
 
         /// <summary>
@@ -61,6 +63,7 @@ namespace Scaphoid.Core.Model
         /// <summary>
         /// U
         /// </summary>
+        [JsonIgnore]
         public double SurfaceAreaPerM => 4 * (FlangeWidth + FlangeThickness) / 1000 + 1.1951951951952 * 2 * 1 * WebHeight / 1000;
 
         /// <summary>
@@ -77,13 +80,17 @@ namespace Scaphoid.Core.Model
         public double ShearCapacity { get; set; }
         public double AxialCapacity { get; set; }
 
+
+        [JsonIgnore]
         public double Z => WebHeight + FlangeThickness;
 
         /// <summary>
         /// Cross Section Values - Iw
         /// </summary>
+        [JsonIgnore]
         public double Iw => (SectionPerimeter / 2) * Math.Pow(FlangeWidth / 10, 2) * Math.Pow((Z / 10), 2) / 24;
 
+        [JsonIgnore]
         public double It { get; set; }
     }
 }

@@ -4405,3 +4405,43 @@ LIMIT 1
 2023-12-08 14:04:19.614 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Get (Schaphoid.Api) in 3.821ms
 2023-12-08 14:04:19.614 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Get (Schaphoid.Api)'
 2023-12-08 14:04:19.614 +03:30 [INF] Request finished HTTP/1.1 GET https://localhost:44357/order/6/sections/wt-0-333-160-6 - - - 200 - application/json;+charset=utf-8 4.8092ms
+2023-12-09 21:54:13.596 +03:30 [INF] Application started. Press Ctrl+C to shut down.
+2023-12-09 21:54:13.624 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/_vs/browserLink - -
+2023-12-09 21:54:13.624 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/_framework/aspnetcore-browser-refresh.js - -
+2023-12-09 21:54:13.637 +03:30 [INF] Hosting environment: Development
+2023-12-09 21:54:13.638 +03:30 [INF] Content root path: E:\Projects\Beam\Schaphoid.Api
+2023-12-09 21:54:13.666 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/_framework/aspnetcore-browser-refresh.js - - - 200 11996 application/javascript;+charset=utf-8 44.0092ms
+2023-12-09 21:54:14.322 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 702.0783ms
+2023-12-09 21:54:19.218 +03:30 [INF] Request starting HTTP/1.1 GET https://localhost:44357/order/6/sections/query?weight.min=19&weight.max=30 - -
+2023-12-09 21:54:19.258 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api)'
+2023-12-09 21:54:19.296 +03:30 [INF] Route matched with {action = "Query", controller = "Sections"}. Executing controller action with signature System.Collections.Generic.List`1[Scaphoid.Core.Model.WebSection] Query(Int32, Schaphoid.Api.Controllers.WebSectionFilters) on controller Schaphoid.Api.Controllers.SectionsController (Schaphoid.Api).
+2023-12-09 21:54:19.933 +03:30 [INF] Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[Scaphoid.Core.Model.WebSection, Scaphoid.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2023-12-09 21:54:19.975 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api) in 676.4265ms
+2023-12-09 21:54:19.976 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api)'
+2023-12-09 21:54:19.981 +03:30 [INF] Request finished HTTP/1.1 GET https://localhost:44357/order/6/sections/query?weight.min=19&weight.max=30 - - - 200 - application/json;+charset=utf-8 762.6994ms
+2023-12-09 21:57:23.946 +03:30 [INF] Application started. Press Ctrl+C to shut down.
+2023-12-09 21:57:23.953 +03:30 [INF] Hosting environment: Development
+2023-12-09 21:57:23.954 +03:30 [INF] Content root path: E:\Projects\Beam\Schaphoid.Api
+2023-12-09 21:57:23.960 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/main - -
+2023-12-09 21:57:24.009 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/main - - - 404 - - 50.9466ms
+2023-12-09 21:57:33.008 +03:30 [INF] Request starting HTTP/1.1 GET https://localhost:44357/order/6/sections/query?weight.min=19&weight.max=30 - -
+2023-12-09 21:57:33.013 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api)'
+2023-12-09 21:57:33.037 +03:30 [INF] Route matched with {action = "Query", controller = "Sections"}. Executing controller action with signature System.Collections.Generic.List`1[Scaphoid.Core.Model.WebSection] Query(Int32, Schaphoid.Api.Controllers.WebSectionFilters) on controller Schaphoid.Api.Controllers.SectionsController (Schaphoid.Api).
+2023-12-09 21:57:33.161 +03:30 [INF] Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[Scaphoid.Core.Model.WebSection, Scaphoid.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2023-12-09 21:57:33.186 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api) in 147.0382ms
+2023-12-09 21:57:33.186 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api)'
+2023-12-09 21:57:33.191 +03:30 [INF] Request finished HTTP/1.1 GET https://localhost:44357/order/6/sections/query?weight.min=19&weight.max=30 - - - 200 - application/json;+charset=utf-8 183.3465ms
+2023-12-09 21:58:27.877 +03:30 [INF] Application started. Press Ctrl+C to shut down.
+2023-12-09 21:58:27.883 +03:30 [INF] Hosting environment: Development
+2023-12-09 21:58:27.884 +03:30 [INF] Content root path: E:\Projects\Beam\Schaphoid.Api
+2023-12-09 21:58:27.892 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/_framework/aspnetcore-browser-refresh.js - -
+2023-12-09 21:58:27.892 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/_vs/browserLink - -
+2023-12-09 21:58:27.908 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/_framework/aspnetcore-browser-refresh.js - - - 200 11996 application/javascript;+charset=utf-8 16.0826ms
+2023-12-09 21:58:27.948 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 57.8498ms
+2023-12-09 21:58:33.288 +03:30 [INF] Request starting HTTP/1.1 GET https://localhost:44357/order/6/sections/query?weight.min=19&weight.max=30 - -
+2023-12-09 21:58:33.317 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api)'
+2023-12-09 21:58:33.338 +03:30 [INF] Route matched with {action = "Query", controller = "Sections"}. Executing controller action with signature System.Collections.Generic.List`1[Scaphoid.Core.Model.WebSection] Query(Int32, Schaphoid.Api.Controllers.WebSectionFilters) on controller Schaphoid.Api.Controllers.SectionsController (Schaphoid.Api).
+2023-12-09 21:58:33.451 +03:30 [INF] Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[Scaphoid.Core.Model.WebSection, Scaphoid.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2023-12-09 21:58:33.474 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api) in 134.0628ms
+2023-12-09 21:58:33.475 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api)'
+2023-12-09 21:58:33.481 +03:30 [INF] Request finished HTTP/1.1 GET https://localhost:44357/order/6/sections/query?weight.min=19&weight.max=30 - - - 200 - application/json;+charset=utf-8 192.8122ms
