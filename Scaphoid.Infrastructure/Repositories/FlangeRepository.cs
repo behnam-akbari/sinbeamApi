@@ -81,15 +81,13 @@ namespace Scaphoid.Infrastructure.Repositories
             _webThicknessRepository = webThicknessRepository;
         }
 
-        public IEnumerable<WebSection> Get()
+        public IEnumerable<WebSection> Get(SteelType steelType)
         {
             var flanges = _flangeRepository.Get();
 
             var webThicknesses = _webThicknessRepository.Get();
 
             var webHeightCollection = Constants.NewWebHeightCollection;
-
-            var index = 1000;
 
             foreach (var webHeight in webHeightCollection)
             {
@@ -104,16 +102,17 @@ namespace Scaphoid.Infrastructure.Repositories
                             WebHeight = webHeight,
                             WebThickness = webThickness.Value,
                             WebThicknessKey = webThickness.Key,
-                            It = flange.It
+                            It = flange.It,
+                            SteelType = steelType
                         };
                     }
                 }
             }
         }
 
-        public WebSection Get(string id)
+        public WebSection Get(SteelType steelType, string id)
         {
-            var sections = Get();
+            var sections = Get(steelType);
 
             var section = sections.FirstOrDefault(e=>e.Id == id);
 

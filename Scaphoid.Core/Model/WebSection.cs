@@ -69,26 +69,38 @@ namespace Scaphoid.Core.Model
         /// <summary>
         /// Cross Section Values - Iy 
         /// </summary>
-        public double MomentOfInertiaIy => Math.Round(Math.Pow(FlangeWidth * FlangeThickness / 100, 2) / (2 * FlangeWidth * FlangeThickness / 100) * Math.Pow(Z / 10, 2), 3);
+        public double MomentOfInertiaIy => Math.Round(Math.Pow(FlangeWidth * FlangeThickness / 100, 2) / (2 * FlangeWidth * FlangeThickness / 100) * Math.Pow(DimensionsZ / 10, 2), 3);
 
         /// <summary>
         /// Cross Section Values - Iz
         /// </summary>
         public double MomentOfInertiaIz => Math.Round((FlangeThickness / 10) * Math.Pow(FlangeWidth / 10, 3) / 6, 3);
-        
-        public double BendingCapacity { get; set; }
+
+        /// <summary>
+        /// Mgg
+        /// </summary>
+        public double BendingCapacity => Ngg * DimensionsZ / 2000;
         public double ShearCapacity { get; set; }
         public double AxialCapacity { get; set; }
 
 
         [JsonIgnore]
-        public double Z => WebHeight + FlangeThickness;
+        public double DimensionsZ => WebHeight + FlangeThickness;
+
+        [JsonIgnore]
+        public SteelType SteelType { get; set; }
+
+        [JsonIgnore]
+        public double Fyk => SteelType == SteelType.S235 ? 23.50 : 35.50;
+
+        [JsonIgnore]
+        public double Ngg => Fyk * SectionPerimeter;
 
         /// <summary>
         /// Cross Section Values - Iw
         /// </summary>
         [JsonIgnore]
-        public double Iw => (SectionPerimeter / 2) * Math.Pow(FlangeWidth / 10, 2) * Math.Pow((Z / 10), 2) / 24;
+        public double Iw => (SectionPerimeter / 2) * Math.Pow(FlangeWidth / 10, 2) * Math.Pow((DimensionsZ / 10), 2) / 24;
 
         [JsonIgnore]
         public double It { get; set; }

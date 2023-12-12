@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Scaphoid.Core.Model;
 using Scaphoid.Infrastructure.Data;
 using Scaphoid.Infrastructure.Repositories;
@@ -22,9 +23,19 @@ namespace Schaphoid.Api.Controllers
         }
 
         [HttpGet("[action]")]
-        public List<WebSection> Query(int orderId, [FromQuery]WebSectionFilters filters)
+        public ActionResult<List<WebSection>> Query(int orderId, [FromQuery]WebSectionFilters filters)
         {
-            var sections = _webSectionRepository.Get();
+            var order = _dbContext.Orders
+                .Where(e => e.Id == orderId)
+                .Include(e=>e.Localization)
+                .FirstOrDefault();
+
+            if (order is null)
+            {
+                return NotFound();
+            }
+
+            var sections = _webSectionRepository.Get(order.Localization.SteelType);
 
             if(filters.Weight is not null)
             {
@@ -106,9 +117,19 @@ namespace Schaphoid.Api.Controllers
         }
 
         [HttpGet("[action]")]
-        public WebSectionFilters Filters()
+        public ActionResult<WebSectionFilters> Filters(int orderId)
         {
-            var sections = _webSectionRepository.Get();
+            var order = _dbContext.Orders
+                .Where(e => e.Id == orderId)
+                .Include(e=>e.Localization)
+                .FirstOrDefault();
+
+            if (order is null)
+            {
+                return NotFound();
+            }
+
+            var sections = _webSectionRepository.Get(order.Localization.SteelType);
 
             var filters = new WebSectionFilters
             {
@@ -137,6 +158,7 @@ namespace Schaphoid.Api.Controllers
         {
             var order = _dbContext.Orders
                 .Where(e => e.Id == orderId)
+                .Include(e => e.Localization)
                 .FirstOrDefault();
 
             if (order is null)
@@ -144,7 +166,7 @@ namespace Schaphoid.Api.Controllers
                 return NotFound();
             }
 
-            var section = GetSectionDto(sectionId);
+            var section = GetSectionDto(order.Localization.SteelType, sectionId);
 
             section.Links.Add(new Link("get-sections-filters", Url.Action(nameof(Filters),
                 null, new { orderId },
@@ -277,31 +299,34 @@ namespace Schaphoid.Api.Controllers
         {
             var properties = new List<string>()
             {
-                $"Iy Major axis inertia = {Math.Round(section.MomentOfInertiaIy, 0)} cm4",
-                $"Iz Minor axis inertia = {Math.Round(section.MomentOfInertiaIz, 0)} cm4",
-                $"iy Major axis gyration = {Math.Round(Math.Sqrt(section.MomentOfInertiaIy/section.SectionPerimeter), 1)} cm",
-                $"iz Minor axis gyration = {Math.Round(Math.Sqrt(section.MomentOfInertiaIz/section.SectionPerimeter), 1)} cm",
-                $"It Torsional inertia = {section.It} cm4",
-                $"Iw Warping inertia = {Math.Round(section.Iw, 0)} cm6",
-                $"A Cross section area = {section.SectionPerimeter} cm2",
-                $"Weight per m = {section.Weight} kg/m",
-                $"Surface area per m = {section.SurfaceAreaPerM} m2/m",
-                //$"Surface area per T = {} m2/T",
-                //"Ratio A/AQ = 1.15"
+                "Beam has uniform depth",
+                $"Iy Major axis inertia = {Math.Round(section.MomentOfInertiaIy, 3)} cm4",
+                $"Iz Minor axis inertia = {Math.Round(section.MomentOfInertiaIz, 3)} cm4",
+                
+                $"iy Major axis gyration = {Math.Round(Math.Sqrt(section.MomentOfInertiaIy/section.SectionPerimeter), 3)} cm",
+                $"iz Minor axis gyration = {Math.Round(Math.Sqrt(section.MomentOfInertiaIz/section.SectionPerimeter), 3)} cm",
+                $"It Torsional inertia = {Math.Round(section.It, 3)} cm4",
+                
+                $"Iw Warping inertia = {Math.Round(section.Iw, 3)} cm6",
+                $"A Cross section area = {Math.Round(section.SectionPerimeter, 3)} cm2",
+                $"Weight per m = {Math.Round(section.Weight, 3)} kg/m",
+                
+                $"Surface area per m = {Math.Round(section.SurfaceAreaPerM, 3)} m2/m",
+                $"Surface area per T = ? m2/T"
             };
 
             return properties;
         }
 
-        private WebSectionDto GetSectionDto(string id)
+        private WebSectionDto GetSectionDto(SteelType steelType, string id)
         {
-            var section = _webSectionRepository.Get(id);
+            var section = _webSectionRepository.Get(steelType, id);
 
             var sectionDesign = GetSectionDesign(section);
 
             var properties = GetSectionProperties(section);
 
-            var steel = SteelType.S275.GetDisplayName();
+            var steel = SteelType.S235.GetDisplayName();
 
             var output = new WebSectionDto
             {
