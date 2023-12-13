@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Scaphoid.Core.Model;
 using Scaphoid.Infrastructure.Data;
 using Scaphoid.Infrastructure.Repositories;
-using System.Text.Json.Serialization;
 
 namespace Schaphoid.Api.Controllers
 {
