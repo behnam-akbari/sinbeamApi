@@ -16,10 +16,10 @@
 
     public enum DesignType
     {
+        UserDefined = 0,
         UK = 1,
         Irish = 2,
-        Iran = 3,
-        UserDefined = 4
+        Iran = 3
     }
 
     public enum ULSLoadExpression
