@@ -301,22 +301,22 @@ namespace Schaphoid.Api.Controllers
                 {
                     Width = section.FlangeWidth,
                     Height = section.FlangeThickness,
-                    ScaledHeight = scaler * section.FlangeThickness,
-                    ScaledWidth = scaler * section.FlangeWidth,
+                    ScaledHeight = Math.Round(scaler * section.FlangeThickness, 0),
+                    ScaledWidth = Math.Round(scaler * section.FlangeWidth, 0),
                 },
                 Web = new Part
                 {
                     Width = section.WebThickness,
                     Height = section.WebHeight,
-                    ScaledHeight = scaler * section.WebHeight,
-                    ScaledWidth = scaler * section.WebThickness,
+                    ScaledHeight = Math.Round(scaler * section.WebHeight, 0),
+                    ScaledWidth = Math.Round(scaler * section.WebThickness, 0),
                 },
                 BottomFlange = new Part
                 {
                     Width = section.FlangeWidth,
                     Height = section.FlangeThickness,
-                    ScaledHeight = scaler * section.FlangeThickness,
-                    ScaledWidth = scaler * section.FlangeWidth,
+                    ScaledHeight = Math.Round(scaler * section.FlangeThickness, 0),
+                    ScaledWidth = Math.Round(scaler * section.FlangeWidth, 0),
                 }
             };
         }
