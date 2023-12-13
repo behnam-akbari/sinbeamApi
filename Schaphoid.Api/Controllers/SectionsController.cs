@@ -293,7 +293,7 @@ namespace Schaphoid.Api.Controllers
 
             var height = 500;
 
-            var scaler = (0.8 * height) / section.WebHeight;
+            var scaler = height / section.WebHeight;
 
             return new SectionDesign
             {
