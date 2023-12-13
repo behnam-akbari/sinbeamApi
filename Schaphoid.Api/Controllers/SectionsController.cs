@@ -241,56 +241,82 @@ namespace Schaphoid.Api.Controllers
 
         private SectionDesign GetSectionDesign(WebSection section)
         {
-            double boxh = 500;
+            //double boxh = 500;
 
-            double boxw = boxh * 180 / 225;
+            //double boxw = boxh * 180 / 225;
 
-            var scalerh = (0.8 * boxh) / section.WebHeight;
-            var scalerw = (0.8 * boxw) / section.FlangeWidth;
+            //var scalerh = (0.8 * boxh) / section.WebHeight;
+            //var scalerw = (0.8 * boxw) / section.FlangeWidth;
 
-            var scaler = Math.Min(scalerh, scalerw);
+            //var scaler = Math.Min(scalerh, scalerw);
 
-            var top_w = Math.Round(scaler * section.FlangeWidth, 2);
-            var bottom_w = Math.Round(scaler * section.FlangeWidth, 2);
-            var top_flg = Math.Round(scaler * section.FlangeThickness, 2);
-            var bottom_flg = Math.Round(scaler * section.FlangeThickness, 2);
-            var webs = Math.Round(scaler * section.WebThickness, 2);
-            var depths = Math.Round(scaler * section.WebHeight, 2);
+            //var top_w = Math.Round(scaler * section.FlangeWidth, 2);
+            //var bottom_w = Math.Round(scaler * section.FlangeWidth, 2);
+            //var top_flg = Math.Round(scaler * section.FlangeThickness, 2);
+            //var bottom_flg = Math.Round(scaler * section.FlangeThickness, 2);
+            //var webs = Math.Round(scaler * section.WebThickness, 2);
+            //var depths = Math.Round(scaler * section.WebHeight, 2);
 
-            var top_of_beam = Math.Round(0.5 * boxh - 0.5 * depths, 2);
-            var in_top_flg = Math.Round(top_of_beam + top_flg, 2);
-            var bottom_of_beam = Math.Round(top_of_beam + depths, 2);
-            var in_bottom_flg = Math.Round(bottom_of_beam - bottom_flg, 2);
+            //var top_of_beam = Math.Round(0.5 * boxh - 0.5 * depths, 2);
+            //var in_top_flg = Math.Round(top_of_beam + top_flg, 2);
+            //var bottom_of_beam = Math.Round(top_of_beam + depths, 2);
+            //var in_bottom_flg = Math.Round(bottom_of_beam - bottom_flg, 2);
 
-            var left_top = Math.Round(0.5 * boxw - 0.5 * top_w, 2);
-            var right_top = Math.Round(left_top + top_w, 2);
-            var left_bottom = Math.Round(0.5 * boxw - 0.5 * bottom_w, 2);
-            var right_bottom = Math.Round(left_bottom + bottom_w, 2);
+            //var left_top = Math.Round(0.5 * boxw - 0.5 * top_w, 2);
+            //var right_top = Math.Round(left_top + top_w, 2);
+            //var left_bottom = Math.Round(0.5 * boxw - 0.5 * bottom_w, 2);
+            //var right_bottom = Math.Round(left_bottom + bottom_w, 2);
 
-            var left_web = Math.Round(0.5 * boxw - 0.5 * webs, 2);
-            var right_web = Math.Round(left_web + webs, 2);
+            //var left_web = Math.Round(0.5 * boxw - 0.5 * webs, 2);
+            //var right_web = Math.Round(left_web + webs, 2);
 
-            var thick = section.WebThickness * 2;
+            //var thick = section.WebThickness * 2;
+
+            //return new SectionDesign
+            //{
+            //    TopFlange = new Part
+            //    {
+            //        width = Math.Round(right_top - left_top, 2),
+            //        height = Math.Round(Math.Max(in_top_flg - top_of_beam - 3, 0), 2),
+            //    },
+            //    Web = new Part
+            //    {
+            //        width = 0,
+            //        height = Math.Round(in_bottom_flg - in_top_flg, 2),
+            //    },
+            //    BottomFlange = new Part
+            //    {
+            //        width = Math.Round(right_top - left_top, 2),
+            //        height = Math.Round(Math.Max(bottom_of_beam - in_bottom_flg - 3, 0), 2),
+            //    }
+            //};
+
+            var height = 500;
+
+            var scaler = (0.8 * height) / section.WebHeight;
 
             return new SectionDesign
             {
                 TopFlange = new Part
                 {
-                    width = Math.Round(right_top - left_top, 2),
-                    height = Math.Round(Math.Max(in_top_flg - top_of_beam - 3, 0), 2),
-                    borderWidth = "2px 2px 1px 2px"
+                    Width = section.FlangeWidth,
+                    Height = section.FlangeThickness,
+                    ScaledHeight = scaler * section.FlangeThickness,
+                    ScaledWidth = scaler * section.FlangeWidth,
                 },
                 Web = new Part
                 {
-                    width = 0,
-                    height = Math.Round(in_bottom_flg - in_top_flg, 2),
-                    borderWidth = $"0 {thick}px 0 0"
+                    Width = section.WebThickness,
+                    Height = section.WebHeight,
+                    ScaledHeight = scaler * section.WebHeight,
+                    ScaledWidth = scaler * section.WebThickness,
                 },
                 BottomFlange = new Part
                 {
-                    width = Math.Round(right_top - left_top, 2),
-                    height = Math.Round(Math.Max(bottom_of_beam - in_bottom_flg - 3, 0), 2),
-                    borderWidth = "1px 2px 2px 2px"
+                    Width = section.FlangeWidth,
+                    Height = section.FlangeThickness,
+                    ScaledHeight = scaler * section.FlangeThickness,
+                    ScaledWidth = scaler * section.FlangeWidth,
                 }
             };
         }
@@ -361,9 +387,10 @@ namespace Schaphoid.Api.Controllers
 
         public class Part
         {
-            public double width { get; set; }
-            public double height { get; set; }
-            public string borderWidth { get; set; }
+            public double Width { get; set; }
+            public double Height { get; set; }
+            public double ScaledWidth { get; set; }
+            public double ScaledHeight { get; set; }
         }
     }
 
