@@ -178,7 +178,7 @@ namespace Schaphoid.Api.Controllers
                     Request.Scheme),
                     HttpMethods.Get));
 
-            section.Links.Add(new Link("get-section", Url.Action(nameof(Get),
+            section.Links.Add(new Link("get-section-2", Url.Action(nameof(Get),
                 null, new { orderId = orderId, sectionId = section.Id },
                 Request.Scheme),
                 HttpMethods.Get));
