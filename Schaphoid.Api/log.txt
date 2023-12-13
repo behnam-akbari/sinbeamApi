@@ -5703,3 +5703,89 @@ LIMIT 1
 2023-12-13 21:25:43.821 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Get (Schaphoid.Api) in 8.3631ms
 2023-12-13 21:25:43.822 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Get (Schaphoid.Api)'
 2023-12-13 21:25:43.822 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/order/16/sections/wt-b-500-200-12 - - - 200 - application/json;+charset=utf-8 10.8349ms
+2023-12-13 21:44:34.627 +03:30 [INF] Application started. Press Ctrl+C to shut down.
+2023-12-13 21:44:34.635 +03:30 [INF] Hosting environment: Development
+2023-12-13 21:44:34.636 +03:30 [INF] Content root path: E:\Projects\Beam\Schaphoid.Api
+2023-12-13 21:44:34.643 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/_vs/browserLink - -
+2023-12-13 21:44:34.643 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/_framework/aspnetcore-browser-refresh.js - -
+2023-12-13 21:44:34.658 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/_framework/aspnetcore-browser-refresh.js - - - 200 11996 application/javascript;+charset=utf-8 15.8984ms
+2023-12-13 21:44:34.700 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 59.9908ms
+2023-12-13 21:44:47.695 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/main - -
+2023-12-13 21:44:47.727 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/main - - - 404 - - 31.5407ms
+2023-12-13 21:45:03.914 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/order/16/sections/query?WebThickness.min=2.5&WebThickness.max=2.5 - -
+2023-12-13 21:45:03.918 +03:30 [INF] CORS policy execution successful.
+2023-12-13 21:45:03.922 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api)'
+2023-12-13 21:45:03.942 +03:30 [INF] Route matched with {action = "Query", controller = "Sections"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[Scaphoid.Core.Model.WebSection]] Query(Int32, Schaphoid.Api.Controllers.WebSectionFilters) on controller Schaphoid.Api.Controllers.SectionsController (Schaphoid.Api).
+2023-12-13 21:45:04.488 +03:30 [WRN] The property 'Restraint.BottomFlangeRestraints' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+2023-12-13 21:45:04.488 +03:30 [WRN] The property 'Restraint.TopFlangeRestraints' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+2023-12-13 21:45:04.865 +03:30 [INF] Executed DbCommand (10ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span", "l"."OrderId", "l"."DesignType", "l"."PsiValue", "l"."SteelType", "l"."ULSLoadExpression", "l"."DeflectionLimit_TotalLoads", "l"."DeflectionLimit_VariableLoads", "l"."DesignParameters_GammaG", "l"."DesignParameters_GammaQ", "l"."DesignParameters_ModificationFactorAllOtherHtoB", "l"."DesignParameters_ModificationFactorKflHtoBLessThanTwo", "l"."DesignParameters_ReductionFactorF", "l"."DesignParameters_SteelGradeS235Between16and40mm", "l"."DesignParameters_SteelGradeS235Between40and63mm", "l"."DesignParameters_SteelGradeS235LessThan16mm", "l"."DesignParameters_SteelGradeS355Between16and40mm", "l"."DesignParameters_SteelGradeS355Between40and63mm", "l"."DesignParameters_SteelGradeS355LessThan16mm"
+FROM "Orders" AS "o"
+LEFT JOIN "Localization" AS "l" ON "o"."Id" = "l"."OrderId"
+WHERE "o"."Id" = @__orderId_0
+LIMIT 1
+2023-12-13 21:45:04.981 +03:30 [INF] Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[Scaphoid.Core.Model.WebSection, Scaphoid.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2023-12-13 21:45:05.008 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api) in 1063.8663ms
+2023-12-13 21:45:05.008 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api)'
+2023-12-13 21:45:05.013 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/order/16/sections/query?WebThickness.min=2.5&WebThickness.max=2.5 - - - 200 - application/json;+charset=utf-8 1099.4535ms
+2023-12-13 23:23:29.685 +03:30 [INF] Request starting HTTP/1.1 GET https://localhost:44357/order/15/loading - -
+2023-12-13 23:23:29.688 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.LoadingController.Loading (Schaphoid.Api)'
+2023-12-13 23:23:29.693 +03:30 [INF] Route matched with {action = "Loading", controller = "Loading"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Schaphoid.Api.Controllers.LoadingDto] Loading(Int32) on controller Schaphoid.Api.Controllers.LoadingController (Schaphoid.Api).
+2023-12-13 23:23:29.755 +03:30 [INF] Executed DbCommand (13ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "t"."Id", "t"."CreatedOn", "t"."Designer", "t"."ElementType", "t"."Note", "t"."Project", "t"."SectionId", "t"."Span", "t"."OrderId", "t"."LoadType", "t"."PermanentLoads_AxialForce", "t"."PermanentLoads_EndMomentLeft", "t"."PermanentLoads_EndMomentRight", "t"."PermanentLoads_PartialUdl", "t"."PermanentLoads_PartialUdlEnd", "t"."PermanentLoads_PartialUdlStart", "t"."PermanentLoads_Udl", "t"."UltimateLoads_AxialForce", "t"."UltimateLoads_EndMomentLeft", "t"."UltimateLoads_EndMomentRight", "t"."UltimateLoads_PartialUdl", "t"."UltimateLoads_PartialUdlEnd", "t"."UltimateLoads_PartialUdlStart", "t"."UltimateLoads_Udl", "t"."VariableLoads_AxialForce", "t"."VariableLoads_EndMomentLeft", "t"."VariableLoads_EndMomentRight", "t"."VariableLoads_PartialUdl", "t"."VariableLoads_PartialUdlEnd", "t"."VariableLoads_PartialUdlStart", "t"."VariableLoads_Udl", "p"."Id", "p"."Load", "p"."LoadingId", "p"."PermanentAction", "p"."Position", "p"."VariableAction"
+FROM (
+    SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span", "l"."OrderId", "l"."LoadType", "l"."PermanentLoads_AxialForce", "l"."PermanentLoads_EndMomentLeft", "l"."PermanentLoads_EndMomentRight", "l"."PermanentLoads_PartialUdl", "l"."PermanentLoads_PartialUdlEnd", "l"."PermanentLoads_PartialUdlStart", "l"."PermanentLoads_Udl", "l"."UltimateLoads_AxialForce", "l"."UltimateLoads_EndMomentLeft", "l"."UltimateLoads_EndMomentRight", "l"."UltimateLoads_PartialUdl", "l"."UltimateLoads_PartialUdlEnd", "l"."UltimateLoads_PartialUdlStart", "l"."UltimateLoads_Udl", "l"."VariableLoads_AxialForce", "l"."VariableLoads_EndMomentLeft", "l"."VariableLoads_EndMomentRight", "l"."VariableLoads_PartialUdl", "l"."VariableLoads_PartialUdlEnd", "l"."VariableLoads_PartialUdlStart", "l"."VariableLoads_Udl"
+    FROM "Orders" AS "o"
+    LEFT JOIN "Loading" AS "l" ON "o"."Id" = "l"."OrderId"
+    WHERE "o"."Id" = @__orderId_0
+    LIMIT 1
+) AS "t"
+LEFT JOIN "PointLoad" AS "p" ON "t"."OrderId" = "p"."LoadingId"
+ORDER BY "t"."Id", "t"."OrderId"
+2023-12-13 23:23:29.765 +03:30 [INF] Executed action Schaphoid.Api.Controllers.LoadingController.Loading (Schaphoid.Api) in 71.6035ms
+2023-12-13 23:23:29.765 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.LoadingController.Loading (Schaphoid.Api)'
+2023-12-13 23:23:29.766 +03:30 [ERR] An unhandled exception has occurred while executing the request.
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at Schaphoid.Api.Controllers.LoadingController.Loading(Int32 orderId) in E:\Projects\Beam\Schaphoid.Api\Controllers\LoadingController.cs:line 35
+   at lambda_method209(Closure, Object, Object[])
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.SyncObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeActionMethodAsync()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeNextActionFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2023-12-13 23:23:29.796 +03:30 [INF] Request finished HTTP/1.1 GET https://localhost:44357/order/15/loading - - - 500 - text/plain;+charset=utf-8 111.7092ms
+2023-12-13 23:24:00.131 +03:30 [INF] Application started. Press Ctrl+C to shut down.
+2023-12-13 23:24:00.167 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/_framework/aspnetcore-browser-refresh.js - -
+2023-12-13 23:24:00.167 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/_vs/browserLink - -
+2023-12-13 23:24:00.170 +03:30 [INF] Hosting environment: Development
+2023-12-13 23:24:00.170 +03:30 [INF] Content root path: E:\Projects\Beam\Schaphoid.Api
+2023-12-13 23:24:00.236 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/_framework/aspnetcore-browser-refresh.js - - - 200 11996 application/javascript;+charset=utf-8 58.8458ms
+2023-12-13 23:24:00.308 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 145.0617ms
+2023-12-13 23:24:12.481 +03:30 [INF] Request starting HTTP/1.1 GET https://localhost:44357/order/15/loading - -
+2023-12-13 23:24:12.527 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.LoadingController.Loading (Schaphoid.Api)'
+2023-12-13 23:24:12.546 +03:30 [INF] Route matched with {action = "Loading", controller = "Loading"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Schaphoid.Api.Controllers.LoadingDto] Loading(Int32) on controller Schaphoid.Api.Controllers.LoadingController (Schaphoid.Api).
+2023-12-13 23:24:13.093 +03:30 [INF] Executing action method Schaphoid.Api.Controllers.LoadingController.Loading (Schaphoid.Api) - Validation state: "Valid"
+2023-12-13 23:24:18.769 +03:30 [WRN] The property 'Restraint.BottomFlangeRestraints' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+2023-12-13 23:24:18.770 +03:30 [WRN] The property 'Restraint.TopFlangeRestraints' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+2023-12-13 23:24:19.353 +03:30 [INF] Executed DbCommand (16ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "t"."Id", "t"."CreatedOn", "t"."Designer", "t"."ElementType", "t"."Note", "t"."Project", "t"."SectionId", "t"."Span", "t"."OrderId", "t"."LoadType", "t"."PermanentLoads_AxialForce", "t"."PermanentLoads_EndMomentLeft", "t"."PermanentLoads_EndMomentRight", "t"."PermanentLoads_PartialUdl", "t"."PermanentLoads_PartialUdlEnd", "t"."PermanentLoads_PartialUdlStart", "t"."PermanentLoads_Udl", "t"."UltimateLoads_AxialForce", "t"."UltimateLoads_EndMomentLeft", "t"."UltimateLoads_EndMomentRight", "t"."UltimateLoads_PartialUdl", "t"."UltimateLoads_PartialUdlEnd", "t"."UltimateLoads_PartialUdlStart", "t"."UltimateLoads_Udl", "t"."VariableLoads_AxialForce", "t"."VariableLoads_EndMomentLeft", "t"."VariableLoads_EndMomentRight", "t"."VariableLoads_PartialUdl", "t"."VariableLoads_PartialUdlEnd", "t"."VariableLoads_PartialUdlStart", "t"."VariableLoads_Udl", "p"."Id", "p"."Load", "p"."LoadingId", "p"."PermanentAction", "p"."Position", "p"."VariableAction"
+FROM (
+    SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span", "l"."OrderId", "l"."LoadType", "l"."PermanentLoads_AxialForce", "l"."PermanentLoads_EndMomentLeft", "l"."PermanentLoads_EndMomentRight", "l"."PermanentLoads_PartialUdl", "l"."PermanentLoads_PartialUdlEnd", "l"."PermanentLoads_PartialUdlStart", "l"."PermanentLoads_Udl", "l"."UltimateLoads_AxialForce", "l"."UltimateLoads_EndMomentLeft", "l"."UltimateLoads_EndMomentRight", "l"."UltimateLoads_PartialUdl", "l"."UltimateLoads_PartialUdlEnd", "l"."UltimateLoads_PartialUdlStart", "l"."UltimateLoads_Udl", "l"."VariableLoads_AxialForce", "l"."VariableLoads_EndMomentLeft", "l"."VariableLoads_EndMomentRight", "l"."VariableLoads_PartialUdl", "l"."VariableLoads_PartialUdlEnd", "l"."VariableLoads_PartialUdlStart", "l"."VariableLoads_Udl"
+    FROM "Orders" AS "o"
+    LEFT JOIN "Loading" AS "l" ON "o"."Id" = "l"."OrderId"
+    WHERE "o"."Id" = @__orderId_0
+    LIMIT 1
+) AS "t"
+LEFT JOIN "PointLoad" AS "p" ON "t"."OrderId" = "p"."LoadingId"
+ORDER BY "t"."Id", "t"."OrderId"
