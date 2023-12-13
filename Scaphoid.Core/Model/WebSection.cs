@@ -79,7 +79,7 @@ namespace Scaphoid.Core.Model
         /// <summary>
         /// Mgg
         /// </summary>
-        public double BendingCapacity => Ngg * DimensionsZ / 2000;
+        public double BendingCapacity => Math.Round(Ngg * DimensionsZ / 2000, 3);
         public double ShearCapacity { get; set; }
         public double AxialCapacity { get; set; }
 

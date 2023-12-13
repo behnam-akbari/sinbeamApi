@@ -352,11 +352,12 @@ namespace Schaphoid.Api.Controllers
 
             var properties = GetSectionProperties(section);
 
-            var steel = SteelType.S235.GetDisplayName();
+            var steel = steelType.GetDisplayName();
 
             var output = new WebSectionDto
             {
                 Id = id,
+                Key = section.Key,
                 WebDepth = section.WebHeight,
                 WebThickness = section.WebThickness,
                 WebSteel = steel,
@@ -428,7 +429,8 @@ namespace Schaphoid.Api.Controllers
     public class WebSectionDto : Resource
     {
         public string Id { get; set; }
-
+        public string Key { get; set; }
+        
         public double WebDepth { get; set; }
         public double WebThickness { get; set; }
         public string WebSteel { get; set; }
