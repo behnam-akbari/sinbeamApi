@@ -292,8 +292,12 @@ namespace Schaphoid.Api.Controllers
             //};
 
             var height = 500;
+            double scaler = 1;
 
-            var scaler = height / section.WebHeight;
+            if (height > section.WebHeight)
+            {
+                scaler = Math.Round(height / section.WebHeight, 2);
+            }
 
             return new SectionDesign
             {
