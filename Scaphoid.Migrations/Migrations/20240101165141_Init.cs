@@ -68,27 +68,28 @@ namespace Scaphoid.Migrations.Migrations
                 {
                     OrderId = table.Column<int>(type: "INTEGER", nullable: false),
                     LoadType = table.Column<int>(type: "INTEGER", nullable: false),
-                    PermanentLoads_Udl = table.Column<int>(type: "INTEGER", nullable: true),
+                    PermanentLoads_Udl = table.Column<double>(type: "REAL", nullable: true),
                     PermanentLoads_PartialUdl = table.Column<int>(type: "INTEGER", nullable: true),
                     PermanentLoads_PartialUdlStart = table.Column<int>(type: "INTEGER", nullable: true),
                     PermanentLoads_PartialUdlEnd = table.Column<int>(type: "INTEGER", nullable: true),
-                    PermanentLoads_EndMomentLeft = table.Column<int>(type: "INTEGER", nullable: true),
-                    PermanentLoads_EndMomentRight = table.Column<int>(type: "INTEGER", nullable: true),
-                    PermanentLoads_AxialForce = table.Column<int>(type: "INTEGER", nullable: true),
-                    VariableLoads_Udl = table.Column<int>(type: "INTEGER", nullable: true),
+                    PermanentLoads_EndMomentLeft = table.Column<double>(type: "REAL", nullable: true),
+                    PermanentLoads_EndMomentRight = table.Column<double>(type: "REAL", nullable: true),
+                    PermanentLoads_AxialForce = table.Column<double>(type: "REAL", nullable: true),
+                    VariableLoads_Udl = table.Column<double>(type: "REAL", nullable: true),
                     VariableLoads_PartialUdl = table.Column<int>(type: "INTEGER", nullable: true),
                     VariableLoads_PartialUdlStart = table.Column<int>(type: "INTEGER", nullable: true),
                     VariableLoads_PartialUdlEnd = table.Column<int>(type: "INTEGER", nullable: true),
-                    VariableLoads_EndMomentLeft = table.Column<int>(type: "INTEGER", nullable: true),
-                    VariableLoads_EndMomentRight = table.Column<int>(type: "INTEGER", nullable: true),
-                    VariableLoads_AxialForce = table.Column<int>(type: "INTEGER", nullable: true),
-                    UltimateLoads_Udl = table.Column<int>(type: "INTEGER", nullable: true),
+                    VariableLoads_EndMomentLeft = table.Column<double>(type: "REAL", nullable: true),
+                    VariableLoads_EndMomentRight = table.Column<double>(type: "REAL", nullable: true),
+                    VariableLoads_AxialForce = table.Column<double>(type: "REAL", nullable: true),
+                    UltimateLoads_Udl = table.Column<double>(type: "REAL", nullable: true),
                     UltimateLoads_PartialUdl = table.Column<int>(type: "INTEGER", nullable: true),
                     UltimateLoads_PartialUdlStart = table.Column<int>(type: "INTEGER", nullable: true),
                     UltimateLoads_PartialUdlEnd = table.Column<int>(type: "INTEGER", nullable: true),
-                    UltimateLoads_EndMomentLeft = table.Column<int>(type: "INTEGER", nullable: true),
-                    UltimateLoads_EndMomentRight = table.Column<int>(type: "INTEGER", nullable: true),
-                    UltimateLoads_AxialForce = table.Column<int>(type: "INTEGER", nullable: true)
+                    UltimateLoads_EndMomentLeft = table.Column<double>(type: "REAL", nullable: true),
+                    UltimateLoads_EndMomentRight = table.Column<double>(type: "REAL", nullable: true),
+                    UltimateLoads_AxialForce = table.Column<double>(type: "REAL", nullable: true),
+                    CombinationType = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -121,6 +122,7 @@ namespace Scaphoid.Migrations.Migrations
                     DeflectionLimit_VariableLoads = table.Column<double>(type: "REAL", nullable: true),
                     DeflectionLimit_TotalLoads = table.Column<double>(type: "REAL", nullable: true),
                     ULSLoadExpression = table.Column<int>(type: "INTEGER", nullable: false),
+                    SteelType = table.Column<int>(type: "INTEGER", nullable: false),
                     PsiValue = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -156,6 +158,70 @@ namespace Scaphoid.Migrations.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AxialForceLoad",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    LoadingId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Type = table.Column<int>(type: "INTEGER", nullable: false),
+                    Value = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AxialForceLoad", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AxialForceLoad_Loading_LoadingId",
+                        column: x => x.LoadingId,
+                        principalTable: "Loading",
+                        principalColumn: "OrderId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DistributeLoad",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    LoadingId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Type = table.Column<int>(type: "INTEGER", nullable: false),
+                    Value = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DistributeLoad", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DistributeLoad_Loading_LoadingId",
+                        column: x => x.LoadingId,
+                        principalTable: "Loading",
+                        principalColumn: "OrderId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EndMomentLoad",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    LoadingId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Type = table.Column<int>(type: "INTEGER", nullable: false),
+                    LeftValue = table.Column<int>(type: "INTEGER", nullable: false),
+                    RightValue = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EndMomentLoad", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EndMomentLoad_Loading_LoadingId",
+                        column: x => x.LoadingId,
+                        principalTable: "Loading",
+                        principalColumn: "OrderId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PointLoad",
                 columns: table => new
                 {
@@ -178,9 +244,51 @@ namespace Scaphoid.Migrations.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "XPointLoad",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    LoadingId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Type = table.Column<int>(type: "INTEGER", nullable: false),
+                    Position = table.Column<double>(type: "REAL", nullable: false),
+                    Value = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_XPointLoad", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_XPointLoad_Loading_LoadingId",
+                        column: x => x.LoadingId,
+                        principalTable: "Loading",
+                        principalColumn: "OrderId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AxialForceLoad_LoadingId",
+                table: "AxialForceLoad",
+                column: "LoadingId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DistributeLoad_LoadingId",
+                table: "DistributeLoad",
+                column: "LoadingId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EndMomentLoad_LoadingId",
+                table: "EndMomentLoad",
+                column: "LoadingId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_PointLoad_LoadingId",
                 table: "PointLoad",
+                column: "LoadingId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_XPointLoad_LoadingId",
+                table: "XPointLoad",
                 column: "LoadingId");
         }
 
@@ -188,7 +296,16 @@ namespace Scaphoid.Migrations.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "AxialForceLoad");
+
+            migrationBuilder.DropTable(
                 name: "Beam");
+
+            migrationBuilder.DropTable(
+                name: "DistributeLoad");
+
+            migrationBuilder.DropTable(
+                name: "EndMomentLoad");
 
             migrationBuilder.DropTable(
                 name: "Localization");
@@ -198,6 +315,9 @@ namespace Scaphoid.Migrations.Migrations
 
             migrationBuilder.DropTable(
                 name: "Restraint");
+
+            migrationBuilder.DropTable(
+                name: "XPointLoad");
 
             migrationBuilder.DropTable(
                 name: "Loading");

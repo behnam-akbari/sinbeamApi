@@ -19,8 +19,8 @@
         public ElementType ElementType { get; set; }
     }
 
-    public class Restraint
-    {
+    public class Restraint 
+    { 
         public int OrderId { get; set; }
         public Order Order { get; set; }
 

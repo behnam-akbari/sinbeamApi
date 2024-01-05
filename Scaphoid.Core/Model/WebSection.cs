@@ -60,11 +60,23 @@ namespace Scaphoid.Core.Model
         /// </summary>
         public double SectionPerimeter => Math.Round(2 * FlangeWidth * FlangeThickness / 100, 3);
 
+        public double SectionArea => (2 * FlangeWidth * FlangeThickness) + (WebHeight * WebThickness);
+
+        public double SelfWeight => Math.Round((SectionArea * 7850 * 9.81d / 1000000) / 1000, 2);
+
         /// <summary>
         /// U
         /// </summary>
         [JsonIgnore]
         public double SurfaceAreaPerM => 4 * (FlangeWidth + FlangeThickness) / 1000 + 1.1951951951952 * 2 * 1 * WebHeight / 1000;
+
+
+
+        /// <summary>
+        /// U
+        /// </summary>
+        [JsonIgnore]
+        public double SurfaceAreaPerT => SurfaceAreaPerM * 1000 / Weight;
 
         /// <summary>
         /// Cross Section Values - Iy 

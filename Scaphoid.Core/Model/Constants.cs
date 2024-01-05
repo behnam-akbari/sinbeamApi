@@ -106,9 +106,11 @@
             ReductionFactorF =  0.85,
             ModificationFactorKflHtoBLessThanTwo = 1.1,
             ModificationFactorAllOtherHtoB = 1.1,
+
             SteelGradeS235LessThan16mm = 275,
             SteelGradeS235Between16and40mm = 275,
             SteelGradeS235Between40and63mm = 255,
+            
             SteelGradeS355LessThan16mm = 355,
             SteelGradeS355Between16and40mm = 355,
             SteelGradeS355Between40and63mm = 335
@@ -116,17 +118,19 @@
 
         public static readonly DesignParameters IranNA = new()
         {
-            GammaG = 1.35,
-            GammaQ = 1.5,
-            ReductionFactorF = 0.925,
+            GammaG = 1,
+            GammaQ = 1,
+            ReductionFactorF = 0.9,
             ModificationFactorKflHtoBLessThanTwo = 1,
-            ModificationFactorAllOtherHtoB = 0.9,
-            SteelGradeS235LessThan16mm = 275,
-            SteelGradeS235Between16and40mm = 265,
-            SteelGradeS235Between40and63mm = 255,
-            SteelGradeS355LessThan16mm = 355,
-            SteelGradeS355Between16and40mm = 345,
-            SteelGradeS355Between40and63mm = 335
+            ModificationFactorAllOtherHtoB = 1,
+            
+            SteelGradeS235LessThan16mm = 240,
+            SteelGradeS235Between16and40mm = 240,
+            SteelGradeS235Between40and63mm = 240,
+
+            SteelGradeS355LessThan16mm = 360,
+            SteelGradeS355Between16and40mm = 360,
+            SteelGradeS355Between40and63mm = 360
         };
 
         public static readonly DesignParameters DefaultNA = new()

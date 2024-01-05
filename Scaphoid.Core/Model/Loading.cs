@@ -9,6 +9,13 @@
         public LoadParameters VariableLoads { get; set; }
         public LoadParameters UltimateLoads { get; set; }
         public ICollection<PointLoad> PointLoads { get; set; }
+
+        public ICollection<DistributeLoad> DistributeLoads { get; set; }
+        public ICollection<EndMomentLoad> EndMomentLoads { get; set; }
+        public ICollection<AxialForceLoad> AxialForceLoads { get; set; }
+        public ICollection<XPointLoad> XPointLoads { get; set; }
+
+        public CombinationType CombinationType { get; set; }
     }
 
     public class PointLoad
@@ -25,19 +32,75 @@
     public enum LoadType
     {
         CharacteristicLoads = 1,
-        UltimateLoads = 2
+        UltimateLoads = 2,
+        Iran = 3
     }
 
     public class LoadParameters
     {
-        public int Udl { get; set; }
+        public double Udl { get; set; }
 
         public int PartialUdl { get; set; }
         public int PartialUdlStart { get; set; }
         public int PartialUdlEnd { get; set; }
 
-        public int EndMomentLeft { get; set; }
-        public int EndMomentRight { get; set; }
-        public int AxialForce { get; set; }
+        public double EndMomentLeft { get; set; }
+        public double EndMomentRight { get; set; }
+        public double AxialForce { get; set; }
+    }
+
+    public enum XType
+    {
+        Dead = 1,
+        Live = 2,
+        Wind = 3,
+        Snow = 4
+    }
+
+    public class DistributeLoad
+    {
+        public int Id { get; set; }
+        public int LoadingId { get; set; }
+        public Loading Loading { get; set; }
+        public XType Type { get; set; }
+        public int Value { get; set; }
+    }
+
+    public class EndMomentLoad
+    {
+        public int Id { get; set; }
+        public int LoadingId { get; set; }
+        public Loading Loading { get; set; }
+        public XType Type { get; set; }
+        public int LeftValue { get; set; }
+        public int RightValue { get; set; }
+    }
+
+    public class AxialForceLoad
+    {
+        public int Id { get; set; }
+        public int LoadingId { get; set; }
+        public Loading Loading { get; set; }
+        public XType Type { get; set; }
+        public int Value { get; set; }
+    }
+
+    public class XPointLoad
+    {
+        public int Id { get; set; }
+        public int LoadingId { get; set; }
+        public Loading Loading { get; set; }
+        public XType Type { get; set; }
+        public double Position { get; set; }
+        public int Value { get; set; }
+    }
+
+    public enum CombinationType
+    {
+        C1 = 1,
+        C2 = 2,
+        C3 = 3,
+        C4 = 4,
+        C5 = 5
     }
 }

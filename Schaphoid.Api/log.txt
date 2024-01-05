@@ -5789,3 +5789,697 @@ FROM (
 ) AS "t"
 LEFT JOIN "PointLoad" AS "p" ON "t"."OrderId" = "p"."LoadingId"
 ORDER BY "t"."Id", "t"."OrderId"
+2023-12-13 23:26:27.480 +03:30 [INF] Application started. Press Ctrl+C to shut down.
+2023-12-13 23:26:27.492 +03:30 [INF] Hosting environment: Development
+2023-12-13 23:26:27.493 +03:30 [INF] Content root path: E:\Projects\Beam\Schaphoid.Api
+2023-12-13 23:26:27.497 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/_vs/browserLink - -
+2023-12-13 23:26:27.497 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/_framework/aspnetcore-browser-refresh.js - -
+2023-12-13 23:26:27.514 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/_framework/aspnetcore-browser-refresh.js - - - 200 11996 application/javascript;+charset=utf-8 17.2995ms
+2023-12-13 23:26:27.550 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 54.2114ms
+2023-12-13 23:26:56.769 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/configuration - -
+2023-12-13 23:26:56.803 +03:30 [INF] CORS policy execution successful.
+2023-12-13 23:26:56.809 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.ConfigurationController.Get (Schaphoid.Api)'
+2023-12-13 23:26:56.818 +03:30 [INF] Route matched with {action = "Get", controller = "Configuration"}. Executing controller action with signature Scaphoid.Core.Model.Resource Get() on controller Schaphoid.Api.Controllers.ConfigurationController (Schaphoid.Api).
+2023-12-13 23:26:56.953 +03:30 [INF] Executing ObjectResult, writing value of type 'Schaphoid.Api.Controllers.OrderDto'.
+2023-12-13 23:26:57.012 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/configuration - -
+2023-12-13 23:26:57.012 +03:30 [INF] Executed action Schaphoid.Api.Controllers.ConfigurationController.Get (Schaphoid.Api) in 192.0336ms
+2023-12-13 23:26:57.013 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.ConfigurationController.Get (Schaphoid.Api)'
+2023-12-13 23:26:57.014 +03:30 [INF] CORS policy execution successful.
+2023-12-13 23:26:57.014 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.ConfigurationController.Get (Schaphoid.Api)'
+2023-12-13 23:26:57.014 +03:30 [INF] Route matched with {action = "Get", controller = "Configuration"}. Executing controller action with signature Scaphoid.Core.Model.Resource Get() on controller Schaphoid.Api.Controllers.ConfigurationController (Schaphoid.Api).
+2023-12-13 23:26:57.018 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/configuration - - - 200 - application/json;+charset=utf-8 249.6974ms
+2023-12-13 23:26:57.021 +03:30 [INF] Executing ObjectResult, writing value of type 'Schaphoid.Api.Controllers.OrderDto'.
+2023-12-13 23:26:57.021 +03:30 [INF] Executed action Schaphoid.Api.Controllers.ConfigurationController.Get (Schaphoid.Api) in 7.0402ms
+2023-12-13 23:26:57.021 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.ConfigurationController.Get (Schaphoid.Api)'
+2023-12-13 23:26:57.022 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/configuration - - - 200 - application/json;+charset=utf-8 10.1651ms
+2023-12-13 23:27:21.139 +03:30 [INF] Request starting HTTP/2 OPTIONS https://localhost:44357/configuration/order - -
+2023-12-13 23:27:21.140 +03:30 [INF] CORS policy execution successful.
+2023-12-13 23:27:21.141 +03:30 [INF] Request finished HTTP/2 OPTIONS https://localhost:44357/configuration/order - - - 204 - - 2.1706ms
+2023-12-13 23:27:21.145 +03:30 [INF] Request starting HTTP/2 POST https://localhost:44357/configuration/order application/json 203
+2023-12-13 23:27:21.146 +03:30 [INF] CORS policy execution successful.
+2023-12-13 23:27:21.146 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.ConfigurationController.CreateOrder (Schaphoid.Api)'
+2023-12-13 23:27:21.154 +03:30 [INF] Route matched with {action = "CreateOrder", controller = "Configuration"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CreateOrder(Schaphoid.Api.Controllers.OrderDto) on controller Schaphoid.Api.Controllers.ConfigurationController (Schaphoid.Api).
+2023-12-13 23:27:21.615 +03:30 [WRN] The property 'Restraint.BottomFlangeRestraints' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+2023-12-13 23:27:21.616 +03:30 [WRN] The property 'Restraint.TopFlangeRestraints' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+2023-12-13 23:27:21.942 +03:30 [INF] Executed DbCommand (5ms) [Parameters=[@p0='?' (DbType = DateTime), @p1='?' (Size = 2), @p2='?' (DbType = Int32), @p3='?' (Size = 2), @p4='?' (Size = 2), @p5='?', @p6='?' (DbType = Double)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Orders" ("CreatedOn", "Designer", "ElementType", "Note", "Project", "SectionId", "Span")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6)
+RETURNING "Id";
+2023-12-13 23:27:21.958 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@p7='?' (DbType = Int32), @p8='?' (DbType = Int32), @p9='?' (DbType = Int32), @p10='?' (DbType = Int32), @p11='?' (DbType = Int32), @p12='?' (DbType = Double), @p13='?' (DbType = Double), @p14='?' (DbType = Double), @p15='?' (DbType = Double), @p16='?' (DbType = Double), @p17='?' (DbType = Double), @p18='?' (DbType = Double), @p19='?' (DbType = Double), @p20='?' (DbType = Double), @p21='?' (DbType = Double), @p22='?' (DbType = Double), @p23='?' (DbType = Double), @p24='?' (DbType = Double)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Localization" ("OrderId", "DesignType", "PsiValue", "SteelType", "ULSLoadExpression", "DeflectionLimit_TotalLoads", "DeflectionLimit_VariableLoads", "DesignParameters_GammaG", "DesignParameters_GammaQ", "DesignParameters_ModificationFactorAllOtherHtoB", "DesignParameters_ModificationFactorKflHtoBLessThanTwo", "DesignParameters_ReductionFactorF", "DesignParameters_SteelGradeS235Between16and40mm", "DesignParameters_SteelGradeS235Between40and63mm", "DesignParameters_SteelGradeS235LessThan16mm", "DesignParameters_SteelGradeS355Between16and40mm", "DesignParameters_SteelGradeS355Between40and63mm", "DesignParameters_SteelGradeS355LessThan16mm")
+VALUES (@p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18, @p19, @p20, @p21, @p22, @p23, @p24);
+2023-12-13 23:27:22.135 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span", "l"."OrderId", "l"."DesignType", "l"."PsiValue", "l"."SteelType", "l"."ULSLoadExpression", "l"."DeflectionLimit_TotalLoads", "l"."DeflectionLimit_VariableLoads", "l"."DesignParameters_GammaG", "l"."DesignParameters_GammaQ", "l"."DesignParameters_ModificationFactorAllOtherHtoB", "l"."DesignParameters_ModificationFactorKflHtoBLessThanTwo", "l"."DesignParameters_ReductionFactorF", "l"."DesignParameters_SteelGradeS235Between16and40mm", "l"."DesignParameters_SteelGradeS235Between40and63mm", "l"."DesignParameters_SteelGradeS235LessThan16mm", "l"."DesignParameters_SteelGradeS355Between16and40mm", "l"."DesignParameters_SteelGradeS355Between40and63mm", "l"."DesignParameters_SteelGradeS355LessThan16mm"
+FROM "Orders" AS "o"
+LEFT JOIN "Localization" AS "l" ON "o"."Id" = "l"."OrderId"
+WHERE "o"."Id" = @__id_0
+LIMIT 1
+2023-12-13 23:27:22.139 +03:30 [INF] Executing CreatedAtActionResult, writing value of type 'Schaphoid.Api.Controllers.OrderDto'.
+2023-12-13 23:27:22.141 +03:30 [INF] Executed action Schaphoid.Api.Controllers.ConfigurationController.CreateOrder (Schaphoid.Api) in 986.4741ms
+2023-12-13 23:27:22.141 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.ConfigurationController.CreateOrder (Schaphoid.Api)'
+2023-12-13 23:27:22.143 +03:30 [INF] Request finished HTTP/2 POST https://localhost:44357/configuration/order application/json 203 - 201 - application/json;+charset=utf-8 998.0730ms
+2023-12-13 23:27:22.446 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/order/17/sections/init - -
+2023-12-13 23:27:22.446 +03:30 [INF] CORS policy execution successful.
+2023-12-13 23:27:22.446 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.SectionsController.Init (Schaphoid.Api)'
+2023-12-13 23:27:22.451 +03:30 [INF] Route matched with {action = "Init", controller = "Sections"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Scaphoid.Core.Model.Resource] Init(Int32) on controller Schaphoid.Api.Controllers.SectionsController (Schaphoid.Api).
+2023-12-13 23:27:22.490 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span"
+FROM "Orders" AS "o"
+WHERE "o"."Id" = @__orderId_0
+LIMIT 1
+2023-12-13 23:27:22.501 +03:30 [INF] Executing ObjectResult, writing value of type 'Scaphoid.Core.Model.Resource'.
+2023-12-13 23:27:22.502 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Init (Schaphoid.Api) in 51.101ms
+2023-12-13 23:27:22.502 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Init (Schaphoid.Api)'
+2023-12-13 23:27:22.502 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/order/17/sections/init - - - 200 - application/json;+charset=utf-8 56.1697ms
+2023-12-13 23:27:22.507 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/order/17/sections/filters - -
+2023-12-13 23:27:22.508 +03:30 [INF] CORS policy execution successful.
+2023-12-13 23:27:22.508 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.SectionsController.Filters (Schaphoid.Api)'
+2023-12-13 23:27:22.510 +03:30 [INF] Route matched with {action = "Filters", controller = "Sections"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Schaphoid.Api.Controllers.WebSectionFilters] Filters(Int32) on controller Schaphoid.Api.Controllers.SectionsController (Schaphoid.Api).
+2023-12-13 23:27:22.520 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span", "l"."OrderId", "l"."DesignType", "l"."PsiValue", "l"."SteelType", "l"."ULSLoadExpression", "l"."DeflectionLimit_TotalLoads", "l"."DeflectionLimit_VariableLoads", "l"."DesignParameters_GammaG", "l"."DesignParameters_GammaQ", "l"."DesignParameters_ModificationFactorAllOtherHtoB", "l"."DesignParameters_ModificationFactorKflHtoBLessThanTwo", "l"."DesignParameters_ReductionFactorF", "l"."DesignParameters_SteelGradeS235Between16and40mm", "l"."DesignParameters_SteelGradeS235Between40and63mm", "l"."DesignParameters_SteelGradeS235LessThan16mm", "l"."DesignParameters_SteelGradeS355Between16and40mm", "l"."DesignParameters_SteelGradeS355Between40and63mm", "l"."DesignParameters_SteelGradeS355LessThan16mm"
+FROM "Orders" AS "o"
+LEFT JOIN "Localization" AS "l" ON "o"."Id" = "l"."OrderId"
+WHERE "o"."Id" = @__orderId_0
+LIMIT 1
+2023-12-13 23:27:22.532 +03:30 [INF] Executing ObjectResult, writing value of type 'Schaphoid.Api.Controllers.WebSectionFilters'.
+2023-12-13 23:27:22.535 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Filters (Schaphoid.Api) in 24.5867ms
+2023-12-13 23:27:22.535 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Filters (Schaphoid.Api)'
+2023-12-13 23:27:22.535 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/order/17/sections/filters - - - 200 - application/json;+charset=utf-8 27.5219ms
+2023-12-13 23:27:35.754 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/order/17/sections/query?WebThickness.min=2.5&WebThickness.max=2.5 - -
+2023-12-13 23:27:35.755 +03:30 [INF] CORS policy execution successful.
+2023-12-13 23:27:35.755 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api)'
+2023-12-13 23:27:35.758 +03:30 [INF] Route matched with {action = "Query", controller = "Sections"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[Scaphoid.Core.Model.WebSection]] Query(Int32, Schaphoid.Api.Controllers.WebSectionFilters) on controller Schaphoid.Api.Controllers.SectionsController (Schaphoid.Api).
+2023-12-13 23:27:35.767 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span", "l"."OrderId", "l"."DesignType", "l"."PsiValue", "l"."SteelType", "l"."ULSLoadExpression", "l"."DeflectionLimit_TotalLoads", "l"."DeflectionLimit_VariableLoads", "l"."DesignParameters_GammaG", "l"."DesignParameters_GammaQ", "l"."DesignParameters_ModificationFactorAllOtherHtoB", "l"."DesignParameters_ModificationFactorKflHtoBLessThanTwo", "l"."DesignParameters_ReductionFactorF", "l"."DesignParameters_SteelGradeS235Between16and40mm", "l"."DesignParameters_SteelGradeS235Between40and63mm", "l"."DesignParameters_SteelGradeS235LessThan16mm", "l"."DesignParameters_SteelGradeS355Between16and40mm", "l"."DesignParameters_SteelGradeS355Between40and63mm", "l"."DesignParameters_SteelGradeS355LessThan16mm"
+FROM "Orders" AS "o"
+LEFT JOIN "Localization" AS "l" ON "o"."Id" = "l"."OrderId"
+WHERE "o"."Id" = @__orderId_0
+LIMIT 1
+2023-12-13 23:27:35.772 +03:30 [INF] Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[Scaphoid.Core.Model.WebSection, Scaphoid.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2023-12-13 23:27:35.776 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api) in 16.9796ms
+2023-12-13 23:27:35.776 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api)'
+2023-12-13 23:27:35.776 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/order/17/sections/query?WebThickness.min=2.5&WebThickness.max=2.5 - - - 200 - application/json;+charset=utf-8 21.4963ms
+2023-12-13 23:27:43.795 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/order/17/sections/query?WebHeight.min=468&WebHeight.max=523&WebThickness.min=2.5&WebThickness.max=2.5 - -
+2023-12-13 23:27:43.795 +03:30 [INF] CORS policy execution successful.
+2023-12-13 23:27:43.795 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api)'
+2023-12-13 23:27:43.795 +03:30 [INF] Route matched with {action = "Query", controller = "Sections"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[Scaphoid.Core.Model.WebSection]] Query(Int32, Schaphoid.Api.Controllers.WebSectionFilters) on controller Schaphoid.Api.Controllers.SectionsController (Schaphoid.Api).
+2023-12-13 23:27:43.796 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span", "l"."OrderId", "l"."DesignType", "l"."PsiValue", "l"."SteelType", "l"."ULSLoadExpression", "l"."DeflectionLimit_TotalLoads", "l"."DeflectionLimit_VariableLoads", "l"."DesignParameters_GammaG", "l"."DesignParameters_GammaQ", "l"."DesignParameters_ModificationFactorAllOtherHtoB", "l"."DesignParameters_ModificationFactorKflHtoBLessThanTwo", "l"."DesignParameters_ReductionFactorF", "l"."DesignParameters_SteelGradeS235Between16and40mm", "l"."DesignParameters_SteelGradeS235Between40and63mm", "l"."DesignParameters_SteelGradeS235LessThan16mm", "l"."DesignParameters_SteelGradeS355Between16and40mm", "l"."DesignParameters_SteelGradeS355Between40and63mm", "l"."DesignParameters_SteelGradeS355LessThan16mm"
+FROM "Orders" AS "o"
+LEFT JOIN "Localization" AS "l" ON "o"."Id" = "l"."OrderId"
+WHERE "o"."Id" = @__orderId_0
+LIMIT 1
+2023-12-13 23:27:43.797 +03:30 [INF] Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[Scaphoid.Core.Model.WebSection, Scaphoid.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2023-12-13 23:27:43.797 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api) in 2.2112ms
+2023-12-13 23:27:43.797 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api)'
+2023-12-13 23:27:43.797 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/order/17/sections/query?WebHeight.min=468&WebHeight.max=523&WebThickness.min=2.5&WebThickness.max=2.5 - - - 200 - application/json;+charset=utf-8 2.6591ms
+2023-12-13 23:28:13.067 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/order/17/sections/wt-b-500-200-10 - -
+2023-12-13 23:28:13.067 +03:30 [INF] CORS policy execution successful.
+2023-12-13 23:28:13.067 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.SectionsController.Get (Schaphoid.Api)'
+2023-12-13 23:28:13.069 +03:30 [INF] Route matched with {action = "Get", controller = "Sections"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Schaphoid.Api.Controllers.WebSectionDto] Get(Int32, System.String) on controller Schaphoid.Api.Controllers.SectionsController (Schaphoid.Api).
+2023-12-13 23:28:13.071 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span", "l"."OrderId", "l"."DesignType", "l"."PsiValue", "l"."SteelType", "l"."ULSLoadExpression", "l"."DeflectionLimit_TotalLoads", "l"."DeflectionLimit_VariableLoads", "l"."DesignParameters_GammaG", "l"."DesignParameters_GammaQ", "l"."DesignParameters_ModificationFactorAllOtherHtoB", "l"."DesignParameters_ModificationFactorKflHtoBLessThanTwo", "l"."DesignParameters_ReductionFactorF", "l"."DesignParameters_SteelGradeS235Between16and40mm", "l"."DesignParameters_SteelGradeS235Between40and63mm", "l"."DesignParameters_SteelGradeS235LessThan16mm", "l"."DesignParameters_SteelGradeS355Between16and40mm", "l"."DesignParameters_SteelGradeS355Between40and63mm", "l"."DesignParameters_SteelGradeS355LessThan16mm"
+FROM "Orders" AS "o"
+LEFT JOIN "Localization" AS "l" ON "o"."Id" = "l"."OrderId"
+WHERE "o"."Id" = @__orderId_0
+LIMIT 1
+2023-12-13 23:28:13.073 +03:30 [INF] Executing ObjectResult, writing value of type 'Schaphoid.Api.Controllers.WebSectionDto'.
+2023-12-13 23:28:13.077 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Get (Schaphoid.Api) in 7.5358ms
+2023-12-13 23:28:13.077 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Get (Schaphoid.Api)'
+2023-12-13 23:28:13.077 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/order/17/sections/wt-b-500-200-10 - - - 200 - application/json;+charset=utf-8 10.6434ms
+2023-12-13 23:28:25.192 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/order/17/loading - -
+2023-12-13 23:28:25.192 +03:30 [INF] CORS policy execution successful.
+2023-12-13 23:28:25.192 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.LoadingController.Loading (Schaphoid.Api)'
+2023-12-13 23:28:25.194 +03:30 [INF] Route matched with {action = "Loading", controller = "Loading"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Schaphoid.Api.Controllers.LoadingDto] Loading(Int32) on controller Schaphoid.Api.Controllers.LoadingController (Schaphoid.Api).
+2023-12-13 23:28:25.234 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "t"."Id", "t"."CreatedOn", "t"."Designer", "t"."ElementType", "t"."Note", "t"."Project", "t"."SectionId", "t"."Span", "t"."OrderId", "t"."LoadType", "t"."PermanentLoads_AxialForce", "t"."PermanentLoads_EndMomentLeft", "t"."PermanentLoads_EndMomentRight", "t"."PermanentLoads_PartialUdl", "t"."PermanentLoads_PartialUdlEnd", "t"."PermanentLoads_PartialUdlStart", "t"."PermanentLoads_Udl", "t"."UltimateLoads_AxialForce", "t"."UltimateLoads_EndMomentLeft", "t"."UltimateLoads_EndMomentRight", "t"."UltimateLoads_PartialUdl", "t"."UltimateLoads_PartialUdlEnd", "t"."UltimateLoads_PartialUdlStart", "t"."UltimateLoads_Udl", "t"."VariableLoads_AxialForce", "t"."VariableLoads_EndMomentLeft", "t"."VariableLoads_EndMomentRight", "t"."VariableLoads_PartialUdl", "t"."VariableLoads_PartialUdlEnd", "t"."VariableLoads_PartialUdlStart", "t"."VariableLoads_Udl", "p"."Id", "p"."Load", "p"."LoadingId", "p"."PermanentAction", "p"."Position", "p"."VariableAction"
+FROM (
+    SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span", "l"."OrderId", "l"."LoadType", "l"."PermanentLoads_AxialForce", "l"."PermanentLoads_EndMomentLeft", "l"."PermanentLoads_EndMomentRight", "l"."PermanentLoads_PartialUdl", "l"."PermanentLoads_PartialUdlEnd", "l"."PermanentLoads_PartialUdlStart", "l"."PermanentLoads_Udl", "l"."UltimateLoads_AxialForce", "l"."UltimateLoads_EndMomentLeft", "l"."UltimateLoads_EndMomentRight", "l"."UltimateLoads_PartialUdl", "l"."UltimateLoads_PartialUdlEnd", "l"."UltimateLoads_PartialUdlStart", "l"."UltimateLoads_Udl", "l"."VariableLoads_AxialForce", "l"."VariableLoads_EndMomentLeft", "l"."VariableLoads_EndMomentRight", "l"."VariableLoads_PartialUdl", "l"."VariableLoads_PartialUdlEnd", "l"."VariableLoads_PartialUdlStart", "l"."VariableLoads_Udl"
+    FROM "Orders" AS "o"
+    LEFT JOIN "Loading" AS "l" ON "o"."Id" = "l"."OrderId"
+    WHERE "o"."Id" = @__orderId_0
+    LIMIT 1
+) AS "t"
+LEFT JOIN "PointLoad" AS "p" ON "t"."OrderId" = "p"."LoadingId"
+ORDER BY "t"."Id", "t"."OrderId"
+2023-12-13 23:28:25.241 +03:30 [INF] Executed action Schaphoid.Api.Controllers.LoadingController.Loading (Schaphoid.Api) in 46.6073ms
+2023-12-13 23:28:25.241 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.LoadingController.Loading (Schaphoid.Api)'
+2023-12-13 23:28:25.241 +03:30 [ERR] An unhandled exception has occurred while executing the request.
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at Schaphoid.Api.Controllers.LoadingController.Loading(Int32 orderId) in E:\Projects\Beam\Schaphoid.Api\Controllers\LoadingController.cs:line 35
+   at lambda_method324(Closure, Object, Object[])
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.SyncObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeActionMethodAsync()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeNextActionFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2023-12-13 23:28:25.258 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/order/17/loading - - - 500 - text/plain;+charset=utf-8 66.7737ms
+2023-12-13 23:29:04.177 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/order/17/sections/init - -
+2023-12-13 23:29:04.178 +03:30 [INF] CORS policy execution successful.
+2023-12-13 23:29:04.178 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.SectionsController.Init (Schaphoid.Api)'
+2023-12-13 23:29:04.178 +03:30 [INF] Route matched with {action = "Init", controller = "Sections"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Scaphoid.Core.Model.Resource] Init(Int32) on controller Schaphoid.Api.Controllers.SectionsController (Schaphoid.Api).
+2023-12-13 23:29:04.178 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span"
+FROM "Orders" AS "o"
+WHERE "o"."Id" = @__orderId_0
+LIMIT 1
+2023-12-13 23:29:04.178 +03:30 [INF] Executing ObjectResult, writing value of type 'Scaphoid.Core.Model.Resource'.
+2023-12-13 23:29:04.179 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Init (Schaphoid.Api) in 0.8952ms
+2023-12-13 23:29:04.179 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Init (Schaphoid.Api)'
+2023-12-13 23:29:04.179 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/order/17/sections/init - - - 200 - application/json;+charset=utf-8 1.4349ms
+2023-12-13 23:29:04.184 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/order/17/sections/filters - -
+2023-12-13 23:29:04.184 +03:30 [INF] CORS policy execution successful.
+2023-12-13 23:29:04.184 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.SectionsController.Filters (Schaphoid.Api)'
+2023-12-13 23:29:04.184 +03:30 [INF] Route matched with {action = "Filters", controller = "Sections"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Schaphoid.Api.Controllers.WebSectionFilters] Filters(Int32) on controller Schaphoid.Api.Controllers.SectionsController (Schaphoid.Api).
+2023-12-13 23:29:04.185 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span", "l"."OrderId", "l"."DesignType", "l"."PsiValue", "l"."SteelType", "l"."ULSLoadExpression", "l"."DeflectionLimit_TotalLoads", "l"."DeflectionLimit_VariableLoads", "l"."DesignParameters_GammaG", "l"."DesignParameters_GammaQ", "l"."DesignParameters_ModificationFactorAllOtherHtoB", "l"."DesignParameters_ModificationFactorKflHtoBLessThanTwo", "l"."DesignParameters_ReductionFactorF", "l"."DesignParameters_SteelGradeS235Between16and40mm", "l"."DesignParameters_SteelGradeS235Between40and63mm", "l"."DesignParameters_SteelGradeS235LessThan16mm", "l"."DesignParameters_SteelGradeS355Between16and40mm", "l"."DesignParameters_SteelGradeS355Between40and63mm", "l"."DesignParameters_SteelGradeS355LessThan16mm"
+FROM "Orders" AS "o"
+LEFT JOIN "Localization" AS "l" ON "o"."Id" = "l"."OrderId"
+WHERE "o"."Id" = @__orderId_0
+LIMIT 1
+2023-12-13 23:29:04.189 +03:30 [INF] Executing ObjectResult, writing value of type 'Schaphoid.Api.Controllers.WebSectionFilters'.
+2023-12-13 23:29:04.189 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Filters (Schaphoid.Api) in 4.8079ms
+2023-12-13 23:29:04.189 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Filters (Schaphoid.Api)'
+2023-12-13 23:29:04.189 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/order/17/sections/filters - - - 200 - application/json;+charset=utf-8 5.2627ms
+2023-12-13 23:29:16.289 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/order/17/sections/query?WebThickness.min=2.5&WebThickness.max=2.5 - -
+2023-12-13 23:29:16.289 +03:30 [INF] CORS policy execution successful.
+2023-12-13 23:29:16.289 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api)'
+2023-12-13 23:29:16.290 +03:30 [INF] Route matched with {action = "Query", controller = "Sections"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[Scaphoid.Core.Model.WebSection]] Query(Int32, Schaphoid.Api.Controllers.WebSectionFilters) on controller Schaphoid.Api.Controllers.SectionsController (Schaphoid.Api).
+2023-12-13 23:29:16.290 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span", "l"."OrderId", "l"."DesignType", "l"."PsiValue", "l"."SteelType", "l"."ULSLoadExpression", "l"."DeflectionLimit_TotalLoads", "l"."DeflectionLimit_VariableLoads", "l"."DesignParameters_GammaG", "l"."DesignParameters_GammaQ", "l"."DesignParameters_ModificationFactorAllOtherHtoB", "l"."DesignParameters_ModificationFactorKflHtoBLessThanTwo", "l"."DesignParameters_ReductionFactorF", "l"."DesignParameters_SteelGradeS235Between16and40mm", "l"."DesignParameters_SteelGradeS235Between40and63mm", "l"."DesignParameters_SteelGradeS235LessThan16mm", "l"."DesignParameters_SteelGradeS355Between16and40mm", "l"."DesignParameters_SteelGradeS355Between40and63mm", "l"."DesignParameters_SteelGradeS355LessThan16mm"
+FROM "Orders" AS "o"
+LEFT JOIN "Localization" AS "l" ON "o"."Id" = "l"."OrderId"
+WHERE "o"."Id" = @__orderId_0
+LIMIT 1
+2023-12-13 23:29:16.291 +03:30 [INF] Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[Scaphoid.Core.Model.WebSection, Scaphoid.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2023-12-13 23:29:16.292 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api) in 2.7582ms
+2023-12-13 23:29:16.292 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api)'
+2023-12-13 23:29:16.293 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/order/17/sections/query?WebThickness.min=2.5&WebThickness.max=2.5 - - - 200 - application/json;+charset=utf-8 3.5612ms
+2023-12-13 23:29:26.538 +03:30 [INF] Application started. Press Ctrl+C to shut down.
+2023-12-13 23:29:26.557 +03:30 [INF] Hosting environment: Development
+2023-12-13 23:29:26.564 +03:30 [INF] Content root path: E:\Projects\Beam\Schaphoid.Api
+2023-12-13 23:29:26.574 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/_framework/aspnetcore-browser-refresh.js - -
+2023-12-13 23:29:26.574 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/_vs/browserLink - -
+2023-12-13 23:29:26.641 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/_framework/aspnetcore-browser-refresh.js - - - 200 11996 application/javascript;+charset=utf-8 56.5871ms
+2023-12-13 23:29:26.696 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 125.5649ms
+2023-12-13 23:29:29.308 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/order/17/sections/wt-b-333-160-6 - -
+2023-12-13 23:29:29.337 +03:30 [INF] CORS policy execution successful.
+2023-12-13 23:29:29.341 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.SectionsController.Get (Schaphoid.Api)'
+2023-12-13 23:29:29.359 +03:30 [INF] Route matched with {action = "Get", controller = "Sections"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Schaphoid.Api.Controllers.WebSectionDto] Get(Int32, System.String) on controller Schaphoid.Api.Controllers.SectionsController (Schaphoid.Api).
+2023-12-13 23:29:29.531 +03:30 [INF] Executing action method Schaphoid.Api.Controllers.SectionsController.Get (Schaphoid.Api) - Validation state: "Valid"
+2023-12-13 23:29:29.987 +03:30 [WRN] The property 'Restraint.BottomFlangeRestraints' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+2023-12-13 23:29:29.987 +03:30 [WRN] The property 'Restraint.TopFlangeRestraints' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+2023-12-13 23:29:30.394 +03:30 [INF] Executed DbCommand (14ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span", "l"."OrderId", "l"."DesignType", "l"."PsiValue", "l"."SteelType", "l"."ULSLoadExpression", "l"."DeflectionLimit_TotalLoads", "l"."DeflectionLimit_VariableLoads", "l"."DesignParameters_GammaG", "l"."DesignParameters_GammaQ", "l"."DesignParameters_ModificationFactorAllOtherHtoB", "l"."DesignParameters_ModificationFactorKflHtoBLessThanTwo", "l"."DesignParameters_ReductionFactorF", "l"."DesignParameters_SteelGradeS235Between16and40mm", "l"."DesignParameters_SteelGradeS235Between40and63mm", "l"."DesignParameters_SteelGradeS235LessThan16mm", "l"."DesignParameters_SteelGradeS355Between16and40mm", "l"."DesignParameters_SteelGradeS355Between40and63mm", "l"."DesignParameters_SteelGradeS355LessThan16mm"
+FROM "Orders" AS "o"
+LEFT JOIN "Localization" AS "l" ON "o"."Id" = "l"."OrderId"
+WHERE "o"."Id" = @__orderId_0
+LIMIT 1
+2023-12-13 23:29:30.535 +03:30 [INF] Executed action method Schaphoid.Api.Controllers.SectionsController.Get (Schaphoid.Api), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 999.1364ms.
+2023-12-13 23:29:30.539 +03:30 [INF] Executing ObjectResult, writing value of type 'Schaphoid.Api.Controllers.WebSectionDto'.
+2023-12-13 23:29:30.570 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Get (Schaphoid.Api) in 1208.2686ms
+2023-12-13 23:29:30.570 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Get (Schaphoid.Api)'
+2023-12-13 23:29:30.580 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/order/17/sections/wt-b-333-160-6 - - - 200 - application/json;+charset=utf-8 1272.4041ms
+2023-12-13 23:29:38.843 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/order/17/loading - -
+2023-12-13 23:29:38.846 +03:30 [INF] CORS policy execution successful.
+2023-12-13 23:29:38.846 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.LoadingController.Loading (Schaphoid.Api)'
+2023-12-13 23:29:38.849 +03:30 [INF] Route matched with {action = "Loading", controller = "Loading"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Schaphoid.Api.Controllers.LoadingDto] Loading(Int32) on controller Schaphoid.Api.Controllers.LoadingController (Schaphoid.Api).
+2023-12-13 23:29:38.866 +03:30 [INF] Executing action method Schaphoid.Api.Controllers.LoadingController.Loading (Schaphoid.Api) - Validation state: "Valid"
+2023-12-17 12:10:17.524 +03:30 [INF] Application started. Press Ctrl+C to shut down.
+2023-12-17 12:10:17.541 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/_framework/aspnetcore-browser-refresh.js - -
+2023-12-17 12:10:17.541 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/_vs/browserLink - -
+2023-12-17 12:10:17.550 +03:30 [INF] Hosting environment: Development
+2023-12-17 12:10:17.551 +03:30 [INF] Content root path: E:\Projects\Beam\Schaphoid.Api
+2023-12-17 12:10:17.565 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/_framework/aspnetcore-browser-refresh.js - - - 200 11996 application/javascript;+charset=utf-8 25.2649ms
+2023-12-17 12:10:18.182 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 643.1232ms
+2023-12-17 12:10:28.276 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/configuration - -
+2023-12-17 12:10:28.313 +03:30 [INF] CORS policy execution successful.
+2023-12-17 12:10:28.319 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.ConfigurationController.Get (Schaphoid.Api)'
+2023-12-17 12:10:28.332 +03:30 [INF] Route matched with {action = "Get", controller = "Configuration"}. Executing controller action with signature Scaphoid.Core.Model.Resource Get() on controller Schaphoid.Api.Controllers.ConfigurationController (Schaphoid.Api).
+2023-12-17 12:10:28.862 +03:30 [INF] Executing ObjectResult, writing value of type 'Schaphoid.Api.Controllers.OrderDto'.
+2023-12-17 12:10:28.910 +03:30 [INF] Executed action Schaphoid.Api.Controllers.ConfigurationController.Get (Schaphoid.Api) in 575.1008ms
+2023-12-17 12:10:28.910 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.ConfigurationController.Get (Schaphoid.Api)'
+2023-12-17 12:10:28.914 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/configuration - - - 200 - application/json;+charset=utf-8 637.5262ms
+2023-12-17 12:10:59.999 +03:30 [INF] Request starting HTTP/2 OPTIONS https://localhost:44357/configuration/order - -
+2023-12-17 12:11:00.001 +03:30 [INF] CORS policy execution successful.
+2023-12-17 12:11:00.002 +03:30 [INF] Request finished HTTP/2 OPTIONS https://localhost:44357/configuration/order - - - 204 - - 3.8011ms
+2023-12-17 12:11:00.006 +03:30 [INF] Request starting HTTP/2 POST https://localhost:44357/configuration/order application/json 203
+2023-12-17 12:11:00.009 +03:30 [INF] CORS policy execution successful.
+2023-12-17 12:11:00.009 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.ConfigurationController.CreateOrder (Schaphoid.Api)'
+2023-12-17 12:11:00.018 +03:30 [INF] Route matched with {action = "CreateOrder", controller = "Configuration"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CreateOrder(Schaphoid.Api.Controllers.OrderDto) on controller Schaphoid.Api.Controllers.ConfigurationController (Schaphoid.Api).
+2023-12-17 12:11:00.929 +03:30 [WRN] The property 'Restraint.BottomFlangeRestraints' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+2023-12-17 12:11:00.930 +03:30 [WRN] The property 'Restraint.TopFlangeRestraints' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+2023-12-17 12:11:01.276 +03:30 [INF] Executed DbCommand (6ms) [Parameters=[@p0='?' (DbType = DateTime), @p1='?' (Size = 2), @p2='?' (DbType = Int32), @p3='?' (Size = 2), @p4='?' (Size = 2), @p5='?', @p6='?' (DbType = Double)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Orders" ("CreatedOn", "Designer", "ElementType", "Note", "Project", "SectionId", "Span")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6)
+RETURNING "Id";
+2023-12-17 12:11:01.292 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@p7='?' (DbType = Int32), @p8='?' (DbType = Int32), @p9='?' (DbType = Int32), @p10='?' (DbType = Int32), @p11='?' (DbType = Int32), @p12='?' (DbType = Double), @p13='?' (DbType = Double), @p14='?' (DbType = Double), @p15='?' (DbType = Double), @p16='?' (DbType = Double), @p17='?' (DbType = Double), @p18='?' (DbType = Double), @p19='?' (DbType = Double), @p20='?' (DbType = Double), @p21='?' (DbType = Double), @p22='?' (DbType = Double), @p23='?' (DbType = Double), @p24='?' (DbType = Double)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Localization" ("OrderId", "DesignType", "PsiValue", "SteelType", "ULSLoadExpression", "DeflectionLimit_TotalLoads", "DeflectionLimit_VariableLoads", "DesignParameters_GammaG", "DesignParameters_GammaQ", "DesignParameters_ModificationFactorAllOtherHtoB", "DesignParameters_ModificationFactorKflHtoBLessThanTwo", "DesignParameters_ReductionFactorF", "DesignParameters_SteelGradeS235Between16and40mm", "DesignParameters_SteelGradeS235Between40and63mm", "DesignParameters_SteelGradeS235LessThan16mm", "DesignParameters_SteelGradeS355Between16and40mm", "DesignParameters_SteelGradeS355Between40and63mm", "DesignParameters_SteelGradeS355LessThan16mm")
+VALUES (@p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18, @p19, @p20, @p21, @p22, @p23, @p24);
+2023-12-17 12:11:01.475 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span", "l"."OrderId", "l"."DesignType", "l"."PsiValue", "l"."SteelType", "l"."ULSLoadExpression", "l"."DeflectionLimit_TotalLoads", "l"."DeflectionLimit_VariableLoads", "l"."DesignParameters_GammaG", "l"."DesignParameters_GammaQ", "l"."DesignParameters_ModificationFactorAllOtherHtoB", "l"."DesignParameters_ModificationFactorKflHtoBLessThanTwo", "l"."DesignParameters_ReductionFactorF", "l"."DesignParameters_SteelGradeS235Between16and40mm", "l"."DesignParameters_SteelGradeS235Between40and63mm", "l"."DesignParameters_SteelGradeS235LessThan16mm", "l"."DesignParameters_SteelGradeS355Between16and40mm", "l"."DesignParameters_SteelGradeS355Between40and63mm", "l"."DesignParameters_SteelGradeS355LessThan16mm"
+FROM "Orders" AS "o"
+LEFT JOIN "Localization" AS "l" ON "o"."Id" = "l"."OrderId"
+WHERE "o"."Id" = @__id_0
+LIMIT 1
+2023-12-17 12:11:01.480 +03:30 [INF] Executing CreatedAtActionResult, writing value of type 'Schaphoid.Api.Controllers.OrderDto'.
+2023-12-17 12:11:01.482 +03:30 [INF] Executed action Schaphoid.Api.Controllers.ConfigurationController.CreateOrder (Schaphoid.Api) in 1464.0735ms
+2023-12-17 12:11:01.483 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.ConfigurationController.CreateOrder (Schaphoid.Api)'
+2023-12-17 12:11:01.485 +03:30 [INF] Request finished HTTP/2 POST https://localhost:44357/configuration/order application/json 203 - 201 - application/json;+charset=utf-8 1478.2883ms
+2023-12-17 12:11:01.747 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/order/18/sections/init - -
+2023-12-17 12:11:01.747 +03:30 [INF] CORS policy execution successful.
+2023-12-17 12:11:01.747 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.SectionsController.Init (Schaphoid.Api)'
+2023-12-17 12:11:01.753 +03:30 [INF] Route matched with {action = "Init", controller = "Sections"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Scaphoid.Core.Model.Resource] Init(Int32) on controller Schaphoid.Api.Controllers.SectionsController (Schaphoid.Api).
+2023-12-17 12:11:01.761 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span"
+FROM "Orders" AS "o"
+WHERE "o"."Id" = @__orderId_0
+LIMIT 1
+2023-12-17 12:11:01.773 +03:30 [INF] Executing ObjectResult, writing value of type 'Scaphoid.Core.Model.Resource'.
+2023-12-17 12:11:01.774 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Init (Schaphoid.Api) in 20.7409ms
+2023-12-17 12:11:01.774 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Init (Schaphoid.Api)'
+2023-12-17 12:11:01.774 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/order/18/sections/init - - - 200 - application/json;+charset=utf-8 27.6286ms
+2023-12-17 12:11:01.780 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/order/18/sections/filters - -
+2023-12-17 12:11:01.781 +03:30 [INF] CORS policy execution successful.
+2023-12-17 12:11:01.781 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.SectionsController.Filters (Schaphoid.Api)'
+2023-12-17 12:11:01.783 +03:30 [INF] Route matched with {action = "Filters", controller = "Sections"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Schaphoid.Api.Controllers.WebSectionFilters] Filters(Int32) on controller Schaphoid.Api.Controllers.SectionsController (Schaphoid.Api).
+2023-12-17 12:11:01.792 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span", "l"."OrderId", "l"."DesignType", "l"."PsiValue", "l"."SteelType", "l"."ULSLoadExpression", "l"."DeflectionLimit_TotalLoads", "l"."DeflectionLimit_VariableLoads", "l"."DesignParameters_GammaG", "l"."DesignParameters_GammaQ", "l"."DesignParameters_ModificationFactorAllOtherHtoB", "l"."DesignParameters_ModificationFactorKflHtoBLessThanTwo", "l"."DesignParameters_ReductionFactorF", "l"."DesignParameters_SteelGradeS235Between16and40mm", "l"."DesignParameters_SteelGradeS235Between40and63mm", "l"."DesignParameters_SteelGradeS235LessThan16mm", "l"."DesignParameters_SteelGradeS355Between16and40mm", "l"."DesignParameters_SteelGradeS355Between40and63mm", "l"."DesignParameters_SteelGradeS355LessThan16mm"
+FROM "Orders" AS "o"
+LEFT JOIN "Localization" AS "l" ON "o"."Id" = "l"."OrderId"
+WHERE "o"."Id" = @__orderId_0
+LIMIT 1
+2023-12-17 12:11:01.804 +03:30 [INF] Executing ObjectResult, writing value of type 'Schaphoid.Api.Controllers.WebSectionFilters'.
+2023-12-17 12:11:01.807 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Filters (Schaphoid.Api) in 23.8887ms
+2023-12-17 12:11:01.807 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Filters (Schaphoid.Api)'
+2023-12-17 12:11:01.807 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/order/18/sections/filters - - - 200 - application/json;+charset=utf-8 26.7630ms
+2023-12-17 12:11:34.033 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/order/18/sections/query?WebThickness.min=2.5&WebThickness.max=2.5 - -
+2023-12-17 12:11:34.033 +03:30 [INF] CORS policy execution successful.
+2023-12-17 12:11:34.034 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api)'
+2023-12-17 12:11:34.040 +03:30 [INF] Route matched with {action = "Query", controller = "Sections"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[Scaphoid.Core.Model.WebSection]] Query(Int32, Schaphoid.Api.Controllers.WebSectionFilters) on controller Schaphoid.Api.Controllers.SectionsController (Schaphoid.Api).
+2023-12-17 12:11:34.052 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span", "l"."OrderId", "l"."DesignType", "l"."PsiValue", "l"."SteelType", "l"."ULSLoadExpression", "l"."DeflectionLimit_TotalLoads", "l"."DeflectionLimit_VariableLoads", "l"."DesignParameters_GammaG", "l"."DesignParameters_GammaQ", "l"."DesignParameters_ModificationFactorAllOtherHtoB", "l"."DesignParameters_ModificationFactorKflHtoBLessThanTwo", "l"."DesignParameters_ReductionFactorF", "l"."DesignParameters_SteelGradeS235Between16and40mm", "l"."DesignParameters_SteelGradeS235Between40and63mm", "l"."DesignParameters_SteelGradeS235LessThan16mm", "l"."DesignParameters_SteelGradeS355Between16and40mm", "l"."DesignParameters_SteelGradeS355Between40and63mm", "l"."DesignParameters_SteelGradeS355LessThan16mm"
+FROM "Orders" AS "o"
+LEFT JOIN "Localization" AS "l" ON "o"."Id" = "l"."OrderId"
+WHERE "o"."Id" = @__orderId_0
+LIMIT 1
+2023-12-17 12:11:34.057 +03:30 [INF] Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[Scaphoid.Core.Model.WebSection, Scaphoid.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2023-12-17 12:11:34.060 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api) in 20.246ms
+2023-12-17 12:11:34.060 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api)'
+2023-12-17 12:11:34.061 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/order/18/sections/query?WebThickness.min=2.5&WebThickness.max=2.5 - - - 200 - application/json;+charset=utf-8 27.3321ms
+2023-12-17 12:12:00.033 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/order/18/sections/query?WebHeight.min=493&WebHeight.max=518&WebThickness.min=2.5&WebThickness.max=2.5 - -
+2023-12-17 12:12:00.034 +03:30 [INF] CORS policy execution successful.
+2023-12-17 12:12:00.034 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api)'
+2023-12-17 12:12:00.034 +03:30 [INF] Route matched with {action = "Query", controller = "Sections"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[Scaphoid.Core.Model.WebSection]] Query(Int32, Schaphoid.Api.Controllers.WebSectionFilters) on controller Schaphoid.Api.Controllers.SectionsController (Schaphoid.Api).
+2023-12-17 12:12:00.035 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span", "l"."OrderId", "l"."DesignType", "l"."PsiValue", "l"."SteelType", "l"."ULSLoadExpression", "l"."DeflectionLimit_TotalLoads", "l"."DeflectionLimit_VariableLoads", "l"."DesignParameters_GammaG", "l"."DesignParameters_GammaQ", "l"."DesignParameters_ModificationFactorAllOtherHtoB", "l"."DesignParameters_ModificationFactorKflHtoBLessThanTwo", "l"."DesignParameters_ReductionFactorF", "l"."DesignParameters_SteelGradeS235Between16and40mm", "l"."DesignParameters_SteelGradeS235Between40and63mm", "l"."DesignParameters_SteelGradeS235LessThan16mm", "l"."DesignParameters_SteelGradeS355Between16and40mm", "l"."DesignParameters_SteelGradeS355Between40and63mm", "l"."DesignParameters_SteelGradeS355LessThan16mm"
+FROM "Orders" AS "o"
+LEFT JOIN "Localization" AS "l" ON "o"."Id" = "l"."OrderId"
+WHERE "o"."Id" = @__orderId_0
+LIMIT 1
+2023-12-17 12:12:00.036 +03:30 [INF] Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[Scaphoid.Core.Model.WebSection, Scaphoid.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2023-12-17 12:12:00.036 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api) in 2.4303ms
+2023-12-17 12:12:00.036 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api)'
+2023-12-17 12:12:00.036 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/order/18/sections/query?WebHeight.min=493&WebHeight.max=518&WebThickness.min=2.5&WebThickness.max=2.5 - - - 200 - application/json;+charset=utf-8 3.0429ms
+2023-12-17 12:12:04.488 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/order/18/sections/wt-b-500-200-12 - -
+2023-12-17 12:12:04.488 +03:30 [INF] CORS policy execution successful.
+2023-12-17 12:12:04.488 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.SectionsController.Get (Schaphoid.Api)'
+2023-12-17 12:12:04.490 +03:30 [INF] Route matched with {action = "Get", controller = "Sections"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Schaphoid.Api.Controllers.WebSectionDto] Get(Int32, System.String) on controller Schaphoid.Api.Controllers.SectionsController (Schaphoid.Api).
+2023-12-17 12:12:04.492 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span", "l"."OrderId", "l"."DesignType", "l"."PsiValue", "l"."SteelType", "l"."ULSLoadExpression", "l"."DeflectionLimit_TotalLoads", "l"."DeflectionLimit_VariableLoads", "l"."DesignParameters_GammaG", "l"."DesignParameters_GammaQ", "l"."DesignParameters_ModificationFactorAllOtherHtoB", "l"."DesignParameters_ModificationFactorKflHtoBLessThanTwo", "l"."DesignParameters_ReductionFactorF", "l"."DesignParameters_SteelGradeS235Between16and40mm", "l"."DesignParameters_SteelGradeS235Between40and63mm", "l"."DesignParameters_SteelGradeS235LessThan16mm", "l"."DesignParameters_SteelGradeS355Between16and40mm", "l"."DesignParameters_SteelGradeS355Between40and63mm", "l"."DesignParameters_SteelGradeS355LessThan16mm"
+FROM "Orders" AS "o"
+LEFT JOIN "Localization" AS "l" ON "o"."Id" = "l"."OrderId"
+WHERE "o"."Id" = @__orderId_0
+LIMIT 1
+2023-12-17 12:12:04.495 +03:30 [INF] Executing ObjectResult, writing value of type 'Schaphoid.Api.Controllers.WebSectionDto'.
+2023-12-17 12:12:04.499 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Get (Schaphoid.Api) in 8.8771ms
+2023-12-17 12:12:04.499 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Get (Schaphoid.Api)'
+2023-12-17 12:12:04.499 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/order/18/sections/wt-b-500-200-12 - - - 200 - application/json;+charset=utf-8 11.6389ms
+2023-12-17 12:12:22.451 +03:30 [INF] Request starting HTTP/2 OPTIONS https://localhost:44357/order/18/sections/wt-b-500-200-12 - -
+2023-12-17 12:12:22.451 +03:30 [INF] CORS policy execution successful.
+2023-12-17 12:12:22.452 +03:30 [INF] Request finished HTTP/2 OPTIONS https://localhost:44357/order/18/sections/wt-b-500-200-12 - - - 204 - - 0.5538ms
+2023-12-17 12:12:22.455 +03:30 [INF] Request starting HTTP/2 POST https://localhost:44357/order/18/sections/wt-b-500-200-12 application/json 4
+2023-12-17 12:12:22.455 +03:30 [INF] CORS policy execution successful.
+2023-12-17 12:12:22.455 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.SectionsController.Save (Schaphoid.Api)'
+2023-12-17 12:12:22.457 +03:30 [INF] Route matched with {action = "Save", controller = "Sections"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Save(Int32, System.String) on controller Schaphoid.Api.Controllers.SectionsController (Schaphoid.Api).
+2023-12-17 12:12:22.459 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span"
+FROM "Orders" AS "o"
+WHERE "o"."Id" = @__orderId_0
+LIMIT 1
+2023-12-17 12:12:22.462 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@p1='?' (DbType = Int32), @p0='?' (Size = 15)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Orders" SET "SectionId" = @p0
+WHERE "Id" = @p1
+RETURNING 1;
+2023-12-17 12:12:22.468 +03:30 [INF] Executing StatusCodeResult, setting HTTP status code 200
+2023-12-17 12:12:22.468 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Save (Schaphoid.Api) in 10.5816ms
+2023-12-17 12:12:22.468 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Save (Schaphoid.Api)'
+2023-12-17 12:12:22.468 +03:30 [INF] Request finished HTTP/2 POST https://localhost:44357/order/18/sections/wt-b-500-200-12 application/json 4 - 200 - - 13.0472ms
+2023-12-17 12:12:22.575 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/order/18/loading - -
+2023-12-17 12:12:22.575 +03:30 [INF] CORS policy execution successful.
+2023-12-17 12:12:22.575 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.LoadingController.Loading (Schaphoid.Api)'
+2023-12-17 12:12:22.577 +03:30 [INF] Route matched with {action = "Loading", controller = "Loading"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Schaphoid.Api.Controllers.LoadingDto] Loading(Int32) on controller Schaphoid.Api.Controllers.LoadingController (Schaphoid.Api).
+2023-12-17 12:12:22.618 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "t"."Id", "t"."CreatedOn", "t"."Designer", "t"."ElementType", "t"."Note", "t"."Project", "t"."SectionId", "t"."Span", "t"."OrderId", "t"."LoadType", "t"."PermanentLoads_AxialForce", "t"."PermanentLoads_EndMomentLeft", "t"."PermanentLoads_EndMomentRight", "t"."PermanentLoads_PartialUdl", "t"."PermanentLoads_PartialUdlEnd", "t"."PermanentLoads_PartialUdlStart", "t"."PermanentLoads_Udl", "t"."UltimateLoads_AxialForce", "t"."UltimateLoads_EndMomentLeft", "t"."UltimateLoads_EndMomentRight", "t"."UltimateLoads_PartialUdl", "t"."UltimateLoads_PartialUdlEnd", "t"."UltimateLoads_PartialUdlStart", "t"."UltimateLoads_Udl", "t"."VariableLoads_AxialForce", "t"."VariableLoads_EndMomentLeft", "t"."VariableLoads_EndMomentRight", "t"."VariableLoads_PartialUdl", "t"."VariableLoads_PartialUdlEnd", "t"."VariableLoads_PartialUdlStart", "t"."VariableLoads_Udl", "p"."Id", "p"."Load", "p"."LoadingId", "p"."PermanentAction", "p"."Position", "p"."VariableAction"
+FROM (
+    SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span", "l"."OrderId", "l"."LoadType", "l"."PermanentLoads_AxialForce", "l"."PermanentLoads_EndMomentLeft", "l"."PermanentLoads_EndMomentRight", "l"."PermanentLoads_PartialUdl", "l"."PermanentLoads_PartialUdlEnd", "l"."PermanentLoads_PartialUdlStart", "l"."PermanentLoads_Udl", "l"."UltimateLoads_AxialForce", "l"."UltimateLoads_EndMomentLeft", "l"."UltimateLoads_EndMomentRight", "l"."UltimateLoads_PartialUdl", "l"."UltimateLoads_PartialUdlEnd", "l"."UltimateLoads_PartialUdlStart", "l"."UltimateLoads_Udl", "l"."VariableLoads_AxialForce", "l"."VariableLoads_EndMomentLeft", "l"."VariableLoads_EndMomentRight", "l"."VariableLoads_PartialUdl", "l"."VariableLoads_PartialUdlEnd", "l"."VariableLoads_PartialUdlStart", "l"."VariableLoads_Udl"
+    FROM "Orders" AS "o"
+    LEFT JOIN "Loading" AS "l" ON "o"."Id" = "l"."OrderId"
+    WHERE "o"."Id" = @__orderId_0
+    LIMIT 1
+) AS "t"
+LEFT JOIN "PointLoad" AS "p" ON "t"."OrderId" = "p"."LoadingId"
+ORDER BY "t"."Id", "t"."OrderId"
+2023-12-17 12:12:22.624 +03:30 [INF] Executed action Schaphoid.Api.Controllers.LoadingController.Loading (Schaphoid.Api) in 46.9112ms
+2023-12-17 12:12:22.625 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.LoadingController.Loading (Schaphoid.Api)'
+2023-12-17 12:12:22.625 +03:30 [ERR] An unhandled exception has occurred while executing the request.
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at Schaphoid.Api.Controllers.LoadingController.Loading(Int32 orderId) in E:\Projects\Beam\Schaphoid.Api\Controllers\LoadingController.cs:line 35
+   at lambda_method327(Closure, Object, Object[])
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.SyncObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeActionMethodAsync()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeNextActionFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2023-12-17 12:12:22.666 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/order/18/loading - - - 500 - text/plain;+charset=utf-8 90.4175ms
+2023-12-17 12:30:04.521 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/configuration - -
+2023-12-17 12:30:04.522 +03:30 [INF] CORS policy execution successful.
+2023-12-17 12:30:04.522 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.ConfigurationController.Get (Schaphoid.Api)'
+2023-12-17 12:30:04.522 +03:30 [INF] Route matched with {action = "Get", controller = "Configuration"}. Executing controller action with signature Scaphoid.Core.Model.Resource Get() on controller Schaphoid.Api.Controllers.ConfigurationController (Schaphoid.Api).
+2023-12-17 12:30:04.522 +03:30 [INF] Executing ObjectResult, writing value of type 'Schaphoid.Api.Controllers.OrderDto'.
+2023-12-17 12:30:04.523 +03:30 [INF] Executed action Schaphoid.Api.Controllers.ConfigurationController.Get (Schaphoid.Api) in 0.6384ms
+2023-12-17 12:30:04.523 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.ConfigurationController.Get (Schaphoid.Api)'
+2023-12-17 12:30:04.523 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/configuration - - - 200 - application/json;+charset=utf-8 1.7745ms
+2023-12-17 12:30:24.062 +03:30 [INF] Request starting HTTP/2 OPTIONS https://localhost:44357/configuration/order - -
+2023-12-17 12:30:24.062 +03:30 [INF] CORS policy execution successful.
+2023-12-17 12:30:24.062 +03:30 [INF] Request finished HTTP/2 OPTIONS https://localhost:44357/configuration/order - - - 204 - - 0.2894ms
+2023-12-17 12:30:24.066 +03:30 [INF] Request starting HTTP/2 POST https://localhost:44357/configuration/order application/json 175
+2023-12-17 12:30:24.066 +03:30 [INF] CORS policy execution successful.
+2023-12-17 12:30:24.066 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.ConfigurationController.CreateOrder (Schaphoid.Api)'
+2023-12-17 12:30:24.066 +03:30 [INF] Route matched with {action = "CreateOrder", controller = "Configuration"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CreateOrder(Schaphoid.Api.Controllers.OrderDto) on controller Schaphoid.Api.Controllers.ConfigurationController (Schaphoid.Api).
+2023-12-17 12:30:24.070 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = DateTime), @p1='?', @p2='?' (DbType = Int32), @p3='?', @p4='?' (Size = 2), @p5='?', @p6='?' (DbType = Double)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Orders" ("CreatedOn", "Designer", "ElementType", "Note", "Project", "SectionId", "Span")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6)
+RETURNING "Id";
+2023-12-17 12:30:24.070 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@p7='?' (DbType = Int32), @p8='?' (DbType = Int32), @p9='?' (DbType = Int32), @p10='?' (DbType = Int32), @p11='?' (DbType = Int32), @p12='?' (DbType = Double), @p13='?' (DbType = Double), @p14='?' (DbType = Double), @p15='?' (DbType = Double), @p16='?' (DbType = Double), @p17='?' (DbType = Double), @p18='?' (DbType = Double), @p19='?' (DbType = Double), @p20='?' (DbType = Double), @p21='?' (DbType = Double), @p22='?' (DbType = Double), @p23='?' (DbType = Double), @p24='?' (DbType = Double)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Localization" ("OrderId", "DesignType", "PsiValue", "SteelType", "ULSLoadExpression", "DeflectionLimit_TotalLoads", "DeflectionLimit_VariableLoads", "DesignParameters_GammaG", "DesignParameters_GammaQ", "DesignParameters_ModificationFactorAllOtherHtoB", "DesignParameters_ModificationFactorKflHtoBLessThanTwo", "DesignParameters_ReductionFactorF", "DesignParameters_SteelGradeS235Between16and40mm", "DesignParameters_SteelGradeS235Between40and63mm", "DesignParameters_SteelGradeS235LessThan16mm", "DesignParameters_SteelGradeS355Between16and40mm", "DesignParameters_SteelGradeS355Between40and63mm", "DesignParameters_SteelGradeS355LessThan16mm")
+VALUES (@p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18, @p19, @p20, @p21, @p22, @p23, @p24);
+2023-12-17 12:30:24.075 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span", "l"."OrderId", "l"."DesignType", "l"."PsiValue", "l"."SteelType", "l"."ULSLoadExpression", "l"."DeflectionLimit_TotalLoads", "l"."DeflectionLimit_VariableLoads", "l"."DesignParameters_GammaG", "l"."DesignParameters_GammaQ", "l"."DesignParameters_ModificationFactorAllOtherHtoB", "l"."DesignParameters_ModificationFactorKflHtoBLessThanTwo", "l"."DesignParameters_ReductionFactorF", "l"."DesignParameters_SteelGradeS235Between16and40mm", "l"."DesignParameters_SteelGradeS235Between40and63mm", "l"."DesignParameters_SteelGradeS235LessThan16mm", "l"."DesignParameters_SteelGradeS355Between16and40mm", "l"."DesignParameters_SteelGradeS355Between40and63mm", "l"."DesignParameters_SteelGradeS355LessThan16mm"
+FROM "Orders" AS "o"
+LEFT JOIN "Localization" AS "l" ON "o"."Id" = "l"."OrderId"
+WHERE "o"."Id" = @__id_0
+LIMIT 1
+2023-12-17 12:30:24.075 +03:30 [INF] Executing CreatedAtActionResult, writing value of type 'Schaphoid.Api.Controllers.OrderDto'.
+2023-12-17 12:30:24.076 +03:30 [INF] Executed action Schaphoid.Api.Controllers.ConfigurationController.CreateOrder (Schaphoid.Api) in 10.0023ms
+2023-12-17 12:30:24.076 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.ConfigurationController.CreateOrder (Schaphoid.Api)'
+2023-12-17 12:30:24.076 +03:30 [INF] Request finished HTTP/2 POST https://localhost:44357/configuration/order application/json 175 - 201 - application/json;+charset=utf-8 10.4962ms
+2023-12-17 12:30:24.107 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/order/19/sections/init - -
+2023-12-17 12:30:24.107 +03:30 [INF] CORS policy execution successful.
+2023-12-17 12:30:24.107 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.SectionsController.Init (Schaphoid.Api)'
+2023-12-17 12:30:24.107 +03:30 [INF] Route matched with {action = "Init", controller = "Sections"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Scaphoid.Core.Model.Resource] Init(Int32) on controller Schaphoid.Api.Controllers.SectionsController (Schaphoid.Api).
+2023-12-17 12:30:24.107 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span"
+FROM "Orders" AS "o"
+WHERE "o"."Id" = @__orderId_0
+LIMIT 1
+2023-12-17 12:30:24.108 +03:30 [INF] Executing ObjectResult, writing value of type 'Scaphoid.Core.Model.Resource'.
+2023-12-17 12:30:24.108 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Init (Schaphoid.Api) in 1.0261ms
+2023-12-17 12:30:24.108 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Init (Schaphoid.Api)'
+2023-12-17 12:30:24.108 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/order/19/sections/init - - - 200 - application/json;+charset=utf-8 1.4462ms
+2023-12-17 12:30:24.113 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/order/19/sections/filters - -
+2023-12-17 12:30:24.113 +03:30 [INF] CORS policy execution successful.
+2023-12-17 12:30:24.113 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.SectionsController.Filters (Schaphoid.Api)'
+2023-12-17 12:30:24.113 +03:30 [INF] Route matched with {action = "Filters", controller = "Sections"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Schaphoid.Api.Controllers.WebSectionFilters] Filters(Int32) on controller Schaphoid.Api.Controllers.SectionsController (Schaphoid.Api).
+2023-12-17 12:30:24.114 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span", "l"."OrderId", "l"."DesignType", "l"."PsiValue", "l"."SteelType", "l"."ULSLoadExpression", "l"."DeflectionLimit_TotalLoads", "l"."DeflectionLimit_VariableLoads", "l"."DesignParameters_GammaG", "l"."DesignParameters_GammaQ", "l"."DesignParameters_ModificationFactorAllOtherHtoB", "l"."DesignParameters_ModificationFactorKflHtoBLessThanTwo", "l"."DesignParameters_ReductionFactorF", "l"."DesignParameters_SteelGradeS235Between16and40mm", "l"."DesignParameters_SteelGradeS235Between40and63mm", "l"."DesignParameters_SteelGradeS235LessThan16mm", "l"."DesignParameters_SteelGradeS355Between16and40mm", "l"."DesignParameters_SteelGradeS355Between40and63mm", "l"."DesignParameters_SteelGradeS355LessThan16mm"
+FROM "Orders" AS "o"
+LEFT JOIN "Localization" AS "l" ON "o"."Id" = "l"."OrderId"
+WHERE "o"."Id" = @__orderId_0
+LIMIT 1
+2023-12-17 12:30:24.124 +03:30 [INF] Executing ObjectResult, writing value of type 'Schaphoid.Api.Controllers.WebSectionFilters'.
+2023-12-17 12:30:24.124 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Filters (Schaphoid.Api) in 10.4788ms
+2023-12-17 12:30:24.124 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Filters (Schaphoid.Api)'
+2023-12-17 12:30:24.124 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/order/19/sections/filters - - - 200 - application/json;+charset=utf-8 10.9176ms
+2023-12-17 12:30:40.509 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/order/19/sections/query?WebHeight.min=488&WebHeight.max=552 - -
+2023-12-17 12:30:40.509 +03:30 [INF] CORS policy execution successful.
+2023-12-17 12:30:40.509 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api)'
+2023-12-17 12:30:40.509 +03:30 [INF] Route matched with {action = "Query", controller = "Sections"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[Scaphoid.Core.Model.WebSection]] Query(Int32, Schaphoid.Api.Controllers.WebSectionFilters) on controller Schaphoid.Api.Controllers.SectionsController (Schaphoid.Api).
+2023-12-17 12:30:40.510 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span", "l"."OrderId", "l"."DesignType", "l"."PsiValue", "l"."SteelType", "l"."ULSLoadExpression", "l"."DeflectionLimit_TotalLoads", "l"."DeflectionLimit_VariableLoads", "l"."DesignParameters_GammaG", "l"."DesignParameters_GammaQ", "l"."DesignParameters_ModificationFactorAllOtherHtoB", "l"."DesignParameters_ModificationFactorKflHtoBLessThanTwo", "l"."DesignParameters_ReductionFactorF", "l"."DesignParameters_SteelGradeS235Between16and40mm", "l"."DesignParameters_SteelGradeS235Between40and63mm", "l"."DesignParameters_SteelGradeS235LessThan16mm", "l"."DesignParameters_SteelGradeS355Between16and40mm", "l"."DesignParameters_SteelGradeS355Between40and63mm", "l"."DesignParameters_SteelGradeS355LessThan16mm"
+FROM "Orders" AS "o"
+LEFT JOIN "Localization" AS "l" ON "o"."Id" = "l"."OrderId"
+WHERE "o"."Id" = @__orderId_0
+LIMIT 1
+2023-12-17 12:30:40.511 +03:30 [INF] Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[Scaphoid.Core.Model.WebSection, Scaphoid.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2023-12-17 12:30:40.512 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api) in 3.4762ms
+2023-12-17 12:30:40.513 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api)'
+2023-12-17 12:30:40.513 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/order/19/sections/query?WebHeight.min=488&WebHeight.max=552 - - - 200 - application/json;+charset=utf-8 4.6971ms
+2023-12-17 12:30:47.616 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/order/19/sections/query?WebHeight.min=488&WebHeight.max=552&WebThickness.min=2.5&WebThickness.max=2.5 - -
+2023-12-17 12:30:47.616 +03:30 [INF] CORS policy execution successful.
+2023-12-17 12:30:47.616 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api)'
+2023-12-17 12:30:47.616 +03:30 [INF] Route matched with {action = "Query", controller = "Sections"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[Scaphoid.Core.Model.WebSection]] Query(Int32, Schaphoid.Api.Controllers.WebSectionFilters) on controller Schaphoid.Api.Controllers.SectionsController (Schaphoid.Api).
+2023-12-17 12:30:47.617 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span", "l"."OrderId", "l"."DesignType", "l"."PsiValue", "l"."SteelType", "l"."ULSLoadExpression", "l"."DeflectionLimit_TotalLoads", "l"."DeflectionLimit_VariableLoads", "l"."DesignParameters_GammaG", "l"."DesignParameters_GammaQ", "l"."DesignParameters_ModificationFactorAllOtherHtoB", "l"."DesignParameters_ModificationFactorKflHtoBLessThanTwo", "l"."DesignParameters_ReductionFactorF", "l"."DesignParameters_SteelGradeS235Between16and40mm", "l"."DesignParameters_SteelGradeS235Between40and63mm", "l"."DesignParameters_SteelGradeS235LessThan16mm", "l"."DesignParameters_SteelGradeS355Between16and40mm", "l"."DesignParameters_SteelGradeS355Between40and63mm", "l"."DesignParameters_SteelGradeS355LessThan16mm"
+FROM "Orders" AS "o"
+LEFT JOIN "Localization" AS "l" ON "o"."Id" = "l"."OrderId"
+WHERE "o"."Id" = @__orderId_0
+LIMIT 1
+2023-12-17 12:30:47.617 +03:30 [INF] Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[Scaphoid.Core.Model.WebSection, Scaphoid.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2023-12-17 12:30:47.618 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api) in 1.7911ms
+2023-12-17 12:30:47.618 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api)'
+2023-12-17 12:30:47.618 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/order/19/sections/query?WebHeight.min=488&WebHeight.max=552&WebThickness.min=2.5&WebThickness.max=2.5 - - - 200 - application/json;+charset=utf-8 2.3953ms
+2023-12-17 12:38:35.622 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/order/19/sections/wt-b-500-200-10 - -
+2023-12-17 12:38:35.622 +03:30 [INF] CORS policy execution successful.
+2023-12-17 12:38:35.622 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.SectionsController.Get (Schaphoid.Api)'
+2023-12-17 12:38:35.622 +03:30 [INF] Route matched with {action = "Get", controller = "Sections"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Schaphoid.Api.Controllers.WebSectionDto] Get(Int32, System.String) on controller Schaphoid.Api.Controllers.SectionsController (Schaphoid.Api).
+2023-12-17 12:38:35.624 +03:30 [INF] Executed DbCommand (1ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span", "l"."OrderId", "l"."DesignType", "l"."PsiValue", "l"."SteelType", "l"."ULSLoadExpression", "l"."DeflectionLimit_TotalLoads", "l"."DeflectionLimit_VariableLoads", "l"."DesignParameters_GammaG", "l"."DesignParameters_GammaQ", "l"."DesignParameters_ModificationFactorAllOtherHtoB", "l"."DesignParameters_ModificationFactorKflHtoBLessThanTwo", "l"."DesignParameters_ReductionFactorF", "l"."DesignParameters_SteelGradeS235Between16and40mm", "l"."DesignParameters_SteelGradeS235Between40and63mm", "l"."DesignParameters_SteelGradeS235LessThan16mm", "l"."DesignParameters_SteelGradeS355Between16and40mm", "l"."DesignParameters_SteelGradeS355Between40and63mm", "l"."DesignParameters_SteelGradeS355LessThan16mm"
+FROM "Orders" AS "o"
+LEFT JOIN "Localization" AS "l" ON "o"."Id" = "l"."OrderId"
+WHERE "o"."Id" = @__orderId_0
+LIMIT 1
+2023-12-17 12:38:35.625 +03:30 [INF] Executing ObjectResult, writing value of type 'Schaphoid.Api.Controllers.WebSectionDto'.
+2023-12-17 12:38:35.625 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Get (Schaphoid.Api) in 3.1408ms
+2023-12-17 12:38:35.626 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Get (Schaphoid.Api)'
+2023-12-17 12:38:35.626 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/order/19/sections/wt-b-500-200-10 - - - 200 - application/json;+charset=utf-8 3.7730ms
+2023-12-17 12:49:58.416 +03:30 [INF] Application started. Press Ctrl+C to shut down.
+2023-12-17 12:49:58.423 +03:30 [INF] Hosting environment: Development
+2023-12-17 12:49:58.424 +03:30 [INF] Content root path: E:\Projects\Beam\Schaphoid.Api
+2023-12-17 12:49:58.429 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/main - -
+2023-12-17 12:49:58.471 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/main - - - 404 - - 43.1867ms
+2023-12-17 12:50:16.782 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/configuration - -
+2023-12-17 12:50:16.791 +03:30 [INF] CORS policy execution successful.
+2023-12-17 12:50:16.795 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.ConfigurationController.Get (Schaphoid.Api)'
+2023-12-17 12:50:16.806 +03:30 [INF] Route matched with {action = "Get", controller = "Configuration"}. Executing controller action with signature Scaphoid.Core.Model.Resource Get() on controller Schaphoid.Api.Controllers.ConfigurationController (Schaphoid.Api).
+2023-12-17 12:50:16.920 +03:30 [INF] Executing ObjectResult, writing value of type 'Schaphoid.Api.Controllers.OrderDto'.
+2023-12-17 12:50:16.975 +03:30 [INF] Executed action Schaphoid.Api.Controllers.ConfigurationController.Get (Schaphoid.Api) in 166.9267ms
+2023-12-17 12:50:16.976 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.ConfigurationController.Get (Schaphoid.Api)'
+2023-12-17 12:50:16.980 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/configuration - - - 200 - application/json;+charset=utf-8 198.0506ms
+2023-12-17 12:50:34.614 +03:30 [INF] Request starting HTTP/2 OPTIONS https://localhost:44357/configuration/order - -
+2023-12-17 12:50:34.616 +03:30 [INF] CORS policy execution successful.
+2023-12-17 12:50:34.617 +03:30 [INF] Request finished HTTP/2 OPTIONS https://localhost:44357/configuration/order - - - 204 - - 2.6088ms
+2023-12-17 12:50:34.620 +03:30 [INF] Request starting HTTP/2 POST https://localhost:44357/configuration/order application/json 175
+2023-12-17 12:50:34.621 +03:30 [INF] CORS policy execution successful.
+2023-12-17 12:50:34.621 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.ConfigurationController.CreateOrder (Schaphoid.Api)'
+2023-12-17 12:50:34.627 +03:30 [INF] Route matched with {action = "CreateOrder", controller = "Configuration"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CreateOrder(Schaphoid.Api.Controllers.OrderDto) on controller Schaphoid.Api.Controllers.ConfigurationController (Schaphoid.Api).
+2023-12-17 12:50:35.019 +03:30 [WRN] The property 'Restraint.BottomFlangeRestraints' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+2023-12-17 12:50:35.019 +03:30 [WRN] The property 'Restraint.TopFlangeRestraints' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+2023-12-17 12:50:35.345 +03:30 [INF] Executed DbCommand (5ms) [Parameters=[@p0='?' (DbType = DateTime), @p1='?', @p2='?' (DbType = Int32), @p3='?', @p4='?' (Size = 2), @p5='?', @p6='?' (DbType = Double)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Orders" ("CreatedOn", "Designer", "ElementType", "Note", "Project", "SectionId", "Span")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6)
+RETURNING "Id";
+2023-12-17 12:50:35.362 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@p7='?' (DbType = Int32), @p8='?' (DbType = Int32), @p9='?' (DbType = Int32), @p10='?' (DbType = Int32), @p11='?' (DbType = Int32), @p12='?' (DbType = Double), @p13='?' (DbType = Double), @p14='?' (DbType = Double), @p15='?' (DbType = Double), @p16='?' (DbType = Double), @p17='?' (DbType = Double), @p18='?' (DbType = Double), @p19='?' (DbType = Double), @p20='?' (DbType = Double), @p21='?' (DbType = Double), @p22='?' (DbType = Double), @p23='?' (DbType = Double), @p24='?' (DbType = Double)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Localization" ("OrderId", "DesignType", "PsiValue", "SteelType", "ULSLoadExpression", "DeflectionLimit_TotalLoads", "DeflectionLimit_VariableLoads", "DesignParameters_GammaG", "DesignParameters_GammaQ", "DesignParameters_ModificationFactorAllOtherHtoB", "DesignParameters_ModificationFactorKflHtoBLessThanTwo", "DesignParameters_ReductionFactorF", "DesignParameters_SteelGradeS235Between16and40mm", "DesignParameters_SteelGradeS235Between40and63mm", "DesignParameters_SteelGradeS235LessThan16mm", "DesignParameters_SteelGradeS355Between16and40mm", "DesignParameters_SteelGradeS355Between40and63mm", "DesignParameters_SteelGradeS355LessThan16mm")
+VALUES (@p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18, @p19, @p20, @p21, @p22, @p23, @p24);
+2023-12-17 12:50:35.551 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span", "l"."OrderId", "l"."DesignType", "l"."PsiValue", "l"."SteelType", "l"."ULSLoadExpression", "l"."DeflectionLimit_TotalLoads", "l"."DeflectionLimit_VariableLoads", "l"."DesignParameters_GammaG", "l"."DesignParameters_GammaQ", "l"."DesignParameters_ModificationFactorAllOtherHtoB", "l"."DesignParameters_ModificationFactorKflHtoBLessThanTwo", "l"."DesignParameters_ReductionFactorF", "l"."DesignParameters_SteelGradeS235Between16and40mm", "l"."DesignParameters_SteelGradeS235Between40and63mm", "l"."DesignParameters_SteelGradeS235LessThan16mm", "l"."DesignParameters_SteelGradeS355Between16and40mm", "l"."DesignParameters_SteelGradeS355Between40and63mm", "l"."DesignParameters_SteelGradeS355LessThan16mm"
+FROM "Orders" AS "o"
+LEFT JOIN "Localization" AS "l" ON "o"."Id" = "l"."OrderId"
+WHERE "o"."Id" = @__id_0
+LIMIT 1
+2023-12-17 12:50:35.555 +03:30 [INF] Executing CreatedAtActionResult, writing value of type 'Schaphoid.Api.Controllers.OrderDto'.
+2023-12-17 12:50:35.558 +03:30 [INF] Executed action Schaphoid.Api.Controllers.ConfigurationController.CreateOrder (Schaphoid.Api) in 930.8471ms
+2023-12-17 12:50:35.558 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.ConfigurationController.CreateOrder (Schaphoid.Api)'
+2023-12-17 12:50:35.560 +03:30 [INF] Request finished HTTP/2 POST https://localhost:44357/configuration/order application/json 175 - 201 - application/json;+charset=utf-8 940.0614ms
+2023-12-17 12:50:35.588 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/order/20/sections/init - -
+2023-12-17 12:50:35.588 +03:30 [INF] CORS policy execution successful.
+2023-12-17 12:50:35.588 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.SectionsController.Init (Schaphoid.Api)'
+2023-12-17 12:50:35.592 +03:30 [INF] Route matched with {action = "Init", controller = "Sections"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Scaphoid.Core.Model.Resource] Init(Int32) on controller Schaphoid.Api.Controllers.SectionsController (Schaphoid.Api).
+2023-12-17 12:50:35.601 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span"
+FROM "Orders" AS "o"
+WHERE "o"."Id" = @__orderId_0
+LIMIT 1
+2023-12-17 12:50:35.612 +03:30 [INF] Executing ObjectResult, writing value of type 'Scaphoid.Core.Model.Resource'.
+2023-12-17 12:50:35.612 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Init (Schaphoid.Api) in 20.2221ms
+2023-12-17 12:50:35.612 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Init (Schaphoid.Api)'
+2023-12-17 12:50:35.613 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/order/20/sections/init - - - 200 - application/json;+charset=utf-8 24.7624ms
+2023-12-17 12:50:35.618 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/order/20/sections/filters - -
+2023-12-17 12:50:35.619 +03:30 [INF] CORS policy execution successful.
+2023-12-17 12:50:35.619 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.SectionsController.Filters (Schaphoid.Api)'
+2023-12-17 12:50:35.621 +03:30 [INF] Route matched with {action = "Filters", controller = "Sections"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Schaphoid.Api.Controllers.WebSectionFilters] Filters(Int32) on controller Schaphoid.Api.Controllers.SectionsController (Schaphoid.Api).
+2023-12-17 12:50:35.640 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span", "l"."OrderId", "l"."DesignType", "l"."PsiValue", "l"."SteelType", "l"."ULSLoadExpression", "l"."DeflectionLimit_TotalLoads", "l"."DeflectionLimit_VariableLoads", "l"."DesignParameters_GammaG", "l"."DesignParameters_GammaQ", "l"."DesignParameters_ModificationFactorAllOtherHtoB", "l"."DesignParameters_ModificationFactorKflHtoBLessThanTwo", "l"."DesignParameters_ReductionFactorF", "l"."DesignParameters_SteelGradeS235Between16and40mm", "l"."DesignParameters_SteelGradeS235Between40and63mm", "l"."DesignParameters_SteelGradeS235LessThan16mm", "l"."DesignParameters_SteelGradeS355Between16and40mm", "l"."DesignParameters_SteelGradeS355Between40and63mm", "l"."DesignParameters_SteelGradeS355LessThan16mm"
+FROM "Orders" AS "o"
+LEFT JOIN "Localization" AS "l" ON "o"."Id" = "l"."OrderId"
+WHERE "o"."Id" = @__orderId_0
+LIMIT 1
+2023-12-17 12:50:35.652 +03:30 [INF] Executing ObjectResult, writing value of type 'Schaphoid.Api.Controllers.WebSectionFilters'.
+2023-12-17 12:50:35.655 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Filters (Schaphoid.Api) in 33.7842ms
+2023-12-17 12:50:35.655 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Filters (Schaphoid.Api)'
+2023-12-17 12:50:35.655 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/order/20/sections/filters - - - 200 - application/json;+charset=utf-8 37.3222ms
+2023-12-17 12:50:44.740 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/order/20/sections/query?WebThickness.min=2.5&WebThickness.max=2.5 - -
+2023-12-17 12:50:44.740 +03:30 [INF] CORS policy execution successful.
+2023-12-17 12:50:44.740 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api)'
+2023-12-17 12:50:44.744 +03:30 [INF] Route matched with {action = "Query", controller = "Sections"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[Scaphoid.Core.Model.WebSection]] Query(Int32, Schaphoid.Api.Controllers.WebSectionFilters) on controller Schaphoid.Api.Controllers.SectionsController (Schaphoid.Api).
+2023-12-17 12:50:44.753 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span", "l"."OrderId", "l"."DesignType", "l"."PsiValue", "l"."SteelType", "l"."ULSLoadExpression", "l"."DeflectionLimit_TotalLoads", "l"."DeflectionLimit_VariableLoads", "l"."DesignParameters_GammaG", "l"."DesignParameters_GammaQ", "l"."DesignParameters_ModificationFactorAllOtherHtoB", "l"."DesignParameters_ModificationFactorKflHtoBLessThanTwo", "l"."DesignParameters_ReductionFactorF", "l"."DesignParameters_SteelGradeS235Between16and40mm", "l"."DesignParameters_SteelGradeS235Between40and63mm", "l"."DesignParameters_SteelGradeS235LessThan16mm", "l"."DesignParameters_SteelGradeS355Between16and40mm", "l"."DesignParameters_SteelGradeS355Between40and63mm", "l"."DesignParameters_SteelGradeS355LessThan16mm"
+FROM "Orders" AS "o"
+LEFT JOIN "Localization" AS "l" ON "o"."Id" = "l"."OrderId"
+WHERE "o"."Id" = @__orderId_0
+LIMIT 1
+2023-12-17 12:50:44.758 +03:30 [INF] Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[Scaphoid.Core.Model.WebSection, Scaphoid.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2023-12-17 12:50:44.764 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api) in 19.7193ms
+2023-12-17 12:50:44.764 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api)'
+2023-12-17 12:50:44.764 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/order/20/sections/query?WebThickness.min=2.5&WebThickness.max=2.5 - - - 200 - application/json;+charset=utf-8 24.5672ms
+2023-12-17 12:50:54.044 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/order/20/sections/query?WebHeight.min=488&WebHeight.max=527&WebThickness.min=2.5&WebThickness.max=2.5 - -
+2023-12-17 12:50:54.044 +03:30 [INF] CORS policy execution successful.
+2023-12-17 12:50:54.044 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api)'
+2023-12-17 12:50:54.044 +03:30 [INF] Route matched with {action = "Query", controller = "Sections"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[Scaphoid.Core.Model.WebSection]] Query(Int32, Schaphoid.Api.Controllers.WebSectionFilters) on controller Schaphoid.Api.Controllers.SectionsController (Schaphoid.Api).
+2023-12-17 12:50:54.045 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span", "l"."OrderId", "l"."DesignType", "l"."PsiValue", "l"."SteelType", "l"."ULSLoadExpression", "l"."DeflectionLimit_TotalLoads", "l"."DeflectionLimit_VariableLoads", "l"."DesignParameters_GammaG", "l"."DesignParameters_GammaQ", "l"."DesignParameters_ModificationFactorAllOtherHtoB", "l"."DesignParameters_ModificationFactorKflHtoBLessThanTwo", "l"."DesignParameters_ReductionFactorF", "l"."DesignParameters_SteelGradeS235Between16and40mm", "l"."DesignParameters_SteelGradeS235Between40and63mm", "l"."DesignParameters_SteelGradeS235LessThan16mm", "l"."DesignParameters_SteelGradeS355Between16and40mm", "l"."DesignParameters_SteelGradeS355Between40and63mm", "l"."DesignParameters_SteelGradeS355LessThan16mm"
+FROM "Orders" AS "o"
+LEFT JOIN "Localization" AS "l" ON "o"."Id" = "l"."OrderId"
+WHERE "o"."Id" = @__orderId_0
+LIMIT 1
+2023-12-17 12:50:54.046 +03:30 [INF] Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[Scaphoid.Core.Model.WebSection, Scaphoid.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2023-12-17 12:50:54.046 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api) in 2.2735ms
+2023-12-17 12:50:54.046 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api)'
+2023-12-17 12:50:54.047 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/order/20/sections/query?WebHeight.min=488&WebHeight.max=527&WebThickness.min=2.5&WebThickness.max=2.5 - - - 200 - application/json;+charset=utf-8 2.8020ms
+2023-12-17 12:50:59.160 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/order/20/sections/wt-b-500-200-12 - -
+2023-12-17 12:50:59.160 +03:30 [INF] CORS policy execution successful.
+2023-12-17 12:50:59.160 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.SectionsController.Get (Schaphoid.Api)'
+2023-12-17 12:50:59.162 +03:30 [INF] Route matched with {action = "Get", controller = "Sections"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Schaphoid.Api.Controllers.WebSectionDto] Get(Int32, System.String) on controller Schaphoid.Api.Controllers.SectionsController (Schaphoid.Api).
+2023-12-17 12:50:59.164 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span", "l"."OrderId", "l"."DesignType", "l"."PsiValue", "l"."SteelType", "l"."ULSLoadExpression", "l"."DeflectionLimit_TotalLoads", "l"."DeflectionLimit_VariableLoads", "l"."DesignParameters_GammaG", "l"."DesignParameters_GammaQ", "l"."DesignParameters_ModificationFactorAllOtherHtoB", "l"."DesignParameters_ModificationFactorKflHtoBLessThanTwo", "l"."DesignParameters_ReductionFactorF", "l"."DesignParameters_SteelGradeS235Between16and40mm", "l"."DesignParameters_SteelGradeS235Between40and63mm", "l"."DesignParameters_SteelGradeS235LessThan16mm", "l"."DesignParameters_SteelGradeS355Between16and40mm", "l"."DesignParameters_SteelGradeS355Between40and63mm", "l"."DesignParameters_SteelGradeS355LessThan16mm"
+FROM "Orders" AS "o"
+LEFT JOIN "Localization" AS "l" ON "o"."Id" = "l"."OrderId"
+WHERE "o"."Id" = @__orderId_0
+LIMIT 1
+2023-12-17 12:50:59.167 +03:30 [INF] Executing ObjectResult, writing value of type 'Schaphoid.Api.Controllers.WebSectionDto'.
+2023-12-17 12:50:59.172 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Get (Schaphoid.Api) in 9.9203ms
+2023-12-17 12:50:59.172 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Get (Schaphoid.Api)'
+2023-12-17 12:50:59.172 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/order/20/sections/wt-b-500-200-12 - - - 200 - application/json;+charset=utf-8 12.6791ms
+2023-12-17 13:16:45.566 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/configuration/order/20 - -
+2023-12-17 13:16:45.566 +03:30 [INF] CORS policy execution successful.
+2023-12-17 13:16:45.566 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.ConfigurationController.GetOrder (Schaphoid.Api)'
+2023-12-17 13:16:45.568 +03:30 [INF] Route matched with {action = "GetOrder", controller = "Configuration"}. Executing controller action with signature Schaphoid.Api.Controllers.OrderDto GetOrder(Int32) on controller Schaphoid.Api.Controllers.ConfigurationController (Schaphoid.Api).
+2023-12-17 13:16:45.571 +03:30 [INF] Executed DbCommand (1ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span", "l"."OrderId", "l"."DesignType", "l"."PsiValue", "l"."SteelType", "l"."ULSLoadExpression", "l"."DeflectionLimit_TotalLoads", "l"."DeflectionLimit_VariableLoads", "l"."DesignParameters_GammaG", "l"."DesignParameters_GammaQ", "l"."DesignParameters_ModificationFactorAllOtherHtoB", "l"."DesignParameters_ModificationFactorKflHtoBLessThanTwo", "l"."DesignParameters_ReductionFactorF", "l"."DesignParameters_SteelGradeS235Between16and40mm", "l"."DesignParameters_SteelGradeS235Between40and63mm", "l"."DesignParameters_SteelGradeS235LessThan16mm", "l"."DesignParameters_SteelGradeS355Between16and40mm", "l"."DesignParameters_SteelGradeS355Between40and63mm", "l"."DesignParameters_SteelGradeS355LessThan16mm"
+FROM "Orders" AS "o"
+LEFT JOIN "Localization" AS "l" ON "o"."Id" = "l"."OrderId"
+WHERE "o"."Id" = @__id_0
+LIMIT 1
+2023-12-17 13:16:45.572 +03:30 [INF] Executing ObjectResult, writing value of type 'Schaphoid.Api.Controllers.OrderDto'.
+2023-12-17 13:16:45.572 +03:30 [INF] Executed action Schaphoid.Api.Controllers.ConfigurationController.GetOrder (Schaphoid.Api) in 3.9123ms
+2023-12-17 13:16:45.572 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.ConfigurationController.GetOrder (Schaphoid.Api)'
+2023-12-17 13:16:45.572 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/configuration/order/20 - - - 200 - application/json;+charset=utf-8 6.2686ms
+2023-12-17 13:42:40.049 +03:30 [INF] Request starting HTTP/2 OPTIONS https://localhost:44357/configuration/order/20 - -
+2023-12-17 13:42:40.049 +03:30 [INF] CORS policy execution successful.
+2023-12-17 13:42:40.049 +03:30 [INF] Request finished HTTP/2 OPTIONS https://localhost:44357/configuration/order/20 - - - 204 - - 0.4097ms
+2023-12-17 13:42:40.053 +03:30 [INF] Request starting HTTP/2 POST https://localhost:44357/configuration/order/20 application/json 546
+2023-12-17 13:42:40.053 +03:30 [INF] CORS policy execution successful.
+2023-12-17 13:42:40.053 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.ConfigurationController.SaveOrder (Schaphoid.Api)'
+2023-12-17 13:42:40.055 +03:30 [INF] Route matched with {action = "SaveOrder", controller = "Configuration"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult SaveOrder(Int32, Schaphoid.Api.Controllers.OrderDto) on controller Schaphoid.Api.Controllers.ConfigurationController (Schaphoid.Api).
+2023-12-17 13:42:40.060 +03:30 [INF] Executed DbCommand (1ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span", "l"."OrderId", "l"."DesignType", "l"."PsiValue", "l"."SteelType", "l"."ULSLoadExpression", "l"."DeflectionLimit_TotalLoads", "l"."DeflectionLimit_VariableLoads", "l"."DesignParameters_GammaG", "l"."DesignParameters_GammaQ", "l"."DesignParameters_ModificationFactorAllOtherHtoB", "l"."DesignParameters_ModificationFactorKflHtoBLessThanTwo", "l"."DesignParameters_ReductionFactorF", "l"."DesignParameters_SteelGradeS235Between16and40mm", "l"."DesignParameters_SteelGradeS235Between40and63mm", "l"."DesignParameters_SteelGradeS235LessThan16mm", "l"."DesignParameters_SteelGradeS355Between16and40mm", "l"."DesignParameters_SteelGradeS355Between40and63mm", "l"."DesignParameters_SteelGradeS355LessThan16mm"
+FROM "Orders" AS "o"
+LEFT JOIN "Localization" AS "l" ON "o"."Id" = "l"."OrderId"
+WHERE "o"."Id" = @__id_0
+LIMIT 1
+2023-12-17 13:42:40.071 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@p7='?' (DbType = Int32), @p0='?' (DbType = Int32), @p1='?' (DbType = Int32), @p2='?' (DbType = Double), @p3='?' (DbType = Double), @p4='?' (DbType = Double), @p5='?' (DbType = Double), @p6='?' (DbType = Double)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Localization" SET "DesignType" = @p0, "SteelType" = @p1, "DesignParameters_ModificationFactorAllOtherHtoB" = @p2, "DesignParameters_ModificationFactorKflHtoBLessThanTwo" = @p3, "DesignParameters_ReductionFactorF" = @p4, "DesignParameters_SteelGradeS235Between16and40mm" = @p5, "DesignParameters_SteelGradeS355Between16and40mm" = @p6
+WHERE "OrderId" = @p7
+RETURNING 1;
+2023-12-17 13:42:40.077 +03:30 [INF] Executing AcceptedAtActionResult, writing value of type 'null'.
+2023-12-17 13:42:40.077 +03:30 [INF] Executed action Schaphoid.Api.Controllers.ConfigurationController.SaveOrder (Schaphoid.Api) in 21.5852ms
+2023-12-17 13:42:40.077 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.ConfigurationController.SaveOrder (Schaphoid.Api)'
+2023-12-17 13:42:40.077 +03:30 [INF] Request finished HTTP/2 POST https://localhost:44357/configuration/order/20 application/json 546 - 202 - - 24.4690ms
+2023-12-17 13:42:40.088 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/order/20/sections/init - -
+2023-12-17 13:42:40.088 +03:30 [INF] CORS policy execution successful.
+2023-12-17 13:42:40.088 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.SectionsController.Init (Schaphoid.Api)'
+2023-12-17 13:42:40.088 +03:30 [INF] Route matched with {action = "Init", controller = "Sections"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Scaphoid.Core.Model.Resource] Init(Int32) on controller Schaphoid.Api.Controllers.SectionsController (Schaphoid.Api).
+2023-12-17 13:42:40.089 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span"
+FROM "Orders" AS "o"
+WHERE "o"."Id" = @__orderId_0
+LIMIT 1
+2023-12-17 13:42:40.089 +03:30 [INF] Executing ObjectResult, writing value of type 'Scaphoid.Core.Model.Resource'.
+2023-12-17 13:42:40.089 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Init (Schaphoid.Api) in 1.0074ms
+2023-12-17 13:42:40.089 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Init (Schaphoid.Api)'
+2023-12-17 13:42:40.090 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/order/20/sections/init - - - 200 - application/json;+charset=utf-8 1.4329ms
+2023-12-17 13:42:40.095 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/order/20/sections/filters - -
+2023-12-17 13:42:40.095 +03:30 [INF] CORS policy execution successful.
+2023-12-17 13:42:40.095 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.SectionsController.Filters (Schaphoid.Api)'
+2023-12-17 13:42:40.095 +03:30 [INF] Route matched with {action = "Filters", controller = "Sections"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Schaphoid.Api.Controllers.WebSectionFilters] Filters(Int32) on controller Schaphoid.Api.Controllers.SectionsController (Schaphoid.Api).
+2023-12-17 13:42:40.095 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span", "l"."OrderId", "l"."DesignType", "l"."PsiValue", "l"."SteelType", "l"."ULSLoadExpression", "l"."DeflectionLimit_TotalLoads", "l"."DeflectionLimit_VariableLoads", "l"."DesignParameters_GammaG", "l"."DesignParameters_GammaQ", "l"."DesignParameters_ModificationFactorAllOtherHtoB", "l"."DesignParameters_ModificationFactorKflHtoBLessThanTwo", "l"."DesignParameters_ReductionFactorF", "l"."DesignParameters_SteelGradeS235Between16and40mm", "l"."DesignParameters_SteelGradeS235Between40and63mm", "l"."DesignParameters_SteelGradeS235LessThan16mm", "l"."DesignParameters_SteelGradeS355Between16and40mm", "l"."DesignParameters_SteelGradeS355Between40and63mm", "l"."DesignParameters_SteelGradeS355LessThan16mm"
+FROM "Orders" AS "o"
+LEFT JOIN "Localization" AS "l" ON "o"."Id" = "l"."OrderId"
+WHERE "o"."Id" = @__orderId_0
+LIMIT 1
+2023-12-17 13:42:40.100 +03:30 [INF] Executing ObjectResult, writing value of type 'Schaphoid.Api.Controllers.WebSectionFilters'.
+2023-12-17 13:42:40.100 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Filters (Schaphoid.Api) in 5.0868ms
+2023-12-17 13:42:40.100 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Filters (Schaphoid.Api)'
+2023-12-17 13:42:40.100 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/order/20/sections/filters - - - 200 - application/json;+charset=utf-8 5.4295ms
+2023-12-17 13:43:05.012 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/order/20/sections/query?WebThickness.min=1.5&WebThickness.max=3.5 - -
+2023-12-17 13:43:05.012 +03:30 [INF] CORS policy execution successful.
+2023-12-17 13:43:05.012 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api)'
+2023-12-17 13:43:05.012 +03:30 [INF] Route matched with {action = "Query", controller = "Sections"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[Scaphoid.Core.Model.WebSection]] Query(Int32, Schaphoid.Api.Controllers.WebSectionFilters) on controller Schaphoid.Api.Controllers.SectionsController (Schaphoid.Api).
+2023-12-17 13:43:05.013 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span", "l"."OrderId", "l"."DesignType", "l"."PsiValue", "l"."SteelType", "l"."ULSLoadExpression", "l"."DeflectionLimit_TotalLoads", "l"."DeflectionLimit_VariableLoads", "l"."DesignParameters_GammaG", "l"."DesignParameters_GammaQ", "l"."DesignParameters_ModificationFactorAllOtherHtoB", "l"."DesignParameters_ModificationFactorKflHtoBLessThanTwo", "l"."DesignParameters_ReductionFactorF", "l"."DesignParameters_SteelGradeS235Between16and40mm", "l"."DesignParameters_SteelGradeS235Between40and63mm", "l"."DesignParameters_SteelGradeS235LessThan16mm", "l"."DesignParameters_SteelGradeS355Between16and40mm", "l"."DesignParameters_SteelGradeS355Between40and63mm", "l"."DesignParameters_SteelGradeS355LessThan16mm"
+FROM "Orders" AS "o"
+LEFT JOIN "Localization" AS "l" ON "o"."Id" = "l"."OrderId"
+WHERE "o"."Id" = @__orderId_0
+LIMIT 1
+2023-12-17 13:43:05.016 +03:30 [INF] Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[Scaphoid.Core.Model.WebSection, Scaphoid.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2023-12-17 13:43:05.020 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api) in 7.5843ms
+2023-12-17 13:43:05.020 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Query (Schaphoid.Api)'
+2023-12-17 13:43:05.023 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/order/20/sections/query?WebThickness.min=1.5&WebThickness.max=3.5 - - - 200 - application/json;+charset=utf-8 10.7070ms
+2023-12-17 13:43:06.646 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/order/20/sections/wt-a-333-160-6 - -
+2023-12-17 13:43:06.646 +03:30 [INF] CORS policy execution successful.
+2023-12-17 13:43:06.646 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.SectionsController.Get (Schaphoid.Api)'
+2023-12-17 13:43:06.646 +03:30 [INF] Route matched with {action = "Get", controller = "Sections"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Schaphoid.Api.Controllers.WebSectionDto] Get(Int32, System.String) on controller Schaphoid.Api.Controllers.SectionsController (Schaphoid.Api).
+2023-12-17 13:43:06.647 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span", "l"."OrderId", "l"."DesignType", "l"."PsiValue", "l"."SteelType", "l"."ULSLoadExpression", "l"."DeflectionLimit_TotalLoads", "l"."DeflectionLimit_VariableLoads", "l"."DesignParameters_GammaG", "l"."DesignParameters_GammaQ", "l"."DesignParameters_ModificationFactorAllOtherHtoB", "l"."DesignParameters_ModificationFactorKflHtoBLessThanTwo", "l"."DesignParameters_ReductionFactorF", "l"."DesignParameters_SteelGradeS235Between16and40mm", "l"."DesignParameters_SteelGradeS235Between40and63mm", "l"."DesignParameters_SteelGradeS235LessThan16mm", "l"."DesignParameters_SteelGradeS355Between16and40mm", "l"."DesignParameters_SteelGradeS355Between40and63mm", "l"."DesignParameters_SteelGradeS355LessThan16mm"
+FROM "Orders" AS "o"
+LEFT JOIN "Localization" AS "l" ON "o"."Id" = "l"."OrderId"
+WHERE "o"."Id" = @__orderId_0
+LIMIT 1
+2023-12-17 13:43:06.648 +03:30 [INF] Executing ObjectResult, writing value of type 'Schaphoid.Api.Controllers.WebSectionDto'.
+2023-12-17 13:43:06.648 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Get (Schaphoid.Api) in 1.682ms
+2023-12-17 13:43:06.648 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Get (Schaphoid.Api)'
+2023-12-17 13:43:06.648 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/order/20/sections/wt-a-333-160-6 - - - 200 - application/json;+charset=utf-8 2.3695ms

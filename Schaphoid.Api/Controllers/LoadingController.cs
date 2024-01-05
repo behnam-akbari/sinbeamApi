@@ -20,7 +20,7 @@ namespace Schaphoid.Api.Controllers
         }
 
         [HttpGet]
-        public ActionResult<LoadingDto> Loading(int orderId)
+        public ActionResult<LoadingDto> Get(int orderId)
         {
             var order = _dbContext.Orders.Where(e => e.Id == orderId)
                 .Include(e => e.Loading)
@@ -34,12 +34,6 @@ namespace Schaphoid.Api.Controllers
 
             var section = _webSectionRepository.Get(order.Localization.SteelType, order.SectionId);
 
-            var section_area = (2 * section.FlangeThickness * section.FlangeWidth) + 
-                               (section.WebThickness * section.WebHeight);
-
-            // ToDo section.Weight
-            var self_wt = Math.Round((section_area * 7850 * 9.81d / 1000000) / 1000, 2);
-
             var loading = order.Loading;
 
             LoadingDto loadingDto;
@@ -49,7 +43,7 @@ namespace Schaphoid.Api.Controllers
                 loadingDto = new LoadingDto
                 {
                     Span = order.Span,
-                    SelfWeight = self_wt,
+                    SelfWeight = section.SelfWeight,
                     LoadType = LoadType.CharacteristicLoads
                 };
             }
@@ -58,7 +52,7 @@ namespace Schaphoid.Api.Controllers
                 loadingDto = new LoadingDto
                 {
                     Span = order.Span,
-                    SelfWeight = self_wt,
+                    SelfWeight = section.SelfWeight,
                     LoadType = loading.LoadType,
                     UltimatePointLoads = loading.LoadType == LoadType.UltimateLoads ?
                         loading.PointLoads.Select(e => new UltimatePointLoadDto

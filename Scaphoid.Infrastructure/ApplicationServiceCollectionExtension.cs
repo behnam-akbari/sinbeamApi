@@ -21,6 +21,7 @@ namespace Scaphoid.Infrastructure
             services.AddScoped<WebSectionRepository>();
             services.AddScoped<FlangeRepository>();
             services.AddScoped<WebThicknessRepository>();
+            services.AddScoped<CombinationRepository>();
 
             return services;
         }

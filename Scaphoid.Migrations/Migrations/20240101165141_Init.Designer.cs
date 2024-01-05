@@ -11,14 +11,36 @@ using Scaphoid.Infrastructure.Data;
 namespace Scaphoid.Migrations.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231208100116_AddSteelType")]
-    partial class AddSteelType
+    [Migration("20240101165141_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.4");
+
+            modelBuilder.Entity("Scaphoid.Core.Model.AxialForceLoad", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("LoadingId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Value")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LoadingId");
+
+                    b.ToTable("AxialForceLoad");
+                });
 
             modelBuilder.Entity("Scaphoid.Core.Model.Beam", b =>
                 {
@@ -75,9 +97,59 @@ namespace Scaphoid.Migrations.Migrations
                     b.ToTable("Beam");
                 });
 
+            modelBuilder.Entity("Scaphoid.Core.Model.DistributeLoad", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("LoadingId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Value")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LoadingId");
+
+                    b.ToTable("DistributeLoad");
+                });
+
+            modelBuilder.Entity("Scaphoid.Core.Model.EndMomentLoad", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("LeftValue")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("LoadingId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("RightValue")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LoadingId");
+
+                    b.ToTable("EndMomentLoad");
+                });
+
             modelBuilder.Entity("Scaphoid.Core.Model.Loading", b =>
                 {
                     b.Property<int>("OrderId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CombinationType")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("LoadType")
@@ -192,6 +264,42 @@ namespace Scaphoid.Migrations.Migrations
                     b.ToTable("Restraint");
                 });
 
+            modelBuilder.Entity("Scaphoid.Core.Model.XPointLoad", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("LoadingId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("Position")
+                        .HasColumnType("REAL");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Value")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LoadingId");
+
+                    b.ToTable("XPointLoad");
+                });
+
+            modelBuilder.Entity("Scaphoid.Core.Model.AxialForceLoad", b =>
+                {
+                    b.HasOne("Scaphoid.Core.Model.Loading", "Loading")
+                        .WithMany("AxialForceLoads")
+                        .HasForeignKey("LoadingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Loading");
+                });
+
             modelBuilder.Entity("Scaphoid.Core.Model.Beam", b =>
                 {
                     b.HasOne("Scaphoid.Core.Model.Order", "Order")
@@ -201,6 +309,28 @@ namespace Scaphoid.Migrations.Migrations
                         .IsRequired();
 
                     b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("Scaphoid.Core.Model.DistributeLoad", b =>
+                {
+                    b.HasOne("Scaphoid.Core.Model.Loading", "Loading")
+                        .WithMany("DistributeLoads")
+                        .HasForeignKey("LoadingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Loading");
+                });
+
+            modelBuilder.Entity("Scaphoid.Core.Model.EndMomentLoad", b =>
+                {
+                    b.HasOne("Scaphoid.Core.Model.Loading", "Loading")
+                        .WithMany("EndMomentLoads")
+                        .HasForeignKey("LoadingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Loading");
                 });
 
             modelBuilder.Entity("Scaphoid.Core.Model.Loading", b =>
@@ -216,14 +346,14 @@ namespace Scaphoid.Migrations.Migrations
                             b1.Property<int>("LoadingOrderId")
                                 .HasColumnType("INTEGER");
 
-                            b1.Property<int>("AxialForce")
-                                .HasColumnType("INTEGER");
+                            b1.Property<double>("AxialForce")
+                                .HasColumnType("REAL");
 
-                            b1.Property<int>("EndMomentLeft")
-                                .HasColumnType("INTEGER");
+                            b1.Property<double>("EndMomentLeft")
+                                .HasColumnType("REAL");
 
-                            b1.Property<int>("EndMomentRight")
-                                .HasColumnType("INTEGER");
+                            b1.Property<double>("EndMomentRight")
+                                .HasColumnType("REAL");
 
                             b1.Property<int>("PartialUdl")
                                 .HasColumnType("INTEGER");
@@ -234,8 +364,8 @@ namespace Scaphoid.Migrations.Migrations
                             b1.Property<int>("PartialUdlStart")
                                 .HasColumnType("INTEGER");
 
-                            b1.Property<int>("Udl")
-                                .HasColumnType("INTEGER");
+                            b1.Property<double>("Udl")
+                                .HasColumnType("REAL");
 
                             b1.HasKey("LoadingOrderId");
 
@@ -250,14 +380,14 @@ namespace Scaphoid.Migrations.Migrations
                             b1.Property<int>("LoadingOrderId")
                                 .HasColumnType("INTEGER");
 
-                            b1.Property<int>("AxialForce")
-                                .HasColumnType("INTEGER");
+                            b1.Property<double>("AxialForce")
+                                .HasColumnType("REAL");
 
-                            b1.Property<int>("EndMomentLeft")
-                                .HasColumnType("INTEGER");
+                            b1.Property<double>("EndMomentLeft")
+                                .HasColumnType("REAL");
 
-                            b1.Property<int>("EndMomentRight")
-                                .HasColumnType("INTEGER");
+                            b1.Property<double>("EndMomentRight")
+                                .HasColumnType("REAL");
 
                             b1.Property<int>("PartialUdl")
                                 .HasColumnType("INTEGER");
@@ -268,8 +398,8 @@ namespace Scaphoid.Migrations.Migrations
                             b1.Property<int>("PartialUdlStart")
                                 .HasColumnType("INTEGER");
 
-                            b1.Property<int>("Udl")
-                                .HasColumnType("INTEGER");
+                            b1.Property<double>("Udl")
+                                .HasColumnType("REAL");
 
                             b1.HasKey("LoadingOrderId");
 
@@ -284,14 +414,14 @@ namespace Scaphoid.Migrations.Migrations
                             b1.Property<int>("LoadingOrderId")
                                 .HasColumnType("INTEGER");
 
-                            b1.Property<int>("AxialForce")
-                                .HasColumnType("INTEGER");
+                            b1.Property<double>("AxialForce")
+                                .HasColumnType("REAL");
 
-                            b1.Property<int>("EndMomentLeft")
-                                .HasColumnType("INTEGER");
+                            b1.Property<double>("EndMomentLeft")
+                                .HasColumnType("REAL");
 
-                            b1.Property<int>("EndMomentRight")
-                                .HasColumnType("INTEGER");
+                            b1.Property<double>("EndMomentRight")
+                                .HasColumnType("REAL");
 
                             b1.Property<int>("PartialUdl")
                                 .HasColumnType("INTEGER");
@@ -302,8 +432,8 @@ namespace Scaphoid.Migrations.Migrations
                             b1.Property<int>("PartialUdlStart")
                                 .HasColumnType("INTEGER");
 
-                            b1.Property<int>("Udl")
-                                .HasColumnType("INTEGER");
+                            b1.Property<double>("Udl")
+                                .HasColumnType("REAL");
 
                             b1.HasKey("LoadingOrderId");
 
@@ -424,9 +554,28 @@ namespace Scaphoid.Migrations.Migrations
                     b.Navigation("Order");
                 });
 
+            modelBuilder.Entity("Scaphoid.Core.Model.XPointLoad", b =>
+                {
+                    b.HasOne("Scaphoid.Core.Model.Loading", "Loading")
+                        .WithMany("XPointLoads")
+                        .HasForeignKey("LoadingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Loading");
+                });
+
             modelBuilder.Entity("Scaphoid.Core.Model.Loading", b =>
                 {
+                    b.Navigation("AxialForceLoads");
+
+                    b.Navigation("DistributeLoads");
+
+                    b.Navigation("EndMomentLoads");
+
                     b.Navigation("PointLoads");
+
+                    b.Navigation("XPointLoads");
                 });
 
             modelBuilder.Entity("Scaphoid.Core.Model.Order", b =>
