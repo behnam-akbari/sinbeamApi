@@ -23,6 +23,7 @@ namespace Schaphoid.Api.Controllers
         public ActionResult<LoadingDto> Get(int orderId)
         {
             var order = _dbContext.Orders.Where(e => e.Id == orderId)
+                .Include(e => e.Localization)
                 .Include(e => e.Loading)
                 .ThenInclude(e => e.PointLoads)
                 .FirstOrDefault();
