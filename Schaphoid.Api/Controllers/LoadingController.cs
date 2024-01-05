@@ -45,7 +45,8 @@ namespace Schaphoid.Api.Controllers
                 {
                     Span = order.Span,
                     SelfWeight = section.SelfWeight,
-                    LoadType = LoadType.CharacteristicLoads
+                    LoadType = LoadType.CharacteristicLoads,
+                    DesignType = order.Localization.DesignType
                 };
             }
             else
@@ -55,6 +56,7 @@ namespace Schaphoid.Api.Controllers
                     Span = order.Span,
                     SelfWeight = section.SelfWeight,
                     LoadType = loading.LoadType,
+                    DesignType = order.Localization.DesignType,
                     UltimatePointLoads = loading.LoadType == LoadType.UltimateLoads ?
                         loading.PointLoads.Select(e => new UltimatePointLoadDto
                         {
@@ -72,7 +74,7 @@ namespace Schaphoid.Api.Controllers
                         }).ToList() : null,
                     PermanentLoads = loading.LoadType == LoadType.CharacteristicLoads ? loading.PermanentLoads : null,
                     VariableLoads = loading.LoadType == LoadType.CharacteristicLoads ? loading.VariableLoads : null,
-                    UltimateLoads = loading.LoadType == LoadType.UltimateLoads ? loading.UltimateLoads : null
+                    UltimateLoads = loading.LoadType == LoadType.UltimateLoads ? loading.UltimateLoads : null,
                 };
             }
 

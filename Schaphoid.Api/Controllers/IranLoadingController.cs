@@ -23,6 +23,7 @@ namespace Schaphoid.Api.Controllers
         public ActionResult<IranLoadingDto> Get(int orderId)
         {
             var order = _dbContext.Orders.Where(e => e.Id == orderId)
+                .Include(e=>e.Localization)
                 .Include(e => e.Loading)
                 .ThenInclude(e => e.DistributeLoads)
                 .Include(e => e.Loading)
@@ -49,7 +50,8 @@ namespace Schaphoid.Api.Controllers
                 loadingDto = new IranLoadingDto
                 {
                     Span = order.Span,
-                    SelfWeight = section.SelfWeight
+                    SelfWeight = section.SelfWeight,
+                    DesignType = order.Localization.DesignType,
                 };
             }
             else
@@ -60,6 +62,7 @@ namespace Schaphoid.Api.Controllers
                     Span = order.Span,
                     SelfWeight = section.SelfWeight,
                     CombinationType = loading.CombinationType,
+                    DesignType = order.Localization.DesignType,
                 };
 
                 var distributeItems = loading.DistributeLoads.Select(e => new IranLoadingItemDto
@@ -230,5 +233,6 @@ namespace Schaphoid.Api.Controllers
         public double Span { get; set; }
         public CombinationType CombinationType { get; set; }
         public List<IranLoadingItemDto> LoadingItems { get; set; } = new List<IranLoadingItemDto>();
+        public DesignType DesignType { get; internal set; }
     }
 }

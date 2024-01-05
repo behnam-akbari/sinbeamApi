@@ -6483,3 +6483,24 @@ LIMIT 1
 2023-12-17 13:43:06.648 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Get (Schaphoid.Api) in 1.682ms
 2023-12-17 13:43:06.648 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Get (Schaphoid.Api)'
 2023-12-17 13:43:06.648 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/order/20/sections/wt-a-333-160-6 - - - 200 - application/json;+charset=utf-8 2.3695ms
+2024-01-05 15:26:34.356 +03:30 [INF] Application started. Press Ctrl+C to shut down.
+2024-01-05 15:26:34.369 +03:30 [INF] Hosting environment: Development
+2024-01-05 15:26:34.370 +03:30 [INF] Content root path: C:\Projects\sinDesigner\sinbeamApi\Schaphoid.Api
+2024-01-05 15:26:34.385 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/ - -
+2024-01-05 15:26:34.429 +03:30 [INF] Executing endpoint 'Fallback /'
+2024-01-05 15:26:34.433 +03:30 [INF] Executed endpoint 'Fallback /'
+2024-01-05 15:26:34.465 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/ - - - 404 - - 80.7684ms
+2024-01-05 15:28:39.149 +03:30 [INF] Application started. Press Ctrl+C to shut down.
+2024-01-05 15:28:39.157 +03:30 [INF] Hosting environment: Development
+2024-01-05 15:28:39.164 +03:30 [INF] Content root path: C:\Projects\sinDesigner\sinbeamApi\Schaphoid.Api
+2024-01-05 15:28:39.187 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/ - -
+2024-01-05 15:28:39.243 +03:30 [INF] Executing endpoint 'Fallback /'
+2024-01-05 15:28:39.244 +03:30 [INF] Executed endpoint 'Fallback /'
+2024-01-05 15:28:39.260 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/ - - - 404 - - 79.5500ms
+2024-01-05 15:29:29.506 +03:30 [INF] Application started. Press Ctrl+C to shut down.
+2024-01-05 15:29:29.513 +03:30 [INF] Hosting environment: Development
+2024-01-05 15:29:29.519 +03:30 [INF] Content root path: C:\Projects\sinDesigner\sinbeamApi\Schaphoid.Api
+2024-01-05 15:29:29.526 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/ - -
+2024-01-05 15:29:29.569 +03:30 [INF] Executing endpoint 'Fallback /'
+2024-01-05 15:29:29.570 +03:30 [INF] Executed endpoint 'Fallback /'
+2024-01-05 15:29:29.590 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/ - - - 404 - - 65.4722ms
