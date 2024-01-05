@@ -183,7 +183,7 @@ namespace Schaphoid.Api.Controllers
             if(order.Localization.DesignType == DesignType.Iran)
             {
                 orderDto.Links.Add(new Link("get-loading", Url.Action(nameof(IranLoadingController.Get),
-                    "loading", new { orderId = id },
+                    "iranLoading", new { orderId = id },
                     Request.Scheme),
                     HttpMethods.Get));
 
@@ -3524,6 +3524,7 @@ namespace Schaphoid.Api.Controllers
         public List<CharacteristicPointLoadDto> CharacteristicPointLoads { get; set; }
         public double Span { get; set; }
         public CombinationType CombinationType { get; set; }
+        public DesignType DesignType { get; internal set; }
     }
 
     public class UltimatePointLoadDto
