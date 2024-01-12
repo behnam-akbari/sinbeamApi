@@ -660,6 +660,7 @@ namespace Schaphoid.Api.Controllers
 
             return new
             {
+                DesignType = localization.DesignType,
                 bending = new
                 {
                     points = bendingPoints,
