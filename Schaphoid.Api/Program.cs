@@ -35,6 +35,14 @@ app.UseCors(AllowSpecificOrigins);
 
 app.UseAuthorization();
 
+//app.Map("/main", context =>
+//{
+//    context.Response.StatusCode = StatusCodes.Status200OK;
+
+//    return Task.CompletedTask;
+//});
+
+app.MapFallbackToFile("/main", @"index.html");
 app.MapFallbackToFile("/", @"index.html");
 
 app.MapControllers();

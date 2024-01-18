@@ -205,20 +205,10 @@ namespace Schaphoid.Api.Controllers
                     HttpMethods.Get));
             }
 
-            //orderDto.Links.Add(new Link("get-properties", Url.Action(nameof(Properties),
-            //    null, new { id = id },
-            //    Request.Scheme),
-            //    HttpMethods.Get));
-
-            //orderDto.Links.Add(new Link("get-restraint", Url.Action(nameof(Restraints),
-            //    null, new { id = id },
-            //    Request.Scheme),
-            //    HttpMethods.Get));
-
-            //orderDto.Links.Add(new Link("save-restraint", Url.Action(nameof(Restraints),
-            //    null, new { id = id },
-            //    Request.Scheme),
-            //    HttpMethods.Post));
+            orderDto.Links.Add(new Link("get-restraints", Url.Action(nameof(VerificationController.Restraints),
+                "Verification", new { orderId = id },
+                Request.Scheme),
+                HttpMethods.Get));
 
             //orderDto.Links.Add(new Link("get-top-flange-verification", Url.Action(nameof(TopFlangeVerification),
             //    null, new { id = id },
@@ -278,78 +268,6 @@ namespace Schaphoid.Api.Controllers
             //    HttpMethods.Post));
 
             return orderDto;
-        }
-
-        #endregion
-
-        #region Restraints
-
-        [HttpGet("order/{id}/restraints")]
-        public object Restraints(int id)
-        {
-            var order = _dbContext.Orders.Where(e => e.Id == id)
-                .Include(e => e.BeamInfo)
-                .Include(e => e.Restraint)
-                .FirstOrDefault();
-
-            if(order is null)
-            {
-                return NotFound();
-            }
-
-            var beam = order.BeamInfo;
-
-            if(order.Restraint is null)
-            {
-                var restraintDto = new RestraintDto
-                {
-                    TopFlangeRestraints = new List<double> { 0, beam.Span },
-                    BottomFlangeRestraints = new List<double> { 0, beam.Span },
-                    FullRestraintTopFlange = false, 
-                    FullRestraintBottomFlange = false
-                };
-
-                return restraintDto;
-            }
-            else
-            {
-                var restraint = order.Restraint;
-
-                var restraintDto = new RestraintDto
-                {
-                    TopFlangeRestraints = restraint.TopFlangeRestraints,
-                    BottomFlangeRestraints = restraint.BottomFlangeRestraints,
-                    FullRestraintTopFlange = restraint.FullRestraintTopFlange,
-                    FullRestraintBottomFlange = restraint.FullRestraintBottomFlange
-                };
-
-                return restraintDto;
-            }
-        }
-
-        [HttpPost("order/{id}/restraints")]
-        public IActionResult Restraints(int id, RestraintDto restraintDto)
-        {
-            var order = _dbContext.Orders.Where(e => e.Id == id)
-                .Include(e => e.Restraint)
-                .FirstOrDefault();
-
-            if (order is null)
-            {
-                return NotFound();
-            }
-
-            order.Restraint = new Restraint
-            {
-                BottomFlangeRestraints = restraintDto.BottomFlangeRestraints,
-                TopFlangeRestraints = restraintDto.TopFlangeRestraints,
-                FullRestraintBottomFlange = restraintDto.FullRestraintBottomFlange,
-                FullRestraintTopFlange = restraintDto.FullRestraintTopFlange
-            };
-
-            _dbContext.SaveChanges();
-
-            return Ok();
         }
 
         #endregion
@@ -3473,15 +3391,6 @@ namespace Schaphoid.Api.Controllers
         public double gamma_q { get; internal set; }
         public double gamma_g_610a { get; internal set; }
         public double gamma_q_610a { get; internal set; }
-    }
-
-    public class RestraintDto
-    {
-        public bool FullRestraintTopFlange { get; set; }
-        public List<double> TopFlangeRestraints { get; set; }
-
-        public bool FullRestraintBottomFlange { get; set; }
-        public List<double> BottomFlangeRestraints { get; set; }
     }
 
     public class BeamDto : Resource

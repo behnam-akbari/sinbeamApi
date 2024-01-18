@@ -6,6 +6,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="Controllers\ConfigurationController.cs~RF52b73370.TMP" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\Scaphoid.Core\Scaphoid.Core.csproj" />
 		<ProjectReference Include="..\Scaphoid.Infrastructure\Scaphoid.Infrastructure.csproj" />
 
