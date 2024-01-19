@@ -210,15 +210,15 @@ namespace Schaphoid.Api.Controllers
                 Request.Scheme),
                 HttpMethods.Get));
 
-            //orderDto.Links.Add(new Link("get-top-flange-verification", Url.Action(nameof(TopFlangeVerification),
-            //    null, new { id = id },
-            //    Request.Scheme),
-            //    HttpMethods.Get));
+            orderDto.Links.Add(new Link("get-top-flange-verification", Url.Action(nameof(VerificationController.TopFlangeVerification),
+                "Verification", new { orderId = id },
+                Request.Scheme),
+                HttpMethods.Get));
 
-            //orderDto.Links.Add(new Link("get-bottom-flange-verification", Url.Action(nameof(BottomFlangeVerification),
-            //    null, new { id = id },
-            //    Request.Scheme),
-            //    HttpMethods.Get));
+            orderDto.Links.Add(new Link("get-bottom-flange-verification", Url.Action(nameof(VerificationController.TopFlangeVerification),
+                "Verification", new { orderId = id },
+                Request.Scheme),
+                HttpMethods.Get));
 
             //orderDto.Links.Add(new Link("set-web-local-buckle", Url.Action(nameof(SetWebLocalBuckle),
             //    null, new { id = id },

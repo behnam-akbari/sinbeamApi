@@ -143,6 +143,14 @@ namespace Schaphoid.Api.Controllers
 
             var restraint = order.Restraint;
 
+            if (restraint == null)
+            {
+                restraint = new Restraint
+                {
+                    TopFlangeRestraints = new List<double>() { 0, order.Span }
+                };
+            }
+
             restraint.TopFlangeRestraints = restraint.TopFlangeRestraints.OrderBy(e => e).ToList();
 
             var ltbtop = new double[100, 50];
@@ -654,6 +662,14 @@ namespace Schaphoid.Api.Controllers
             }
 
             var restraint = order.Restraint;
+
+            if (restraint == null)
+            {
+                restraint = new Restraint
+                {
+                    BottomFlangeRestraints = new List<double>() { 0, order.Span }
+                };
+            }
 
             var ltbbottom = new double[100, 50];
             var ltbtop = new double[100, 50];
