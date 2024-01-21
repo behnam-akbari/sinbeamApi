@@ -3254,3 +3254,178 @@ LIMIT 1
 2024-01-12 22:47:45.287 +03:30 [INF] Executed action Schaphoid.Api.Controllers.ConfigurationController.Get (Schaphoid.Api) in 0.6216ms
 2024-01-12 22:47:45.287 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.ConfigurationController.Get (Schaphoid.Api)'
 2024-01-12 22:47:45.287 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/configuration - - - 200 - application/json;+charset=utf-8 1.2618ms
+2024-01-21 22:36:14.843 +03:30 [INF] Application started. Press Ctrl+C to shut down.
+2024-01-21 22:36:14.893 +03:30 [INF] Hosting environment: Development
+2024-01-21 22:36:14.894 +03:30 [INF] Content root path: E:\Projects\Beam\Schaphoid.Api
+2024-01-21 22:36:14.972 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/ - -
+2024-01-21 22:36:15.306 +03:30 [INF] Executing endpoint 'Fallback /'
+2024-01-21 22:36:15.386 +03:30 [INF] Sending file. Request path: '/index.html'. Physical path: 'E:\Projects\Beam\Schaphoid.Api\wwwroot\index.html'
+2024-01-21 22:36:15.386 +03:30 [INF] Executed endpoint 'Fallback /'
+2024-01-21 22:36:15.441 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/ - - - 200 - text/html 470.9225ms
+2024-01-21 22:36:15.463 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/_framework/aspnetcore-browser-refresh.js - -
+2024-01-21 22:36:15.463 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/assets/index-71b070d7.js - -
+2024-01-21 22:36:15.463 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/assets/index-f8dfeff8.css - -
+2024-01-21 22:36:15.471 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/_vs/browserLink - -
+2024-01-21 22:36:15.496 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/_framework/aspnetcore-browser-refresh.js - - - 200 11996 application/javascript;+charset=utf-8 27.8475ms
+2024-01-21 22:36:15.567 +03:30 [INF] Sending file. Request path: '/assets/index-71b070d7.js'. Physical path: 'E:\Projects\Beam\Schaphoid.Api\wwwroot\assets\index-71b070d7.js'
+2024-01-21 22:36:15.577 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/assets/index-71b070d7.js - - - 200 303095 text/javascript 113.5284ms
+2024-01-21 22:36:15.585 +03:30 [INF] Sending file. Request path: '/assets/index-f8dfeff8.css'. Physical path: 'E:\Projects\Beam\Schaphoid.Api\wwwroot\assets\index-f8dfeff8.css'
+2024-01-21 22:36:15.600 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/assets/index-f8dfeff8.css - - - 200 586244 text/css 136.9348ms
+2024-01-21 22:36:15.633 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/configuration - -
+2024-01-21 22:36:15.633 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/assets/newConstants-653b2f88.js - -
+2024-01-21 22:36:15.633 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/assets/generalDetails-1babf1c3.js - -
+2024-01-21 22:36:15.633 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/assets/designType-eee11f54.js - -
+2024-01-21 22:36:15.635 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.ConfigurationController.Get (Schaphoid.Api)'
+2024-01-21 22:36:15.645 +03:30 [INF] Sending file. Request path: '/assets/newConstants-653b2f88.js'. Physical path: 'E:\Projects\Beam\Schaphoid.Api\wwwroot\assets\newConstants-653b2f88.js'
+2024-01-21 22:36:15.647 +03:30 [INF] Sending file. Request path: '/assets/designType-eee11f54.js'. Physical path: 'E:\Projects\Beam\Schaphoid.Api\wwwroot\assets\designType-eee11f54.js'
+2024-01-21 22:36:15.647 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/assets/newConstants-653b2f88.js - - - 200 398 text/javascript 13.6097ms
+2024-01-21 22:36:15.648 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/assets/designType-eee11f54.js - - - 200 175 text/javascript 14.3583ms
+2024-01-21 22:36:15.648 +03:30 [INF] Route matched with {action = "Get", controller = "Configuration"}. Executing controller action with signature Scaphoid.Core.Model.Resource Get() on controller Schaphoid.Api.Controllers.ConfigurationController (Schaphoid.Api).
+2024-01-21 22:36:15.692 +03:30 [INF] Sending file. Request path: '/assets/generalDetails-1babf1c3.js'. Physical path: 'E:\Projects\Beam\Schaphoid.Api\wwwroot\assets\generalDetails-1babf1c3.js'
+2024-01-21 22:36:15.692 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/assets/generalDetails-1babf1c3.js - - - 200 19135 text/javascript 59.2527ms
+2024-01-21 22:36:15.943 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 471.9640ms
+2024-01-21 22:36:15.976 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/Beam.svg - -
+2024-01-21 22:36:16.004 +03:30 [INF] Sending file. Request path: '/Beam.svg'. Physical path: 'E:\Projects\Beam\Schaphoid.Api\wwwroot\Beam.svg'
+2024-01-21 22:36:16.005 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/Beam.svg - - - 200 5958 image/svg+xml 29.1509ms
+2024-01-21 22:36:16.671 +03:30 [INF] Executing action method Schaphoid.Api.Controllers.ConfigurationController.Get (Schaphoid.Api) - Validation state: "Valid"
+2024-01-21 22:36:16.697 +03:30 [INF] Executed action method Schaphoid.Api.Controllers.ConfigurationController.Get (Schaphoid.Api), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 21.5398ms.
+2024-01-21 22:36:16.701 +03:30 [INF] Executing ObjectResult, writing value of type 'Schaphoid.Api.Controllers.OrderDto'.
+2024-01-21 22:36:16.758 +03:30 [INF] Executed action Schaphoid.Api.Controllers.ConfigurationController.Get (Schaphoid.Api) in 1107.6355ms
+2024-01-21 22:36:16.758 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.ConfigurationController.Get (Schaphoid.Api)'
+2024-01-21 22:36:16.767 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/configuration - - - 200 - application/json;+charset=utf-8 1133.3898ms
+2024-01-21 22:36:33.486 +03:30 [INF] Request starting HTTP/2 POST https://localhost:44357/configuration/order application/json 166
+2024-01-21 22:36:33.488 +03:30 [INF] CORS policy execution failed.
+2024-01-21 22:36:33.488 +03:30 [INF] Request origin https://localhost:44357 does not have permission to access the resource.
+2024-01-21 22:36:33.488 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.ConfigurationController.CreateOrder (Schaphoid.Api)'
+2024-01-21 22:36:33.494 +03:30 [INF] Route matched with {action = "CreateOrder", controller = "Configuration"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CreateOrder(Schaphoid.Api.Controllers.OrderDto) on controller Schaphoid.Api.Controllers.ConfigurationController (Schaphoid.Api).
+2024-01-21 22:36:33.534 +03:30 [INF] Executing action method Schaphoid.Api.Controllers.ConfigurationController.CreateOrder (Schaphoid.Api) - Validation state: "Valid"
+2024-01-21 22:36:37.409 +03:30 [WRN] The property 'Restraint.BottomFlangeRestraints' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+2024-01-21 22:36:37.410 +03:30 [WRN] The property 'Restraint.TopFlangeRestraints' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+2024-01-21 22:36:38.110 +03:30 [ERR] Failed executing DbCommand (6ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (DbType = DateTime), @p2='?', @p3='?' (DbType = Int32), @p4='?', @p5='?' (Size = 2), @p6='?', @p7='?' (DbType = Double)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Orders" ("CombinationType", "CreatedOn", "Designer", "ElementType", "Note", "Project", "SectionId", "Span")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7)
+RETURNING "Id";
+2024-01-21 22:36:38.204 +03:30 [ERR] An exception occurred in the database while saving changes for context type 'Scaphoid.Infrastructure.Data.ApplicationDbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.Sqlite.SqliteException (0x80004005): SQLite Error 1: 'table Orders has no column named CombinationType'.
+   at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)
+   at Microsoft.Data.Sqlite.SqliteCommand.PrepareAndEnumerateStatements(Stopwatch timer)+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteCommand.GetStatements(Stopwatch timer)+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.Execute(IRelationalConnection connection)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.Execute(IRelationalConnection connection)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.Execute(IEnumerable`1 commandBatches, IRelationalConnection connection)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChanges(IList`1 entries)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChanges(IList`1 entriesToSave)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChanges(StateManager stateManager, Boolean acceptAllChangesOnSuccess)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.<>c.<SaveChanges>b__107_0(DbContext _, ValueTuple`2 t)
+   at Microsoft.EntityFrameworkCore.Storage.NonRetryingExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChanges(Boolean acceptAllChangesOnSuccess)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChanges(Boolean acceptAllChangesOnSuccess)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.Sqlite.SqliteException (0x80004005): SQLite Error 1: 'table Orders has no column named CombinationType'.
+   at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)
+   at Microsoft.Data.Sqlite.SqliteCommand.PrepareAndEnumerateStatements(Stopwatch timer)+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteCommand.GetStatements(Stopwatch timer)+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.Execute(IRelationalConnection connection)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.Execute(IRelationalConnection connection)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.Execute(IEnumerable`1 commandBatches, IRelationalConnection connection)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChanges(IList`1 entries)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChanges(IList`1 entriesToSave)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChanges(StateManager stateManager, Boolean acceptAllChangesOnSuccess)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.<>c.<SaveChanges>b__107_0(DbContext _, ValueTuple`2 t)
+   at Microsoft.EntityFrameworkCore.Storage.NonRetryingExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChanges(Boolean acceptAllChangesOnSuccess)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChanges(Boolean acceptAllChangesOnSuccess)
+2024-01-21 22:38:00.129 +03:30 [INF] Application started. Press Ctrl+C to shut down.
+2024-01-21 22:38:00.142 +03:30 [INF] Hosting environment: Development
+2024-01-21 22:38:00.146 +03:30 [INF] Content root path: E:\Projects\Beam\Schaphoid.Api
+2024-01-21 22:38:00.156 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/_framework/aspnetcore-browser-refresh.js - -
+2024-01-21 22:38:00.156 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/_vs/browserLink - -
+2024-01-21 22:38:00.208 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/_framework/aspnetcore-browser-refresh.js - - - 200 11996 application/javascript;+charset=utf-8 48.5812ms
+2024-01-21 22:38:00.231 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/configuration - -
+2024-01-21 22:38:00.290 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 138.1919ms
+2024-01-21 22:38:00.306 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.ConfigurationController.Get (Schaphoid.Api)'
+2024-01-21 22:38:00.320 +03:30 [INF] Route matched with {action = "Get", controller = "Configuration"}. Executing controller action with signature Scaphoid.Core.Model.Resource Get() on controller Schaphoid.Api.Controllers.ConfigurationController (Schaphoid.Api).
+2024-01-21 22:38:00.497 +03:30 [INF] Executing action method Schaphoid.Api.Controllers.ConfigurationController.Get (Schaphoid.Api) - Validation state: "Valid"
+2024-01-21 22:38:00.517 +03:30 [INF] Executed action method Schaphoid.Api.Controllers.ConfigurationController.Get (Schaphoid.Api), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 15.2272ms.
+2024-01-21 22:38:00.521 +03:30 [INF] Executing ObjectResult, writing value of type 'Schaphoid.Api.Controllers.OrderDto'.
+2024-01-21 22:38:00.574 +03:30 [INF] Executed action Schaphoid.Api.Controllers.ConfigurationController.Get (Schaphoid.Api) in 250.6154ms
+2024-01-21 22:38:00.574 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.ConfigurationController.Get (Schaphoid.Api)'
+2024-01-21 22:38:00.578 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/configuration - - - 200 - application/json;+charset=utf-8 348.0043ms
+2024-01-21 22:38:25.384 +03:30 [INF] Request starting HTTP/2 POST https://localhost:44357/configuration/order application/json 166
+2024-01-21 22:38:25.426 +03:30 [INF] CORS policy execution failed.
+2024-01-21 22:38:25.427 +03:30 [INF] Request origin https://localhost:44357 does not have permission to access the resource.
+2024-01-21 22:38:25.427 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.ConfigurationController.CreateOrder (Schaphoid.Api)'
+2024-01-21 22:38:25.434 +03:30 [INF] Route matched with {action = "CreateOrder", controller = "Configuration"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CreateOrder(Schaphoid.Api.Controllers.OrderDto) on controller Schaphoid.Api.Controllers.ConfigurationController (Schaphoid.Api).
+2024-01-21 22:38:25.469 +03:30 [INF] Executing action method Schaphoid.Api.Controllers.ConfigurationController.CreateOrder (Schaphoid.Api) - Validation state: "Valid"
+2024-01-21 22:38:29.085 +03:30 [WRN] The property 'Restraint.BottomFlangeRestraints' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+2024-01-21 22:38:29.085 +03:30 [WRN] The property 'Restraint.TopFlangeRestraints' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+2024-01-21 22:38:29.530 +03:30 [INF] Executed DbCommand (45ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (DbType = DateTime), @p2='?', @p3='?' (DbType = Int32), @p4='?', @p5='?' (Size = 2), @p6='?', @p7='?' (DbType = Double)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Orders" ("CombinationType", "CreatedOn", "Designer", "ElementType", "Note", "Project", "SectionId", "Span")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7)
+RETURNING "Id";
+2024-01-21 22:38:29.548 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@p8='?' (DbType = Int32), @p9='?' (DbType = Int32), @p10='?' (DbType = Int32), @p11='?' (DbType = Int32), @p12='?' (DbType = Int32), @p13='?' (DbType = Double), @p14='?' (DbType = Double), @p15='?' (DbType = Double), @p16='?' (DbType = Double), @p17='?' (DbType = Double), @p18='?' (DbType = Double), @p19='?' (DbType = Double), @p20='?' (DbType = Double), @p21='?' (DbType = Double), @p22='?' (DbType = Double), @p23='?' (DbType = Double), @p24='?' (DbType = Double), @p25='?' (DbType = Double)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Localization" ("OrderId", "DesignType", "PsiValue", "SteelType", "ULSLoadExpression", "DeflectionLimit_TotalLoads", "DeflectionLimit_VariableLoads", "DesignParameters_GammaG", "DesignParameters_GammaQ", "DesignParameters_ModificationFactorAllOtherHtoB", "DesignParameters_ModificationFactorKflHtoBLessThanTwo", "DesignParameters_ReductionFactorF", "DesignParameters_SteelGradeS235Between16and40mm", "DesignParameters_SteelGradeS235Between40and63mm", "DesignParameters_SteelGradeS235LessThan16mm", "DesignParameters_SteelGradeS355Between16and40mm", "DesignParameters_SteelGradeS355Between40and63mm", "DesignParameters_SteelGradeS355LessThan16mm")
+VALUES (@p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18, @p19, @p20, @p21, @p22, @p23, @p24, @p25);
+2024-01-21 22:38:29.898 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CombinationType", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span", "l"."OrderId", "l"."DesignType", "l"."PsiValue", "l"."SteelType", "l"."ULSLoadExpression", "l"."DeflectionLimit_TotalLoads", "l"."DeflectionLimit_VariableLoads", "l"."DesignParameters_GammaG", "l"."DesignParameters_GammaQ", "l"."DesignParameters_ModificationFactorAllOtherHtoB", "l"."DesignParameters_ModificationFactorKflHtoBLessThanTwo", "l"."DesignParameters_ReductionFactorF", "l"."DesignParameters_SteelGradeS235Between16and40mm", "l"."DesignParameters_SteelGradeS235Between40and63mm", "l"."DesignParameters_SteelGradeS235LessThan16mm", "l"."DesignParameters_SteelGradeS355Between16and40mm", "l"."DesignParameters_SteelGradeS355Between40and63mm", "l"."DesignParameters_SteelGradeS355LessThan16mm"
+FROM "Orders" AS "o"
+LEFT JOIN "Localization" AS "l" ON "o"."Id" = "l"."OrderId"
+WHERE "o"."Id" = @__id_0
+LIMIT 1
+2024-01-21 22:38:29.903 +03:30 [INF] Executed action method Schaphoid.Api.Controllers.ConfigurationController.CreateOrder (Schaphoid.Api), returned result Microsoft.AspNetCore.Mvc.CreatedAtActionResult in 4433.8807ms.
+2024-01-21 22:38:29.904 +03:30 [INF] Executing CreatedAtActionResult, writing value of type 'Schaphoid.Api.Controllers.OrderDto'.
+2024-01-21 22:38:29.907 +03:30 [INF] Executed action Schaphoid.Api.Controllers.ConfigurationController.CreateOrder (Schaphoid.Api) in 4473.1759ms
+2024-01-21 22:38:29.907 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.ConfigurationController.CreateOrder (Schaphoid.Api)'
+2024-01-21 22:38:29.951 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/assets/defineSection-cce70a24.css - -
+2024-01-21 22:38:29.951 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/assets/defineSection-fc2b51a9.js - -
+2024-01-21 22:38:29.951 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/assets/info-circle-28c39cf2.js - -
+2024-01-21 22:38:29.972 +03:30 [INF] Request finished HTTP/2 POST https://localhost:44357/configuration/order application/json 166 - 201 - application/json;+charset=utf-8 4588.4640ms
+2024-01-21 22:38:29.992 +03:30 [INF] Sending file. Request path: '/assets/defineSection-cce70a24.css'. Physical path: 'E:\Projects\Beam\Schaphoid.Api\wwwroot\assets\defineSection-cce70a24.css'
+2024-01-21 22:38:29.994 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/assets/defineSection-cce70a24.css - - - 200 207 text/css 43.1248ms
+2024-01-21 22:38:30.004 +03:30 [INF] Sending file. Request path: '/assets/defineSection-fc2b51a9.js'. Physical path: 'E:\Projects\Beam\Schaphoid.Api\wwwroot\assets\defineSection-fc2b51a9.js'
+2024-01-21 22:38:30.005 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/assets/defineSection-fc2b51a9.js - - - 200 19874 text/javascript 54.2240ms
+2024-01-21 22:38:30.015 +03:30 [INF] Sending file. Request path: '/assets/info-circle-28c39cf2.js'. Physical path: 'E:\Projects\Beam\Schaphoid.Api\wwwroot\assets\info-circle-28c39cf2.js'
+2024-01-21 22:38:30.016 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/assets/info-circle-28c39cf2.js - - - 200 757 text/javascript 65.1018ms
+2024-01-21 22:38:30.025 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/order/9/sections/init - -
+2024-01-21 22:38:30.025 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/assets/temp-2-3f66e273.png - -
+2024-01-21 22:38:30.026 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.SectionsController.Init (Schaphoid.Api)'
+2024-01-21 22:38:30.029 +03:30 [INF] Route matched with {action = "Init", controller = "Sections"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Scaphoid.Core.Model.Resource] Init(Int32) on controller Schaphoid.Api.Controllers.SectionsController (Schaphoid.Api).
+2024-01-21 22:38:30.044 +03:30 [INF] Executing action method Schaphoid.Api.Controllers.SectionsController.Init (Schaphoid.Api) - Validation state: "Valid"
+2024-01-21 22:38:30.046 +03:30 [INF] Sending file. Request path: '/assets/temp-2-3f66e273.png'. Physical path: 'E:\Projects\Beam\Schaphoid.Api\wwwroot\assets\temp-2-3f66e273.png'
+2024-01-21 22:38:30.052 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/assets/temp-2-3f66e273.png - - - 200 23579 image/png 27.2222ms
+2024-01-21 22:38:30.055 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CombinationType", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span"
+FROM "Orders" AS "o"
+WHERE "o"."Id" = @__orderId_0
+LIMIT 1
+2024-01-21 22:38:30.068 +03:30 [INF] Executed action method Schaphoid.Api.Controllers.SectionsController.Init (Schaphoid.Api), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 23.6571ms.
+2024-01-21 22:38:30.068 +03:30 [INF] Executing ObjectResult, writing value of type 'Scaphoid.Core.Model.Resource'.
+2024-01-21 22:38:30.069 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Init (Schaphoid.Api) in 40.3683ms
+2024-01-21 22:38:30.069 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Init (Schaphoid.Api)'
+2024-01-21 22:38:30.069 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/order/9/sections/init - - - 200 - application/json;+charset=utf-8 44.9582ms
+2024-01-21 22:38:30.075 +03:30 [INF] Request starting HTTP/2 GET https://localhost:44357/order/9/sections/filters - -
+2024-01-21 22:38:30.076 +03:30 [INF] Executing endpoint 'Schaphoid.Api.Controllers.SectionsController.Filters (Schaphoid.Api)'
+2024-01-21 22:38:30.077 +03:30 [INF] Route matched with {action = "Filters", controller = "Sections"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Schaphoid.Api.Controllers.WebSectionFilters] Filters(Int32) on controller Schaphoid.Api.Controllers.SectionsController (Schaphoid.Api).
+2024-01-21 22:38:30.088 +03:30 [INF] Executing action method Schaphoid.Api.Controllers.SectionsController.Filters (Schaphoid.Api) - Validation state: "Valid"
+2024-01-21 22:38:37.201 +03:30 [INF] Executed DbCommand (0ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "o"."Id", "o"."CombinationType", "o"."CreatedOn", "o"."Designer", "o"."ElementType", "o"."Note", "o"."Project", "o"."SectionId", "o"."Span", "l"."OrderId", "l"."DesignType", "l"."PsiValue", "l"."SteelType", "l"."ULSLoadExpression", "l"."DeflectionLimit_TotalLoads", "l"."DeflectionLimit_VariableLoads", "l"."DesignParameters_GammaG", "l"."DesignParameters_GammaQ", "l"."DesignParameters_ModificationFactorAllOtherHtoB", "l"."DesignParameters_ModificationFactorKflHtoBLessThanTwo", "l"."DesignParameters_ReductionFactorF", "l"."DesignParameters_SteelGradeS235Between16and40mm", "l"."DesignParameters_SteelGradeS235Between40and63mm", "l"."DesignParameters_SteelGradeS235LessThan16mm", "l"."DesignParameters_SteelGradeS355Between16and40mm", "l"."DesignParameters_SteelGradeS355Between40and63mm", "l"."DesignParameters_SteelGradeS355LessThan16mm"
+FROM "Orders" AS "o"
+LEFT JOIN "Localization" AS "l" ON "o"."Id" = "l"."OrderId"
+WHERE "o"."Id" = @__orderId_0
+LIMIT 1
+2024-01-21 22:38:37.215 +03:30 [INF] Executed action method Schaphoid.Api.Controllers.SectionsController.Filters (Schaphoid.Api), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 7126.42ms.
+2024-01-21 22:38:37.215 +03:30 [INF] Executing ObjectResult, writing value of type 'Schaphoid.Api.Controllers.WebSectionFilters'.
+2024-01-21 22:38:37.219 +03:30 [INF] Executed action Schaphoid.Api.Controllers.SectionsController.Filters (Schaphoid.Api) in 7141.2582ms
+2024-01-21 22:38:37.219 +03:30 [INF] Executed endpoint 'Schaphoid.Api.Controllers.SectionsController.Filters (Schaphoid.Api)'
+2024-01-21 22:38:37.219 +03:30 [INF] Request finished HTTP/2 GET https://localhost:44357/order/9/sections/filters - - - 200 - application/json;+charset=utf-8 7143.9385ms
