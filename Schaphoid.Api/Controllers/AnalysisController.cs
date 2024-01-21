@@ -24,7 +24,7 @@ namespace Schaphoid.Api.Controllers
         }
 
         [HttpGet]
-        public object Standard(int orderId)
+        public ActionResult<AnalysisDto> Standard(int orderId)
         {
             var order = _dbContext.Orders.Where(e => e.Id == orderId)
                 .Include(e => e.Localization)
@@ -37,11 +37,13 @@ namespace Schaphoid.Api.Controllers
                 return NotFound();
             }
 
-            return Get(order.Span, order.SectionId, order.Localization, order.Loading);
+            var result = Get(order.Span, order.SectionId, order.Localization, order.Loading);
+
+            return result;
         }
 
         [HttpGet("[action]")]
-        public object Iran(int orderId, CombinationType combination = CombinationType.C1)
+        public ActionResult<AnalysisDto> Iran(int orderId, CombinationType combination = CombinationType.C1)
         {
             var order = _dbContext.Orders.Where(e => e.Id == orderId)
                 .Include(e => e.Localization)
@@ -62,7 +64,14 @@ namespace Schaphoid.Api.Controllers
 
             var loading = _combinationRepository.GetLoading(order.Loading, combination);
 
-            return Get(order.Span, order.SectionId, order.Localization, loading);
+            var result = Get(order.Span, order.SectionId, order.Localization, loading);
+
+            result.Links.Add(new Link("save-combination", Url.Action(nameof(Save),
+                null, new { orderId = orderId },
+                Request.Scheme),
+                HttpMethods.Post));
+
+            return result;
         }
 
         [HttpPost("[action]")]
@@ -88,7 +97,7 @@ namespace Schaphoid.Api.Controllers
         }
 
         #region Private Methods
-        private object Get(double span, string sectionId, Localization localization, Loading loading)
+        private AnalysisDto Get(double span, string sectionId, Localization localization, Loading loading)
         {
             var section = _webSectionRepository.Get(localization.SteelType, sectionId);
 
@@ -681,22 +690,22 @@ namespace Schaphoid.Api.Controllers
                 sheerPoints.Add(new Point(bmdData[i, 0], Math.Round(bmdData[i, 2], 2)));
             }
 
-            return new
+            return new AnalysisDto
             {
                 DesignType = localization.DesignType,
-                bending = new
+                bending = new AnalysisDto.Bending
                 {
                     points = bendingPoints,
                     maxMoment = max_bm,
                     minMoment = min_bm,
                 },
-                shear = new
+                shear = new AnalysisDto.Shear
                 {
                     points = sheerPoints,
                     MaxShear = sheerPoints.Select(e => e.Y).Max(),
                     MinShear = sheerPoints.Select(e => e.Y).Min(),
                 },
-                deflection = new
+                deflection = new AnalysisDto.Deflection
                 {
                     sheer = sheerDeflectionPoints,
                     bending = bendingDeflectionPoints,
@@ -706,6 +715,36 @@ namespace Schaphoid.Api.Controllers
             };
         }
         #endregion
+    }
+
+    public class AnalysisDto:Resource
+    {
+        public DesignType DesignType { get; set; }
+        public Bending bending { get; set; }
+        public Shear shear { get; set; }
+        public Deflection deflection { get; set; }
+
+        public class Bending
+        {
+            public List<Point> points { get; set; }
+            public double maxMoment { get; set; }
+            public double minMoment { get; set; }
+        }
+
+        public class Shear
+        {
+            public List<Point> points { get; set; }
+            public double MaxShear { get; set; }
+            public double MinShear { get; set; }
+        }
+
+        public class Deflection
+        {
+            public List<Point> sheer { get; set; }
+            public List<Point> bending { get; set; }
+            public List<Point> total { get; set; }
+            public double MaxDefln { get; set; }
+        }
     }
 
     public class IranAnalysisDto
