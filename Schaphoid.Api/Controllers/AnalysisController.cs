@@ -65,9 +65,29 @@ namespace Schaphoid.Api.Controllers
             return Get(order.Span, order.SectionId, order.Localization, loading);
         }
 
+        [HttpPost("[action]")]
+        public object Save(int orderId, IranAnalysisDto iranAnalysisDto)
+        {
+            var order = _dbContext.Orders.Where(e => e.Id == orderId)
+                .Include(e => e.Localization)
+                .FirstOrDefault();
 
+            if(order is null)
+            {
+                return NotFound();
+            }
 
+            if(order.Localization.DesignType != DesignType.Iran)
+            {
+                return Ok();
+            }
 
+            order.CombinationType = iranAnalysisDto.Combination;
+
+            return Ok();
+        }
+
+        #region Private Methods
         private object Get(double span, string sectionId, Localization localization, Loading loading)
         {
             var section = _webSectionRepository.Get(localization.SteelType, sectionId);
@@ -685,5 +705,11 @@ namespace Schaphoid.Api.Controllers
                 }
             };
         }
+        #endregion
+    }
+
+    public class IranAnalysisDto
+    {
+        public CombinationType Combination { get; set; }
     }
 }

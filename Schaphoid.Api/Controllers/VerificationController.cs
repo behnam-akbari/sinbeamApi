@@ -6,6 +6,7 @@ using Scaphoid.Infrastructure.Repositories;
 
 namespace Schaphoid.Api.Controllers
 {
+    [Route("order/{orderId}/[controller]")]
     public class VerificationController : BaseController
     {
         private readonly ApplicationDbContext _dbContext;
@@ -20,7 +21,7 @@ namespace Schaphoid.Api.Controllers
 
         #region Restraints
 
-        [HttpGet("order/{orderId}/restraints")]
+        [HttpGet("[action]")]
         public object Restraints(int orderId)
         {
             var order = _dbContext.Orders
@@ -65,10 +66,20 @@ namespace Schaphoid.Api.Controllers
                 Request.Scheme),
                 HttpMethods.Post));
 
+            restraintDto.Links.Add(new Link("set-web-local-buckle", Url.Action(nameof(SetWebLocalBuckle),
+                null, new { orderId = orderId },
+                Request.Scheme),
+                HttpMethods.Post));
+
+            restraintDto.Links.Add(new Link("unset-web-local-buckle", Url.Action(nameof(UnsetWebLocalBuckle),
+                null, new { orderId = orderId },
+                Request.Scheme),
+                HttpMethods.Post));
+
             return restraintDto;
         }
 
-        [HttpPost("order/{orderId}/restraints")]
+        [HttpPost("[action]")]
         public IActionResult Restraints(int orderId, RestraintDto restraintDto)
         {
             var order = _dbContext.Orders
@@ -98,10 +109,10 @@ namespace Schaphoid.Api.Controllers
 
         #region Flange Verification
 
-        [HttpGet("order/{id}/top-flange-verification")]
-        public object TopFlangeVerification(int id)
+        [HttpGet("top-flange")]
+        public object TopFlangeVerification(int orderId)
         {
-            var order = _dbContext.Orders.Where(e => e.Id == id)
+            var order = _dbContext.Orders.Where(e => e.Id == orderId)
                 .Include(e => e.BeamInfo)
                 .Include(e => e.Restraint)
                 .Include(e => e.Loading)
@@ -115,19 +126,21 @@ namespace Schaphoid.Api.Controllers
             }
 
             var top_ute_condition = string.Empty;
-            var beam = order.BeamInfo;
             var localization = order.Localization;
             var loading = order.Loading;
+            var span = order.Span;
 
             const int segments = 100;
-            var interval = beam.Span / segments;
+            var interval = span / segments;
 
-            var depth_left = beam.WebDepth;
+            var webSection = _webSectionRepository.Get(order.Localization.SteelType, order.SectionId);
 
-            var depth_right = beam.IsUniformDepth ? depth_left : beam.WebDepthRight;
+            var depth_left = webSection.WebHeight;
 
-            double leftheight = Math.Pow(Math.Pow(beam.WebDepth, 2), 0.5);
-            double rightheight = Math.Pow(Math.Pow(beam.WebDepthRight, 2), 0.5);
+            var depth_right = webSection.WebHeight;
+
+            double leftheight = Math.Pow(Math.Pow(depth_left, 2), 0.5);
+            double rightheight = Math.Pow(Math.Pow(depth_right, 2), 0.5);
 
             var gamma_g = localization.DesignParameters.GammaG * localization.DesignParameters.ReductionFactorF;
             var gamma_q = localization.DesignParameters.GammaQ;
@@ -137,7 +150,7 @@ namespace Schaphoid.Api.Controllers
             for (int j = 1; j < segments - 1; j++)
             {
                 var section_position = j * interval;
-                var section_depth = leftheight - (leftheight - rightheight) * section_position / beam.Span;
+                var section_depth = leftheight - (leftheight - rightheight) * section_position / span;
                 momarray[j, 13] = section_depth;
             }
 
@@ -223,10 +236,10 @@ namespace Schaphoid.Api.Controllers
                 //var steeltop = beam.TopFlangeSteel == SteelType.S355 ? 355 : 275;
                 var steeltop = 355;
 
-                var top_flg_thick = beam.TopFlangeThickness;
-                var top_flg_width = beam.TopFlangeWidth;
-                var bottom_flg_thick = beam.BottomFlangeThickness;
-                var bottom_flg_width = beam.BottomFlangeWidth;
+                var top_flg_thick = webSection.FlangeThickness;
+                var top_flg_width = webSection.FlangeWidth;
+                var bottom_flg_thick = webSection.FlangeThickness;
+                var bottom_flg_width = webSection.FlangeWidth;
 
                 var top_area = top_flg_thick * top_flg_width;
                 var bottom_area = bottom_flg_thick * bottom_flg_width;
@@ -236,7 +249,6 @@ namespace Schaphoid.Api.Controllers
                 var epsilon_top = Math.Pow((235 / topstrength), 0.5);
                 var lambda_one_top = 93.9 * epsilon_top;
 
-                var span = beam.Span;
                 double beta = 0;
 
                 if (span * 1000 / (top_flg_width * 0.5) > 50)
@@ -450,19 +462,18 @@ namespace Schaphoid.Api.Controllers
             }
             else
             {
-                var steeltop = beam.TopFlangeSteel == SteelType.S355 ? 355 : 275;
+                var steeltop = order.Localization.SteelType == SteelType.S355 ? 355 : 275;
 
-                var bottom_flg_thick = beam.BottomFlangeThickness;
-                var bottom_flg_width = beam.BottomFlangeWidth;
+                var bottom_flg_thick = webSection.FlangeThickness;
+                var bottom_flg_width = webSection.FlangeWidth;
                 var area_bottom = bottom_flg_thick * bottom_flg_width;
 
-                var top_flg_thick = beam.TopFlangeThickness;
-                var top_flg_width = beam.TopFlangeWidth;
+                var top_flg_thick = webSection.FlangeThickness;
+                var top_flg_width = webSection.FlangeWidth;
                 var area_top = top_flg_thick * top_flg_width;
 
                 var topstrength = designstrength(order, top_flg_thick, steeltop);
 
-                var span = beam.Span;
                 double beta = 0;
 
                 if (span * 1000 / (top_flg_width * 0.5) > 50)
@@ -613,11 +624,10 @@ namespace Schaphoid.Api.Controllers
             }
         }
 
-        [HttpGet("order/{id}/bottom-flange-verification")]
-        public object BottomFlangeVerification(int id)
+        [HttpGet("bottom-flange")]
+        public object BottomFlangeVerification(int orderId)
         {
-            var order = _dbContext.Orders.Where(e => e.Id == id)
-                .Include(e => e.BeamInfo)
+            var order = _dbContext.Orders.Where(e => e.Id == orderId)
                 .Include(e => e.Restraint)
                 .Include(e => e.Loading)
                 .ThenInclude(e => e.PointLoads)
@@ -630,19 +640,20 @@ namespace Schaphoid.Api.Controllers
             }
 
             var max_onerous = string.Empty;
-            var beam = order.BeamInfo;
             var localization = order.Localization;
             var loading = order.Loading;
+            var span = order.Span;
+            var webSection = _webSectionRepository.Get(order.Localization.SteelType, order.SectionId);
 
             const int segments = 100;
-            var interval = beam.Span / segments;
+            var interval = span / segments;
 
-            var depth_left = beam.WebDepth;
+            var depth_left = webSection.WebHeight;
 
-            var depth_right = beam.IsUniformDepth ? depth_left : beam.WebDepthRight;
+            var depth_right = webSection.WebHeight;
 
-            double leftheight = Math.Pow(Math.Pow(beam.WebDepth, 2), 0.5);
-            double rightheight = Math.Pow(Math.Pow(beam.WebDepthRight, 2), 0.5);
+            double leftheight = Math.Pow(Math.Pow(depth_left, 2), 0.5);
+            double rightheight = Math.Pow(Math.Pow(depth_right, 2), 0.5);
 
             var gamma_g = localization.DesignParameters.GammaG * localization.DesignParameters.ReductionFactorF;
             var gamma_q = localization.DesignParameters.GammaQ;
@@ -652,13 +663,13 @@ namespace Schaphoid.Api.Controllers
             for (int j = 1; j < segments - 1; j++)
             {
                 var section_position = j * interval;
-                var section_depth = leftheight - (leftheight - rightheight) * section_position / beam.Span;
+                var section_depth = leftheight - (leftheight - rightheight) * section_position / span;
                 momarray[j, 13] = section_depth;
             }
 
             for (int j = 1; j < segments - 1; j++)
             {
-                momarray[j, 25] = momarray[j, 13] + 0.5 * (beam.TopFlangeThickness + beam.BottomFlangeThickness);
+                momarray[j, 25] = momarray[j, 13] + 0.5 * (webSection.FlangeThickness + webSection.FlangeThickness);
             }
 
             var restraint = order.Restraint;
@@ -739,12 +750,12 @@ namespace Schaphoid.Api.Controllers
                     ltbbottom[i + 1, 10] = Math.Pow(c_one, -0.5);
                 }
 
-                var steelbottom = beam.BottomFlangeSteel == SteelType.S355 ? 355 : 275;
+                var steelbottom = order.Localization.SteelType == SteelType.S355 ? 355 : 275;
 
-                var top_flg_thick = beam.TopFlangeThickness;
-                var top_flg_width = beam.TopFlangeWidth;
-                var bottom_flg_thick = beam.BottomFlangeThickness;
-                var bottom_flg_width = beam.BottomFlangeWidth;
+                var top_flg_thick = webSection.FlangeThickness;
+                var top_flg_width = webSection.FlangeWidth;
+                var bottom_flg_thick = webSection.FlangeThickness;
+                var bottom_flg_width = webSection.FlangeWidth;
 
                 var top_area = top_flg_thick * top_flg_width;
                 var bottom_area = bottom_flg_thick * bottom_flg_width;
@@ -754,7 +765,6 @@ namespace Schaphoid.Api.Controllers
                 var epsilon_bottom = Math.Pow((235 / bottomstrength), 0.5);
                 var lambda_one_bottom = 93.9 * epsilon_bottom;
 
-                var span = beam.Span;
                 double beta = 0;
 
                 if (span * 1000 / (bottom_flg_width * 0.5) > 50)
@@ -987,19 +997,18 @@ namespace Schaphoid.Api.Controllers
             }
             else
             {
-                var steelbot = beam.BottomFlangeSteel == SteelType.S355 ? 355 : 275;
+                var steelbot = order.Localization.SteelType == SteelType.S355 ? 355 : 275;
 
-                var bottom_flg_thick = beam.BottomFlangeThickness;
-                var bottom_flg_width = beam.BottomFlangeWidth;
+                var bottom_flg_thick = webSection.FlangeThickness;
+                var bottom_flg_width = webSection.FlangeWidth;
                 var area_bottom = bottom_flg_thick * bottom_flg_width;
 
-                var top_flg_thick = beam.TopFlangeThickness;
-                var top_flg_width = beam.TopFlangeWidth;
+                var top_flg_thick = webSection.FlangeThickness;
+                var top_flg_width = webSection.FlangeWidth;
                 var area_top = top_flg_thick * top_flg_width;
 
                 var botstrength = designstrength(order, top_flg_thick, steelbot);
 
-                var span = beam.Span;
                 double beta = 0;
 
                 if (span * 1000 / (bottom_flg_thick * 0.5) > 50)
@@ -1150,10 +1159,10 @@ namespace Schaphoid.Api.Controllers
             }
         }
 
-        [HttpPost("order/{id}/set-web-local-buckle")]
-        public IActionResult SetWebLocalBuckle(int id)
+        [HttpPost("set-web-local-buckle")]
+        public IActionResult SetWebLocalBuckle(int orderId)
         {
-            var order = _dbContext.Orders.Where(e => e.Id == id)
+            var order = _dbContext.Orders.Where(e => e.Id == orderId)
                 .Include(e => e.BeamInfo)
                 .FirstOrDefault();
 
@@ -1169,10 +1178,10 @@ namespace Schaphoid.Api.Controllers
             return Ok();
         }
 
-        [HttpPost("order/{id}/unset-web-local-buckle")]
-        public IActionResult UnsetWebLocalBuckle(int id)
+        [HttpPost("unset-web-local-buckle")]
+        public IActionResult UnsetWebLocalBuckle(int orderId)
         {
-            var order = _dbContext.Orders.Where(e => e.Id == id)
+            var order = _dbContext.Orders.Where(e => e.Id == orderId)
                 .Include(e => e.BeamInfo)
                 .FirstOrDefault();
 
@@ -1188,11 +1197,10 @@ namespace Schaphoid.Api.Controllers
             return Ok();
         }
 
-        [HttpGet("order/{id}/web-verification")]
-        public object WebVerification(int id)
+        [HttpGet("web-verification")]
+        public object WebVerification(int orderId)
         {
-            var order = _dbContext.Orders.Where(e => e.Id == id)
-                .Include(e => e.BeamInfo)
+            var order = _dbContext.Orders.Where(e => e.Id == orderId)
                 .Include(e => e.Restraint)
                 .Include(e => e.Loading)
                 .ThenInclude(e => e.PointLoads)
@@ -1492,7 +1500,7 @@ namespace Schaphoid.Api.Controllers
             return captions;
         }
 
-        private double designstrength(Order order, int thickness, int steelgrade)
+        private double designstrength(Order order, double thickness, int steelgrade)
         {
             var localization = order.Localization;
             double thicknessOutput = 0;

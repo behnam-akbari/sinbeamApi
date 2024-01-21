@@ -17,6 +17,7 @@
         public Restraint Restraint { get; set; }
         public double Span { get; set; }
         public ElementType ElementType { get; set; }
+        public CombinationType CombinationType { get; set; }
     }
 
     public class Restraint 
