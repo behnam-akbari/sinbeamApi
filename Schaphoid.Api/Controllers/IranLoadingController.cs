@@ -152,7 +152,7 @@ namespace Schaphoid.Api.Controllers
                 order.Loading = new Loading();
             }
 
-            order.Loading.LoadType = LoadType.Iran;
+            order.Loading.LoadType = LoadType.UltimateLoads;
             order.Loading.CombinationType = loadingDto.CombinationType;
 
             order.Loading.DistributeLoads?.Clear();

@@ -11,12 +11,15 @@ namespace Schaphoid.Api.Controllers
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly WebSectionRepository _webSectionRepository;
+        private readonly CombinationRepository _combinationRepository;
 
         public VerificationController(ApplicationDbContext dbContext,
-            WebSectionRepository webSectionRepository)
+            WebSectionRepository webSectionRepository,
+            CombinationRepository combinationRepository)
         {
             _dbContext = dbContext;
             _webSectionRepository = webSectionRepository;
+            _combinationRepository = combinationRepository;
         }
 
         #region Restraints
@@ -133,6 +136,17 @@ namespace Schaphoid.Api.Controllers
             var top_ute_condition = string.Empty;
             var localization = order.Localization;
             var loading = order.Loading;
+
+            if (localization.DesignType == DesignType.Iran)
+            {
+                if (order.CombinationType == 0)
+                {
+                    order.CombinationType = CombinationType.C1;
+                }
+
+                loading = _combinationRepository.GetLoading(loading, order.CombinationType);
+            }
+
             var span = order.Span;
 
             const int segments = 100;
@@ -191,7 +205,7 @@ namespace Schaphoid.Api.Controllers
                 {
                     var distance = ltbtop[i, 1];
 
-                    var nett_bm = bmoment(order, distance);
+                    var nett_bm = bmoment(order, distance, loading);
 
                     ltbtop[i, 3] = nett_bm;
                 }
@@ -201,7 +215,7 @@ namespace Schaphoid.Api.Controllers
                     for (int k = 1; k < 3; k++)
                     {
                         var distance = ltbtop[i, 1] + k * ltbtop[i + 1, 2] * 0.25;
-                        var nett_bm = bmoment(order, distance);
+                        var nett_bm = bmoment(order, distance, loading);
                         ltbtop[i + 1, k + 4] = nett_bm;
                     }
                 }
@@ -549,11 +563,11 @@ namespace Schaphoid.Api.Controllers
 
                 var extra = 0.5 * (top_flg_thick + bottom_flg_thick);
 
-                var nett_bm = bmoment(order, 0);
+                var nett_bm = bmoment(order, 0, loading);
 
                 var force_at_zero = nett_bm * 1000 / (depth_left + extra);
 
-                nett_bm = bmoment(order, span);
+                nett_bm = bmoment(order, span, loading);
 
                 var force_at_span = nett_bm * 1000 / (depth_left + extra);
 
@@ -656,6 +670,17 @@ namespace Schaphoid.Api.Controllers
             var max_onerous = string.Empty;
             var localization = order.Localization;
             var loading = order.Loading;
+
+            if (localization.DesignType == DesignType.Iran)
+            {
+                if (order.CombinationType == 0)
+                {
+                    order.CombinationType = CombinationType.C1;
+                }
+
+                loading = _combinationRepository.GetLoading(loading, order.CombinationType);
+            }
+
             var span = order.Span;
             var webSection = _webSectionRepository.Get(order.Localization.SteelType, order.SectionId);
 
@@ -717,7 +742,7 @@ namespace Schaphoid.Api.Controllers
                 {
                     var distance = ltbbottom[i, 1];
 
-                    var nett_bm = bmoment(order, distance);
+                    var nett_bm = bmoment(order, distance, loading);
 
                     ltbbottom[i, 3] = nett_bm;
                 }
@@ -727,7 +752,7 @@ namespace Schaphoid.Api.Controllers
                     for (int k = 1; k < 3; k++)
                     {
                         var distance = ltbbottom[i, 1] + k * ltbbottom[i + 1, 2] * 0.25;
-                        var nett_bm = bmoment(order, distance);
+                        var nett_bm = bmoment(order, distance, loading);
                         ltbbottom[i + 1, k + 4] = nett_bm;
                     }
                 }
@@ -927,7 +952,7 @@ namespace Schaphoid.Api.Controllers
                     }
                     else if (ltbbottom[i, 29] == 1)
                     {
-                        ltbbottom[i, 23] = ltbbottom[i, 21] / ltbtop[i, 15];
+                        ltbbottom[i, 23] = ltbbottom[i, 21] / ltbbottom[i, 15];
                     }
                     else
                     {
@@ -1095,11 +1120,11 @@ namespace Schaphoid.Api.Controllers
 
                 var extra = 0.5 * (top_flg_thick + bottom_flg_thick);
 
-                var nett_bm = bmoment(order, 0);
+                var nett_bm = bmoment(order, 0, loading);
 
                 var force_at_zero = nett_bm * 1000 / (depth_left + extra);
 
-                nett_bm = bmoment(order, span);
+                nett_bm = bmoment(order, span, loading);
 
                 var force_at_span = nett_bm * 1000 / (depth_left + extra);
 
@@ -1238,6 +1263,17 @@ namespace Schaphoid.Api.Controllers
             }
 
             var loading = order.Loading;
+            var localization = order.Localization;
+
+            if (localization.DesignType == DesignType.Iran)
+            {
+                if (order.CombinationType == 0)
+                {
+                    order.CombinationType = CombinationType.C1;
+                }
+
+                loading = _combinationRepository.GetLoading(loading, order.CombinationType);
+            }
 
             var webSection = _webSectionRepository.Get(order.Localization.SteelType, order.SectionId);
 
@@ -1260,8 +1296,6 @@ namespace Schaphoid.Api.Controllers
             var interval = span / 100;
             var segments = 100;
 
-            var localization = order.Localization;
-
             var depth_left = webSection.WebHeight;
 
             var depth_right =  depth_left;
@@ -1269,7 +1303,7 @@ namespace Schaphoid.Api.Controllers
             double leftheight = Math.Pow(Math.Pow(webSection.WebHeight, 2), 0.5);
             double rightheight = Math.Pow(Math.Pow(webSection.WebHeight, 2), 0.5);
 
-            var helpData = GetHelpData(order, webSection);
+            var helpData = GetHelpData2(order, webSection, loading);
 
             var gamma_g = helpData.gamma_g;
             var gamma_q = helpData.gamma_q;
@@ -1599,12 +1633,11 @@ namespace Schaphoid.Api.Controllers
             return thicknessOutput;
         }
 
-        private double bmoment(Order order, double distance)
+        private double bmoment(Order order, double distance, Loading loading)
         {
             var webSection = _webSectionRepository.Get(order.Localization.SteelType, order.SectionId);
 
             var localization = order.Localization;
-            var loading = order.Loading;
 
             var gamma_g = localization.DesignParameters.GammaG * localization.DesignParameters.ReductionFactorF;
             var gamma_q = localization.DesignParameters.GammaQ;
@@ -1613,9 +1646,9 @@ namespace Schaphoid.Api.Controllers
 
             var gamma_q_610a = localization.DesignParameters.GammaQ * localization.PsiValue;
 
-            var arrayPoints = GetArrayPoints(localization, order.Loading, gamma_g, gamma_q, gamma_g_610a, gamma_q_610a);
+            var arrayPoints = GetArrayPoints(localization, loading, gamma_g, gamma_q, gamma_g_610a, gamma_q_610a);
 
-            var helpData = GetHelpData(order, webSection);
+            var helpData = GetHelpData2(order, webSection, loading);
 
             var BM_reaction = helpData.lh_reaction * distance + helpData.uls_left_mom;
 

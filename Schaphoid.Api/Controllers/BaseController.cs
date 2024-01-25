@@ -38,8 +38,10 @@ namespace Schaphoid.Api.Controllers
         }
 
         protected HelpData GetHelpData(Order order, WebSection section)
+            => GetHelpData2(order, section, order.Loading);
+
+        protected HelpData GetHelpData2(Order order, WebSection section, Loading loading)
         {
-            var loading = order.Loading;
             var localization = order.Localization;
             var span = order.Span;
 
@@ -339,27 +341,27 @@ namespace Schaphoid.Api.Controllers
             if (ltbbottom[max_position, 29] == 1)
             {
                 x.KeyValues.Add($"Correction factor kct",  $"{Math.Round(ltbbottom[max_position, 10], 2)}");
-                x.KeyValues.Add($"Slendernesst",  $"{Math.Round(ltbbottom[max_position, 12], 3)}");
-                x.KeyValues.Add($"Effective areat",  $"{Math.Round(aeff_bottom, 0)} mm2");
-                x.KeyValues.Add($"Resistancet",  $"{Math.Round(ltbbottom[max_position, 15], 0)} kN");
-                x.KeyValues.Add($"Force due to momentt",  $"{Math.Round(ltbbottom[max_position, 19], 0)}  kN");
-                x.KeyValues.Add($"Force from axialt",  $"{Math.Round(bottom_axial_force, 0)} kN");
-                x.KeyValues.Add($"Totalt",  $"{Math.Round(ltbbottom[max_position, 21], 0)} kN");
-                x.KeyValues.Add($"Utilisationt",  $"{Math.Round(ltbbottom[max_position, 23], 2)}");
+                x.KeyValues.Add($"Slenderness",  $"{Math.Round(ltbbottom[max_position, 12], 3)}");
+                x.KeyValues.Add($"Effective area",  $"{Math.Round(aeff_bottom, 0)} mm2");
+                x.KeyValues.Add($"Resistance",  $"{Math.Round(ltbbottom[max_position, 15], 0)} kN");
+                x.KeyValues.Add($"Force due to moment",  $"{Math.Round(ltbbottom[max_position, 19], 0)}  kN");
+                x.KeyValues.Add($"Force from axial",  $"{Math.Round(bottom_axial_force, 0)} kN");
+                x.KeyValues.Add($"Total",  $"{Math.Round(ltbbottom[max_position, 21], 0)} kN");
+                x.KeyValues.Add($"Utilisation",  $"{Math.Round(ltbbottom[max_position, 23], 2)}");
             }
             else if (ltbbottom[max_position, 29] == -1)
             {
                 x.KeyValues.Add($"Force due to moment", $"{Math.Round(ltbbottom[max_position, 24], 0)} kN");
-                x.KeyValues.Add($"Force from axialt",  $"{Math.Round(bottom_axial_force, 0)} kN");
+                x.KeyValues.Add($"Force from axial",  $"{Math.Round(bottom_axial_force, 0)} kN");
                 x.KeyValues.Add($"Totalt",  $"{Math.Round(ltbbottom[max_position, 26], 0)} kN");
                 x.Captions.Add("Segment is in tension");
-                x.KeyValues.Add($"Flange tension resistancet",  $"{Math.Round(bottom_flange_tension_resi, 0)} kN");
+                x.KeyValues.Add($"Flange tension resistance",  $"{Math.Round(bottom_flange_tension_resi, 0)} kN");
             }
             else
             {
                 x.Captions.Add("Segment is partially in tension and part in compression");
-                x.KeyValues.Add($"Most onerous utilisationt",  $"{Math.Round(ltbbottom[max_position, 30], 2)} considering {max_onerous}");
-                x.KeyValues.Add($"Force from axialt",  $"{Math.Round(bottom_axial_force, 0)} kN");
+                x.KeyValues.Add($"Most onerous utilisation",  $"{Math.Round(ltbbottom[max_position, 30], 2)} considering {max_onerous}");
+                x.KeyValues.Add($"Force from axial",  $"{Math.Round(bottom_axial_force, 0)} kN");
             }
 
             return x;

@@ -10,10 +10,10 @@
         public LoadParameters UltimateLoads { get; set; }
         public ICollection<PointLoad> PointLoads { get; set; }
 
-        public ICollection<DistributeLoad> DistributeLoads { get; set; }
-        public ICollection<EndMomentLoad> EndMomentLoads { get; set; }
-        public ICollection<AxialForceLoad> AxialForceLoads { get; set; }
-        public ICollection<XPointLoad> XPointLoads { get; set; }
+        public ICollection<DistributeLoad> DistributeLoads { get; set; } = new HashSet<DistributeLoad>();
+        public ICollection<EndMomentLoad> EndMomentLoads { get; set; } = new HashSet<EndMomentLoad>();
+        public ICollection<AxialForceLoad> AxialForceLoads { get; set; } = new HashSet<AxialForceLoad>();
+        public ICollection<XPointLoad> XPointLoads { get; set; } = new HashSet<XPointLoad>();
 
         public CombinationType CombinationType { get; set; }
     }
@@ -32,8 +32,7 @@
     public enum LoadType
     {
         CharacteristicLoads = 1,
-        UltimateLoads = 2,
-        Iran = 3
+        UltimateLoads = 2
     }
 
     public class LoadParameters
