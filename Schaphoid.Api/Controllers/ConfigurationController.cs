@@ -215,7 +215,7 @@ namespace Schaphoid.Api.Controllers
                 Request.Scheme),
                 HttpMethods.Get));
 
-            orderDto.Links.Add(new Link("get-bottom-flange-verification", Url.Action(nameof(VerificationController.TopFlangeVerification),
+            orderDto.Links.Add(new Link("get-bottom-flange-verification", Url.Action(nameof(VerificationController.BottomFlangeVerification),
                 "Verification", new { orderId = id },
                 Request.Scheme),
                 HttpMethods.Get));

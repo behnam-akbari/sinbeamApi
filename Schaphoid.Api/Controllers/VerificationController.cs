@@ -26,6 +26,7 @@ namespace Schaphoid.Api.Controllers
         {
             var order = _dbContext.Orders
                 .Where(e => e.Id == orderId)
+                .Include(e => e.Localization)
                 .Include(e => e.Restraint)
                 .FirstOrDefault();
 
@@ -45,7 +46,9 @@ namespace Schaphoid.Api.Controllers
                     TopFlangeRestraints = new List<double> { 0, order.Span },
                     BottomFlangeRestraints = new List<double> { 0, order.Span },
                     FullRestraintTopFlange = false,
-                    FullRestraintBottomFlange = false
+                    FullRestraintBottomFlange = false,
+                    DesignType = localization.DesignType,
+                    Combination = order.CombinationType
                 };
             }
             else
@@ -57,7 +60,9 @@ namespace Schaphoid.Api.Controllers
                     TopFlangeRestraints = restraint.TopFlangeRestraints,
                     BottomFlangeRestraints = restraint.BottomFlangeRestraints,
                     FullRestraintTopFlange = restraint.FullRestraintTopFlange,
-                    FullRestraintBottomFlange = restraint.FullRestraintBottomFlange
+                    FullRestraintBottomFlange = restraint.FullRestraintBottomFlange,
+                    DesignType = localization.DesignType,
+                    Combination = order.CombinationType
                 };
             }
 
@@ -80,7 +85,7 @@ namespace Schaphoid.Api.Controllers
         }
 
         [HttpPost("[action]")]
-        public IActionResult Restraints(int orderId, RestraintDto restraintDto)
+        public IActionResult Restraints(int orderId, [FromBody]RestraintDto restraintDto)
         {
             var order = _dbContext.Orders
                 .Where(e => e.Id == orderId)
@@ -449,15 +454,23 @@ namespace Schaphoid.Api.Controllers
                     verificationItems.Add(verificationItem);
                 }
 
-                var captions = max_position > 0 ?
-                    GetTopFlangeMaxPositionCaptions(top_ute_condition, ltbtop, aeff_top, top_flange_tension_resi, top_axial_force, max_position) :
-                    new List<string>();
+                if(max_position > 0)
+                {
+                    var x = GetTopFlangeMaxPositionCaptions2(top_ute_condition, ltbtop, aeff_top, top_flange_tension_resi, top_axial_force, max_position);
+
+                    return new
+                    {
+                        MaximumUtilization = Math.Round(max_top_ute, 2),
+                        verificationItems,
+                        x.Captions,
+                        x.KeyValues
+                    };
+                }
 
                 return new
                 {
                     MaximumUtilization = Math.Round(max_top_ute, 2),
-                    verificationItems,
-                    captions
+                    verificationItems
                 };
             }
             else
@@ -584,42 +597,43 @@ namespace Schaphoid.Api.Controllers
                     max_top_ute = Math.Max(top_comp_ute, top_tens_ute);
                 }
 
-                var captions = new List<string>();
+                var x = new X();
 
-                captions.Add("Top flange is fully restrained");
-                captions.Add($"Effective area = {Math.Round(aeff_top, 0)} mm2");
-                captions.Add($"Resistance = {Math.Round(resi_top, 0)} kN");
+                x.Captions.Add("Top flange is fully restrained");
+                x.KeyValues.Add("Effective area", $"{Math.Round(aeff_top, 0)} mm2");
+                x.KeyValues.Add($"Resistance",$"{Math.Round(resi_top, 0)} kN");
 
                 if (topflange_status == "tension")
                 {
-                    captions.Add($"Force due to moment = {Math.Round(min_top_force, 0)} kN");
-                    captions.Add($"Total = {Math.Round(nett_min_top_force, 0)} kN");
+                    x.KeyValues.Add($"Force due to moment", $"{Math.Round(min_top_force, 0)} kN");
+                    x.KeyValues.Add($"Total", $"{Math.Round(nett_min_top_force, 0)} kN");
                 }
                 else if (topflange_status == "compression")
                 {
-                    captions.Add($"Force due to moment = {Math.Round(max_top_force, 0)} kN");
-                    captions.Add($"Total =  {Math.Round(nett_max_top_force, 0)} kN");
+                    x.KeyValues.Add($"Force due to moment", $"{Math.Round(max_top_force, 0)} kN");
+                    x.KeyValues.Add($"Total", $"{Math.Round(nett_max_top_force, 0)} kN");
                 }
                 else if (topflange_status == "both")
                 {
                     if (max_top_ute == top_tens_ute)
                     {
-                        captions.Add($"Force due to moment = {Math.Round(min_top_force, 0)} kN");
-                        captions.Add($"Total = {Math.Round(nett_min_top_force, 0)} kN");
+                        x.KeyValues.Add($"Force due to moment", $"{Math.Round(min_top_force, 0)} kN");
+                        x.KeyValues.Add($"Total", $"{Math.Round(nett_min_top_force, 0)} kN");
                     }
                     else
                     {
-                        captions.Add($"Force due to moment = {Math.Round(max_top_force, 0)} kN");
-                        captions.Add($"Total = {Math.Round(nett_max_top_force, 0)} kN");
+                        x.KeyValues.Add($"Force due to moment", $"{Math.Round(max_top_force, 0)} kN");
+                        x.KeyValues.Add($"Total", $"{Math.Round(nett_max_top_force, 0)} kN");
                     }
                 }
 
-                captions.Add($"Force from axial = {Math.Round(top_axial_force, 0)} kN");
-                captions.Add($"Utilisation = {Math.Round(max_top_ute, 2)}");
+                x.KeyValues.Add($"Force from axial", $"{Math.Round(top_axial_force, 0)} kN");
+                x.KeyValues.Add($"Utilisation", $"{Math.Round(max_top_ute, 2)}");
 
                 return new
                 {
-                    captions
+                    x.Captions,
+                    x.KeyValues
                 };
             }
         }
@@ -984,16 +998,26 @@ namespace Schaphoid.Api.Controllers
                     verificationItems.Add(verificationItem);
                 }
 
-                var captions = max_position > 0 ?
-                    GetBottomFlangeMaxPositionCaptions(max_onerous, ltbbottom, aeff_bottom, bottom_flange_tension_resi, bottom_axial_force, max_position) :
-                    new List<string>();
-
-                return new
+                if(max_position > 0)
                 {
-                    MaximumUtilization = Math.Round(max_bottom_ute, 2),
-                    verificationItems,
-                    captions
-                };
+                    var x = GetBottomFlangeMaxPositionCaptions2(max_onerous, ltbbottom, aeff_bottom, bottom_flange_tension_resi, bottom_axial_force, max_position);
+
+                    return new
+                    {
+                        MaximumUtilization = Math.Round(max_bottom_ute, 2),
+                        verificationItems,
+                        x.Captions,
+                        x.KeyValues
+                    };
+                }
+                else
+                {
+                    return new
+                    {
+                        MaximumUtilization = Math.Round(max_bottom_ute, 2),
+                        verificationItems
+                    };
+                }
             }
             else
             {
@@ -1119,42 +1143,43 @@ namespace Schaphoid.Api.Controllers
                     max_bottom_ute = Math.Max(top_comp_ute, bottom_tens_ute);
                 }
 
-                var captions = new List<string>();
+                var x = new X();
 
-                captions.Add("Bottom flange is fully restrained");
-                captions.Add($"Effective area = {Math.Round(aeff_bottom, 0)} mm2");
-                captions.Add($"Resistance = {Math.Round(resi_bottom, 0)} kN");
+                x.Captions.Add("Bottom flange is fully restrained");
+                x.KeyValues.Add($"Effective area", $"{Math.Round(aeff_bottom, 0)} mm2");
+                x.KeyValues.Add($"Resistance", $"{Math.Round(resi_bottom, 0)} kN");
 
                 if (flange_status == "tension")
                 {
-                    captions.Add($"Force due to moment = {Math.Round(min_bottom_force, 0)} kN");
-                    captions.Add($"Total = {Math.Round(nett_min_bottom_force, 0)} kN");
+                    x.KeyValues.Add($"Force due to moment", $"{Math.Round(min_bottom_force, 0)} kN");
+                    x.KeyValues.Add($"Total", $"{Math.Round(nett_min_bottom_force, 0)} kN");
                 }
                 else if (flange_status == "compression")
                 {
-                    captions.Add($"Force due to moment = {Math.Round(max_bottom_force, 0)} kN");
-                    captions.Add($"Total =  {Math.Round(nett_max_bottom_force, 0)} kN");
+                    x.KeyValues.Add($"Force due to moment", $"{Math.Round(max_bottom_force, 0)} kN");
+                    x.KeyValues.Add($"Total", $"{Math.Round(nett_max_bottom_force, 0)} kN");
                 }
                 else if (flange_status == "both")
                 {
                     if (max_bottom_ute == bottom_tens_ute)
                     {
-                        captions.Add($"Force due to moment = {Math.Round(min_bottom_force, 0)} kN");
-                        captions.Add($"Total = {Math.Round(nett_min_bottom_force, 0)} kN");
+                        x.KeyValues.Add($"Force due to moment", $"{Math.Round(min_bottom_force, 0)} kN");
+                        x.KeyValues.Add($"Total", $"{Math.Round(nett_min_bottom_force, 0)} kN");
                     }
                     else
                     {
-                        captions.Add($"Force due to moment = {Math.Round(max_bottom_force, 0)} kN");
-                        captions.Add($"Total = {Math.Round(nett_max_bottom_force, 0)} kN");
+                        x.KeyValues.Add($"Force due to moment", $"{Math.Round(max_bottom_force, 0)} kN");
+                        x.KeyValues.Add($"Total", $"{Math.Round(nett_max_bottom_force, 0)} kN");
                     }
                 }
 
-                captions.Add($"Force from axial = {Math.Round(bottom_axial_force, 0)} kN");
-                captions.Add($"Utilisation = {Math.Round(max_bottom_ute, 2)}");
+                x.KeyValues.Add($"Force from axial", $"{Math.Round(bottom_axial_force, 0)} kN");
+                x.KeyValues.Add($"Utilisation", $"{Math.Round(max_bottom_ute, 2)}");
 
                 return new
                 {
-                    captions
+                    x.Captions,
+                    x.KeyValues
                 };
             }
         }
@@ -1465,6 +1490,41 @@ namespace Schaphoid.Api.Controllers
             return captions;
         }
 
+        private X GetTopFlangeMaxPositionCaptions2(string top_ute_condition, double[,] ltbtop, double aeff_top, double top_flange_tension_resi, double top_axial_force, int seg_no)
+        {
+            var x = new X();
+
+            x.KeyValues.Add("Segment", $"from {Math.Round(ltbtop[seg_no - 1, 1], 3)} m to {Math.Round(ltbtop[seg_no, 1], 3)} m");
+            x.KeyValues.Add("Segment length", $"{Math.Round(ltbtop[seg_no, 2] * 1000, 0)} mm");
+
+            if (ltbtop[seg_no, 29] == 1)
+            {
+                x.KeyValues.Add("Correction factor kc", $"{Math.Round(ltbtop[seg_no, 10], 2)}");
+                x.KeyValues.Add("Slenderness", $"{Math.Round(ltbtop[seg_no, 12], 3)}");
+                x.KeyValues.Add("Effective area", $"{Math.Round(aeff_top, 0)} mm2");
+                x.KeyValues.Add("Resistance", $"{Math.Round(ltbtop[seg_no, 15], 0)} kN");
+                x.KeyValues.Add("Force due to moment", $"{Math.Round(ltbtop[seg_no, 19], 0)}  kN");
+                x.KeyValues.Add("Force from axial", $"{Math.Round(top_axial_force, 0)} kN");
+                x.KeyValues.Add("Total", $"{Math.Round(ltbtop[seg_no, 26], 0)} kN");
+                x.KeyValues.Add("Utilisation", $"{Math.Round(ltbtop[seg_no, 23], 2)}");
+            }
+            else if (ltbtop[seg_no, 29] == -1)
+            {
+                x.KeyValues.Add("Force due to moment",$"{Math.Round(ltbtop[seg_no, 27], 0)} kN");
+                x.KeyValues.Add("Force from axial",$"{Math.Round(top_axial_force, 0)} kN");
+                x.KeyValues.Add("Total",$"{Math.Round(ltbtop[seg_no, 21], 0)} kN");
+                x.Captions.Add("Segment is in tension");
+                x.KeyValues.Add("Flange tension resistance",$"{Math.Round(top_flange_tension_resi, 0)} kN");
+            }
+            else
+            {
+                x.Captions.Add("Segment is partially in tension and part in compression");
+                x.Captions.Add($"Most onerous utilisation ={Math.Round(ltbtop[seg_no, 30], 2)} considering {top_ute_condition}");
+            }
+
+            return x;
+        }
+
         private List<string> GetTopFlangeMaxPositionCaptions(string top_ute_condition, double[,] ltbtop, double aeff_top, double top_flange_tension_resi, double top_axial_force, int seg_no)
         {
             var captions = new List<string>();
@@ -1607,5 +1667,13 @@ namespace Schaphoid.Api.Controllers
 
         public bool FullRestraintBottomFlange { get; set; }
         public List<double> BottomFlangeRestraints { get; set; }
+        public DesignType DesignType { get; internal set; }
+        public CombinationType Combination { get; internal set; }
+    }
+
+    public class X
+    {
+        public Dictionary<string, string> KeyValues { get; set; } = new Dictionary<string, string>();
+        public List<string> Captions { get; set; } = new List<string>();
     }
 }
