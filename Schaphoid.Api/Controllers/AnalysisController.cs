@@ -93,6 +93,8 @@ namespace Schaphoid.Api.Controllers
 
             order.CombinationType = iranAnalysisDto.Combination;
 
+            _dbContext.SaveChanges();
+
             return Ok();
         }
 
