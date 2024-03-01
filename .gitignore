@@ -81,3 +81,4 @@ About
 node_modules/
 wwwroot/
 PublishProfiles/
+/Schaphoid.Api/log.txt
