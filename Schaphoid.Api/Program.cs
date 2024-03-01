@@ -43,6 +43,7 @@ app.UseAuthorization();
 //});
 
 app.MapFallbackToFile("/main", @"index.html");
+app.MapFallbackToFile("/home", @"index.html");
 app.MapFallbackToFile("/", @"index.html");
 
 app.MapControllers();
