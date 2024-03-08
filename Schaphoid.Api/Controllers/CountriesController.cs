@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Scaphoid.Core.Model;
+using Scaphoid.Infrastructure.Data;
 
 namespace Schaphoid.Api.Controllers
 {
@@ -7,15 +8,17 @@ namespace Schaphoid.Api.Controllers
     [Route("[controller]")]
     public class CountriesController : ControllerBase
     {
-        [HttpPost]
+        private readonly ApplicationDbContext _dbContext;
+
+        public CountriesController(ApplicationDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
+        [HttpGet]
         public List<Country> Get()
         {
-            var countries = new List<Country>
-            {
-                new Country{ Id = 1, Name = "Iran" },
-                new Country{ Id = 2, Name = "England"},
-                new Country{ Id = 2, Name = "Ireland"}
-            };
+            var countries = _dbContext.Countries.ToList();
 
             return countries;
         }
