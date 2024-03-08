@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Scaphoid.Core.Model;
 using Scaphoid.Infrastructure.Data;
 using Scaphoid.Infrastructure.Repositories;
+using static System.Collections.Specialized.BitVector32;
 
 namespace Schaphoid.Api.Controllers
 {
@@ -49,22 +50,33 @@ namespace Schaphoid.Api.Controllers
 
             var x = GetBottomFlangeDesign(order);
 
-            return new
+            return new DesignDto
             {
-                web = new
+                Web = new DesignDto.Section
                 {
                     IsValid = max_shear_ute < 1,
                     Utilization = max_shear_ute
                 },
-                bottomFlange = new
+                BottomFlange = new DesignDto.Section
                 {
                     IsValid = bottomFlangeUtilization < 1,
                     Utilization = bottomFlangeUtilization
                 },
-                topFlange = new
+                TopFlange = new DesignDto.Section
                 {
                     IsValid = topFlangeUtilization < 1,
                     Utilization = topFlangeUtilization
+                },
+                Links = new List<Link>
+                {
+                    new Link("create-request", Url.Action(nameof(RequestController.Create),
+                    "Request", new { orderId = orderId },
+                    Request.Scheme),
+                    HttpMethods.Post),
+                    new Link("get-countries", Url.Action(nameof(CountriesController.Get),
+                    "Countries", null,
+                    Request.Scheme),
+                    HttpMethods.Get)
                 }
             };
         }
@@ -1289,6 +1301,19 @@ namespace Schaphoid.Api.Controllers
             double nett_bm = BM_reaction + BM_udl + BM_points + BM_part;
 
             return nett_bm;
+        }
+    }
+
+    internal class DesignDto : Resource
+    {
+        public Section Web { get; set; }
+        public Section BottomFlange { get; set; }
+        public Section TopFlange { get; set; }
+
+        public class Section
+        {
+            public bool IsValid { get; set; }
+            public double Utilization { get; set; }
         }
     }
 }

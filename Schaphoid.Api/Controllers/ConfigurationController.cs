@@ -21,25 +21,30 @@ namespace Schaphoid.Api.Controllers
         }
 
         [HttpGet]
-        public Resource Get(int? id)
+        public OrderDto Get(int? id)
         {
+            var order = new OrderDto();
+
             if (id.HasValue)
             {
-                var orderDto = GetOrderDto(id.Value);
-
-                return orderDto;
+                order = GetOrderDto(id.Value);
             }
             else
             {
-                var order = new OrderDto();
+                order = new OrderDto();
 
                 order.Links.Add(new Link("create-order", Url.Action(nameof(CreateOrder),
                     null, null,
                     Request.Scheme),
                     HttpMethods.Post));
-
-                return order;
             }
+
+            order.Links.Add(new Link("ask-question", Url.Action(nameof(QuestionController.Create),
+            "question", null,
+            Request.Scheme),
+            HttpMethods.Post));
+
+            return order;
         }
 
         #region Order

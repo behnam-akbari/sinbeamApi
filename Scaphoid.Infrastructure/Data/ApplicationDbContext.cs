@@ -11,6 +11,9 @@ namespace Scaphoid.Infrastructure.Data
         }
 
         public DbSet<Order> Orders { get; set; }
+        public DbSet<Request> Requests { get; set; }
+        public DbSet<Country> Countries { get; set; }
+        public DbSet<Question> Questions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
