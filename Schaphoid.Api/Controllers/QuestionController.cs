@@ -16,27 +16,6 @@ namespace Schaphoid.Api.Controllers
             _dbContext = dbContext;
         }
 
-        [HttpGet]
-        public async Task<object> Get(int page = 1)
-        {
-            int take = 20;
-            int skip = (page - 1) * take;
-
-            var questions = await _dbContext.Questions
-                .Select(e => new
-                {
-                    e.Id,
-                    e.Message,
-                    e.Email,
-                    e.CreatedOn
-                })
-                .Skip(skip)
-                .Take(take)
-                .ToListAsync();
-
-            return questions;
-        }
-
         [HttpPost]
         public async Task<IActionResult> Create(QuestionDto questionDto)
         {

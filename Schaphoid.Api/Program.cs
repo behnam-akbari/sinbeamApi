@@ -42,6 +42,7 @@ app.UseAuthorization();
 //    return Task.CompletedTask;
 //});
 
+app.MapFallbackToFile("/panel", @"index.html");
 app.MapFallbackToFile("/main/{*queryvalues}", @"index.html");
 app.MapFallbackToFile("/main", @"index.html");
 app.MapFallbackToFile("/home", @"index.html");
