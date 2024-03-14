@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Scaphoid.Core.Model;
 using Scaphoid.Infrastructure.Data;
 
@@ -13,6 +14,21 @@ namespace Schaphoid.Api.Controllers
         public QuestionController(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
+        }
+
+        [HttpGet]
+        public async Task<object> Get(QuestionDto questionDto)
+        {
+            var questions = await _dbContext.Questions
+                .Select(e => new
+                {
+                    e.Id,
+                    e.Message,
+                    e.Email,
+                    e.CreatedOn
+                }).ToListAsync();
+
+            return questions;
         }
 
         [HttpPost]

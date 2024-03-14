@@ -47,8 +47,6 @@ namespace Schaphoid.Api.Controllers
             return order;
         }
 
-        #region Order
-
         [HttpPost("order")]
         public IActionResult CreateOrder(OrderDto orderDto)
         {
@@ -247,8 +245,6 @@ namespace Schaphoid.Api.Controllers
 
             return orderDto;
         }
-
-        #endregion
     }
 
     public class HelpData
