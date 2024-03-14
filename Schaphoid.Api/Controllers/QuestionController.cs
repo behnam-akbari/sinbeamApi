@@ -17,8 +17,11 @@ namespace Schaphoid.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<object> Get(QuestionDto questionDto)
+        public async Task<object> Get(int page = 1)
         {
+            int take = 20;
+            int skip = (page - 1) * take;
+
             var questions = await _dbContext.Questions
                 .Select(e => new
                 {
@@ -26,7 +29,10 @@ namespace Schaphoid.Api.Controllers
                     e.Message,
                     e.Email,
                     e.CreatedOn
-                }).ToListAsync();
+                })
+                .Skip(skip)
+                .Take(take)
+                .ToListAsync();
 
             return questions;
         }
