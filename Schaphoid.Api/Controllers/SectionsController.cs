@@ -283,8 +283,8 @@ namespace Schaphoid.Api.Controllers
                 $"Iy Major axis inertia = {Math.Round(section.MomentOfInertiaIy, 3)} cm4",
                 $"Iz Minor axis inertia = {Math.Round(section.MomentOfInertiaIz, 3)} cm4",
                 
-                $"iy Major axis gyration = {Math.Round(Math.Sqrt(section.MomentOfInertiaIy/section.SectionPerimeter), 3)} cm",
-                $"iz Minor axis gyration = {Math.Round(Math.Sqrt(section.MomentOfInertiaIz/section.SectionPerimeter), 3)} cm",
+                $"Iy Major axis gyration = {Math.Round(Math.Sqrt(section.MomentOfInertiaIy/section.SectionPerimeter), 3)} cm",
+                $"Iz Minor axis gyration = {Math.Round(Math.Sqrt(section.MomentOfInertiaIz/section.SectionPerimeter), 3)} cm",
                 $"It Torsional inertia = {Math.Round(section.It, 3)} cm4",
                 
                 $"Iw Warping inertia = {Math.Round(section.Iw, 3)} cm6",

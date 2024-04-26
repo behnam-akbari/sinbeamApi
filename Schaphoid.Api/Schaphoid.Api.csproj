@@ -6,6 +6,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Include="wwwroot\assets\analysis-35c58f8a.js" />
 	  <None Include="wwwroot\assets\analysis-4016a1be.js" />
 	  <None Include="wwwroot\assets\analysis-46c5fc41.js" />
 	  <None Include="wwwroot\assets\analysis-4ada6abb.js" />
@@ -20,6 +21,7 @@
 	  <None Include="wwwroot\assets\combinationType-55c5d1b5.js" />
 	  <None Include="wwwroot\assets\combinationType-57c89c47.js" />
 	  <None Include="wwwroot\assets\combinationType-5cf72777.js" />
+	  <None Include="wwwroot\assets\combinationType-61f4b9ee.js" />
 	  <None Include="wwwroot\assets\combinationType-811d5c88.js" />
 	  <None Include="wwwroot\assets\combinationType-9dd467c4.js" />
 	  <None Include="wwwroot\assets\combinationType-9fbb9b51.js" />
@@ -35,6 +37,7 @@
 	  <None Include="wwwroot\assets\defineSection-9bf121bf.js" />
 	  <None Include="wwwroot\assets\defineSection-9f2ac9e3.js" />
 	  <None Include="wwwroot\assets\defineSection-af170e69.js" />
+	  <None Include="wwwroot\assets\defineSection-b55dbb7d.js" />
 	  <None Include="wwwroot\assets\defineSection-f0b2b7d1.js" />
 	  <None Include="wwwroot\assets\design-093d9e8e.js" />
 	  <None Include="wwwroot\assets\design-1a82e25b.js" />
@@ -46,6 +49,7 @@
 	  <None Include="wwwroot\assets\design-518b5bb4.js" />
 	  <None Include="wwwroot\assets\design-57b7a793.js" />
 	  <None Include="wwwroot\assets\design-5cd73f31.js" />
+	  <None Include="wwwroot\assets\design-9a555256.js" />
 	  <None Include="wwwroot\assets\designType-eee11f54.js" />
 	  <None Include="wwwroot\assets\fa-brands-400-33d983f8.woff2" />
 	  <None Include="wwwroot\assets\fa-brands-400-ba6f7248.svg" />
@@ -63,6 +67,7 @@
 	  <None Include="wwwroot\assets\generalDetails-65b8bbe6.js" />
 	  <None Include="wwwroot\assets\generalDetails-75020ae8.js" />
 	  <None Include="wwwroot\assets\generalDetails-8a454327.js" />
+	  <None Include="wwwroot\assets\generalDetails-a02f2ccb.js" />
 	  <None Include="wwwroot\assets\generalDetails-aaac93c6.js" />
 	  <None Include="wwwroot\assets\generalDetails-b0148142.js" />
 	  <None Include="wwwroot\assets\generalDetails-cbc1bb3f.js" />
@@ -70,6 +75,7 @@
 	  <None Include="wwwroot\assets\generalDetails-e9bb6fb8.js" />
 	  <None Include="wwwroot\assets\generalDetails-f855977c.js" />
 	  <None Include="wwwroot\assets\index-009876ab.js" />
+	  <None Include="wwwroot\assets\index-1b53c0f1.js" />
 	  <None Include="wwwroot\assets\index-2cfcadfa.js" />
 	  <None Include="wwwroot\assets\index-3bb1130d.js" />
 	  <None Include="wwwroot\assets\index-595bca01.js" />
@@ -93,6 +99,7 @@
 	  <None Include="wwwroot\assets\loading-70003c5c.js" />
 	  <None Include="wwwroot\assets\loading-7803bee7.js" />
 	  <None Include="wwwroot\assets\loading-83d3c149.js" />
+	  <None Include="wwwroot\assets\loading-899c6dc0.js" />
 	  <None Include="wwwroot\assets\loading-8b9d5837.js" />
 	  <None Include="wwwroot\assets\loading-a872aeff.js" />
 	  <None Include="wwwroot\assets\loading-dcc72ca0.js" />
@@ -103,6 +110,7 @@
 	  <None Include="wwwroot\assets\verifications-0a126075.js" />
 	  <None Include="wwwroot\assets\verifications-31d6c9af.js" />
 	  <None Include="wwwroot\assets\verifications-42ce3cd5.js" />
+	  <None Include="wwwroot\assets\verifications-4ba10ccd.js" />
 	  <None Include="wwwroot\assets\verifications-aa8a1c36.js" />
 	  <None Include="wwwroot\assets\verifications-b1e44462.js" />
 	  <None Include="wwwroot\assets\verifications-c9356247.js" />

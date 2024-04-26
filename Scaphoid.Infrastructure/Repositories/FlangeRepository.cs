@@ -8,13 +8,13 @@ namespace Scaphoid.Infrastructure.Repositories
         {
             var list = new List<WebThickness>()
             {
-                new WebThickness("WT 0", 1.5),
-                new WebThickness("WT A", 2),
-                new WebThickness("WT B", 2.5),
-                new WebThickness("WT C", 3),
-                new WebThickness("WT D", 4),
-                new WebThickness("WT E", 5),
-                new WebThickness("WT F", 6)
+                new WebThickness("WT0", 1.5),
+                new WebThickness("WTA", 2),
+                new WebThickness("WTB", 2.5),
+                new WebThickness("WTC", 3),
+                new WebThickness("WTD", 4),
+                new WebThickness("WTE", 5),
+                new WebThickness("WTF", 6)
             };
 
             return list;

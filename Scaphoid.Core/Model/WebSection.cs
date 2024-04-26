@@ -25,7 +25,7 @@ namespace Scaphoid.Core.Model
     {
         public string Id => $"{WebThicknessKey.Replace(" ", "-" )}-{WebHeight}-{FlangeWidth}-{FlangeThickness}".ToLower();
 
-        public string Key => $"{WebThicknessKey} {WebHeight} / {FlangeWidth} X {FlangeThickness}";
+        public string Key => $"{WebThicknessKey}{WebHeight} {FlangeWidth}X{FlangeThickness}";
 
         /// <summary>
         /// Weight/m

@@ -146,10 +146,10 @@ namespace Scaphoid.Core.Model
 
     public enum SteelType
     {
-        [Display(Name = "ST-37 (s 235)")]
+        [Display(Name = "ST37 (S235)")]
         S235 = 1,
 
-        [Display(Name = "ST-38 (s 355)")]
+        [Display(Name = "ST52 (S355)")]
         S355 = 2
     }
 }
